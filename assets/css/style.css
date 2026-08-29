@@ -3,6 +3,28 @@
    Black ground, one red signal, broadcast typography.
    ═══════════════════════════════════════════════════════════ */
 
+/* ── brand typeface ───────────────────────────────────────── */
+@font-face{
+  font-family:'Eurostile GEO';
+  src:url('../fonts/eurostile-geo-400.woff2') format('woff2');
+  font-weight:400; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'Eurostile GEO';
+  src:url('../fonts/eurostile-geo-600.woff2') format('woff2');
+  font-weight:600; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'Eurostile GEO';
+  src:url('../fonts/eurostile-geo-700.woff2') format('woff2');
+  font-weight:700; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'Eurostile GEO';
+  src:url('../fonts/eurostile-geo-900.woff2') format('woff2');
+  font-weight:900; font-style:normal; font-display:swap;
+}
+
 /* ── tokens ───────────────────────────────────────────────── */
 :root{
   --black:#000000;
@@ -16,9 +38,12 @@
 
   --glow: 0 0 0 1px rgba(228,33,28,.45), 0 0 34px -6px rgba(228,33,28,.55);
 
-  --f-dsp:'Archivo','Noto Sans Georgian',system-ui,sans-serif;
-  --f-body:'Archivo','Noto Sans Georgian',system-ui,sans-serif;
-  --f-mono:'IBM Plex Mono','Noto Sans Georgian',ui-monospace,monospace;
+  --f-dsp:'Eurostile GEO',system-ui,sans-serif;
+  --f-body:'Eurostile GEO',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono','Eurostile GEO',ui-monospace,monospace;
+
+  /* the brand star, used as a mask so it inherits currentColor */
+  --star:url('../img/star.svg');
 
   --pad: clamp(20px, 4.4vw, 68px);
   --max: 1440px;
@@ -39,7 +64,7 @@ body{
   background:var(--black);
   color:var(--white);
   font-family:var(--f-body);
-  font-variation-settings:'wdth' 100,'wght' 400;
+  font-weight:400;
   font-size:clamp(1rem,.96rem + .2vw,1.0625rem);
   line-height:1.62;
   -webkit-font-smoothing:antialiased;
@@ -57,6 +82,19 @@ ul,ol{ margin:0; padding:0; list-style:none; }
 :focus-visible{
   outline:2px solid var(--red);
   outline-offset:3px;
+}
+
+/* brand star, drawn as a mask so it takes the colour of its text */
+.kick::before,
+.plan__list li::before,
+.ticker__set span::after,
+.box__cap span + span::before{
+  content:"";
+  display:inline-block;
+  width:1em; height:.44em;
+  background:currentColor;
+  -webkit-mask:var(--star) center/contain no-repeat;
+  mask:var(--star) center/contain no-repeat;
 }
 
 .vh{
@@ -104,11 +142,11 @@ ul,ol{ margin:0; padding:0; list-style:none; }
   color:var(--red);
   margin-bottom:clamp(18px,2.2vw,28px);
 }
-.kick::before{ content:"✦ "; }
+.kick::before{ margin-right:.5em; vertical-align:.12em; }
 
 .dsp{
   font-family:var(--f-dsp);
-  font-variation-settings:'wdth' 112,'wght' 800;
+  font-weight:700;
   font-size:clamp(2.2rem,5.4vw,4.4rem);
   line-height:.98;
   letter-spacing:-.025em;
@@ -229,7 +267,7 @@ ul,ol{ margin:0; padding:0; list-style:none; }
   border-bottom:1px solid var(--rule);
   text-decoration:none;
   font-family:var(--f-dsp);
-  font-variation-settings:'wdth' 106,'wght' 700;
+  font-weight:700;
   font-size:clamp(1.5rem,7vw,2.2rem);
   letter-spacing:-.02em;
   line-height:1.1;
@@ -325,8 +363,8 @@ body.is-locked{ overflow:hidden; }
 .third__beats{ position:relative; }
 .beat{
   font-family:var(--f-dsp);
-  font-variation-settings:'wdth' 118,'wght' 800;
-  font-size:clamp(2.4rem,7.4vw,6.2rem);
+  font-weight:900;
+  font-size:clamp(1.9rem,8.4vw,6rem);
   line-height:.94;
   letter-spacing:-.035em;
   opacity:0;
@@ -400,7 +438,7 @@ body.is-locked{ overflow:hidden; }
   color:var(--dim);
   white-space:nowrap;
 }
-.ticker__set span::after{ content:" ✦"; color:var(--red); opacity:.55; }
+.ticker__set span::after{ margin-left:.7em; vertical-align:.12em; color:var(--red); opacity:.7; }
 @keyframes slide{ to{ transform:translateX(-50%); } }
 @media (prefers-reduced-motion:reduce){ .ticker__row{ animation:none; } }
 
@@ -415,7 +453,7 @@ body.is-locked{ overflow:hidden; }
 .epg__scroll{ overflow-x:auto; overflow-y:hidden; scrollbar-width:thin; }
 .epg__scroll::-webkit-scrollbar{ height:6px; }
 .epg__scroll::-webkit-scrollbar-thumb{ background:var(--rule-2); }
-.epg__inner{ min-width:820px; }
+.epg__inner{ min-width:900px; --chw:220px; }
 
 .epg__ruler{
   display:grid; grid-template-columns:var(--chw,190px) 1fr;
@@ -447,15 +485,17 @@ body.is-locked{ overflow:hidden; }
 .epg__row{
   display:grid; grid-template-columns:var(--chw,190px) 1fr;
   border-bottom:1px solid var(--rule);
+  min-height:52px;
 }
 .epg__row:last-child{ border-bottom:0; }
 .epg__ch{
   display:flex; align-items:center; gap:10px;
   font-family:var(--f-body);
-  font-variation-settings:'wdth' 86,'wght' 500;
+  font-weight:600;
   font-size:.9rem;
   letter-spacing:0; text-transform:none;
   color:#D6D6DB;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .epg__ch b{
   font:500 .68rem/1 var(--f-mono);
@@ -505,7 +545,7 @@ body.is-locked{ overflow:hidden; }
   color:var(--dim);
 }
 @media (max-width:640px){
-  .epg__inner{ --chw:150px; }
+  .epg__inner{ --chw:164px; }
   .epg__ch{ font-size:.84rem; }
   .epg__row{ min-height:56px; }
 }
@@ -522,7 +562,7 @@ body.is-locked{ overflow:hidden; }
 .stats > div{ background:var(--black); padding:clamp(22px,3vw,32px); }
 .stats dt{
   font-family:var(--f-dsp);
-  font-variation-settings:'wdth' 108,'wght' 700;
+  font-weight:700;
   font-size:clamp(2rem,3.4vw,2.9rem);
   line-height:1;
   letter-spacing:-.02em;
@@ -556,7 +596,7 @@ body.is-locked{ overflow:hidden; }
   letter-spacing:.12em; text-transform:uppercase;
   color:var(--dim);
 }
-.box__cap span + span::before{ content:"✦ "; color:var(--red); }
+.box__cap span + span::before{ margin-right:.55em; vertical-align:.12em; color:var(--red); }
 .box__media video{
   width:100%; height:auto;
   border:1px solid var(--rule);
@@ -592,7 +632,7 @@ body.is-locked{ overflow:hidden; }
   font-size:1.02rem;
   color:#B9B9C0;
 }
-.box__note b{ color:var(--red); font-variation-settings:'wght' 700; }
+.box__note b{ color:var(--red); font-weight:700; }
 
 @media (max-width:900px){
   .box{ grid-template-columns:1fr; }
@@ -624,7 +664,7 @@ body.is-locked{ overflow:hidden; }
 .step__n::after{ content:" / 3"; color:var(--dim); }
 .step h3{
   font-family:var(--f-dsp);
-  font-variation-settings:'wdth' 104,'wght' 700;
+  font-weight:700;
   font-size:clamp(1.15rem,1.6vw,1.4rem);
   letter-spacing:-.015em;
   line-height:1.15;
@@ -668,7 +708,7 @@ body.is-locked{ overflow:hidden; }
 }
 .plan__name{
   font-family:var(--f-dsp);
-  font-variation-settings:'wdth' 106,'wght' 700;
+  font-weight:700;
   font-size:1.15rem;
   letter-spacing:-.01em;
 }
@@ -680,7 +720,7 @@ body.is-locked{ overflow:hidden; }
 }
 .plan__price b{
   font-family:var(--f-dsp);
-  font-variation-settings:'wdth' 116,'wght' 800;
+  font-weight:900;
   font-size:clamp(3rem,5vw,4rem);
   line-height:.9;
   letter-spacing:-.045em;
@@ -698,9 +738,9 @@ body.is-locked{ overflow:hidden; }
   color:#B9B9C0;
 }
 .plan__list li::before{
-  content:"✦";
-  position:absolute; left:0; top:.05em;
-  color:var(--red); font-size:.7em;
+  position:absolute; left:0; top:.62em;
+  width:.85em; height:.374em;
+  color:var(--red);
 }
 .plan__cta{ margin-top:auto; width:100%; }
 
@@ -721,7 +761,7 @@ body.is-locked{ overflow:hidden; }
   cursor:pointer;
   list-style:none;
   font-family:var(--f-dsp);
-  font-variation-settings:'wdth' 102,'wght' 600;
+  font-weight:600;
   font-size:clamp(1rem,1.4vw,1.15rem);
   line-height:1.35;
   transition:color .2s;
