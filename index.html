@@ -23,13 +23,13 @@
 <link rel="preload" as="image" href="assets/frames/f001.webp">
 
 <noscript><style>
-  .hero{ height:100svh; }
-  .hero__stage{ position:relative; }
-  .hero__canvas{ display:none; }
-  .hero__still{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
+  .film{ height:100svh; }
+  .film__stage{ position:relative; }
+  .film__canvas{ display:none; }
+  .film__still{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
   .beat[data-beat="2"]{ opacity:1; visibility:visible; transform:none; }
   .third__cta{ opacity:1; transform:none; pointer-events:auto; }
-  .hero__cue{ display:none; }
+  .film__cue{ display:none; }
   .rv{ opacity:1; transform:none; }
 </style></noscript>
 </head>
@@ -84,21 +84,55 @@
 
 <main id="top">
 
-<!-- ══ HERO — scroll-scrubbed film ═════════════════════════ -->
-<section class="hero" id="hero" aria-label="Televizio">
-  <div class="hero__stage">
-    <canvas class="hero__canvas" id="film" aria-hidden="true"></canvas>
-    <noscript><img class="hero__still" src="assets/frames/f097.webp" alt=""></noscript>
+<!-- ══ HERO — the room, tilted in 3D ═══════════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero__stage" id="stage">
+    <div class="hero__plate" id="plate">
+      <img class="hero__room" src="assets/img/room.webp" alt="საღამოს მისაღები ოთახი; კედელზე დამონტაჟებულ ტელევიზორზე ჩართულია Televizio-ს მთავარი ეკრანი" width="1584" height="672" fetchpriority="high">
+      <span class="hero__tvglow" id="tvglow" aria-hidden="true"></span>
+      <span class="hero__neonglow" aria-hidden="true"></span>
+      <span class="hero__sheen" id="sheen" aria-hidden="true"></span>
+      <span class="hero__vig" aria-hidden="true"></span>
+    </div>
+  </div>
+
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <div class="hero__copy" id="heroCopy">
+    <p class="hero__kick"><span class="dot" aria-hidden="true"></span><span class="ka">პირდაპირი ეთერი · თბილისი</span><span class="en">Live · Tbilisi</span></p>
+
+    <h1 class="hero__h1">
+      <span class="ka">ერთი ყუთი.<br><em>1000+</em> არხი.</span>
+      <span class="en">One box.<br><em>1,000+</em> channels.</span>
+    </h1>
+
+    <p class="hero__lede">
+      <span class="ka">Android TV ბოქსი, ქართული ინტერფეისი და ყველა არხი, რაც გინდა — ერთ გამოწერაში, ერთ ანგარიში.</span>
+      <span class="en">An Android TV box, a Georgian interface and every channel you want — one subscription, one bill.</span>
+    </p>
+
+    <div class="hero__cta">
+      <a class="btn btn--red" href="#price"><span class="ka">აიღე ყუთი — 29₾/თვე</span><span class="en">Get the box — 29₾/mo</span></a>
+      <a class="btn btn--ghost" href="#channels"><span class="ka">ნახე არხების სია</span><span class="en">See the channel list</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ THE FILM — scroll-scrubbed ═════════════════════ -->
+<section class="film" id="film" aria-label="გადართვა / The switch">
+  <div class="film__stage">
+    <canvas class="film__canvas" id="filmCanvas" aria-hidden="true"></canvas>
+    <noscript><img class="film__still" src="assets/frames/f097.webp" alt=""></noscript>
 
     <!-- no-JS / reduced-motion fallback -->
-    <video class="hero__video" id="filmVideo" src="assets/video/hero.mp4" muted playsinline loop preload="none" aria-hidden="true"></video>
+    <video class="film__video" id="filmVideo" src="assets/video/hero.mp4" muted playsinline loop preload="none" aria-hidden="true"></video>
 
-    <div class="hero__bloom" id="bloom" aria-hidden="true"></div>
-    <div class="hero__scrim" aria-hidden="true"></div>
+    <div class="film__bloom" id="bloom" aria-hidden="true"></div>
+    <div class="film__scrim" aria-hidden="true"></div>
 
     <!-- broadcast lower-third -->
     <div class="third">
-      <div class="third__kick"><span class="dot" aria-hidden="true"></span><span class="ka">პირდაპირი ეთერი · თბილისი</span><span class="en">Live · Tbilisi</span></div>
+      <div class="third__kick"><span class="dot" aria-hidden="true"></span><span class="ka">გადართვა</span><span class="en">The switch</span></div>
 
       <div class="third__beats">
         <p class="beat is-on" data-beat="0">
@@ -110,18 +144,17 @@
           <span class="en">Cut<br>all of it.</span>
         </p>
         <p class="beat" data-beat="2">
-          <span class="ka">ერთი ყუთი.<br><em>1000+</em> არხი.</span>
-          <span class="en">One box.<br><em>1,000+</em> channels.</span>
+          <span class="ka">დარჩა<br>ერთი <em>ყუთი</em>.</span>
+          <span class="en">What is left:<br>one <em>box</em>.</span>
         </p>
       </div>
 
-      <div class="third__cta" id="heroCta">
-        <a class="btn btn--red" href="#price"><span class="ka">აიღე ყუთი — 29₾/თვე</span><span class="en">Get the box — 29₾/mo</span></a>
-        <a class="btn btn--ghost" href="#channels"><span class="ka">ნახე არხების სია</span><span class="en">See the channel list</span></a>
+      <div class="third__cta" id="filmCta">
+        <a class="btn btn--ghost" href="#box"><span class="ka">გაიცანი ყუთი</span><span class="en">Meet the box</span></a>
       </div>
     </div>
 
-    <div class="hero__cue" id="cue" aria-hidden="true">
+    <div class="film__cue" id="cue" aria-hidden="true">
       <span class="ka">გადაახვიე</span><span class="en">Scroll</span>
       <i></i>
     </div>
