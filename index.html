@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ka" data-lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Televizio — ერთი ყუთი. ათასობით არხი.</title>
+<meta name="description" content="Televizio — Android TV ბოქსი და 1000+ ტელეარხის გამოწერა. ერთი მოწყობილობა, ერთი ანგარიშსწორება, ყველა არხი ერთ ადგილას.">
+<link rel="icon" href="assets/img/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/icon-red.png">
+<meta name="theme-color" content="#000000">
+
+<meta property="og:title" content="Televizio — ერთი ყუთი. ათასობით არხი.">
+<meta property="og:description" content="Android TV ბოქსი და 1000+ არხის გამოწერა. ერთი მოწყობილობა, ერთი ანგარიშსწორება.">
+<meta property="og:image" content="assets/img/icon-red.png">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Georgian:wght@300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="preload" as="image" href="assets/frames/f001.webp">
+
+<noscript><style>
+  .hero{ height:100svh; }
+  .hero__stage{ position:relative; }
+  .hero__canvas{ display:none; }
+  .hero__still{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
+  .beat[data-beat="2"]{ opacity:1; visibility:visible; transform:none; }
+  .third__cta{ opacity:1; transform:none; pointer-events:auto; }
+  .hero__cue{ display:none; }
+  .rv{ opacity:1; transform:none; }
+</style></noscript>
+</head>
+<body>
+
+<a class="skip" href="#channels"><span class="ka">გადადი შიგთავსზე</span><span class="en">Skip to content</span></a>
+
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header class="hdr" id="hdr">
+  <div class="hdr__in">
+    <a class="hdr__logo" href="#top" aria-label="Televizio">
+      <img src="assets/img/logo-white.png" alt="Televizio" width="900" height="280">
+    </a>
+
+    <nav class="hdr__nav" aria-label="მთავარი">
+      <a href="#channels"><span class="ka">არხები</span><span class="en">Channels</span></a>
+      <a href="#box"><span class="ka">ყუთი</span><span class="en">The box</span></a>
+      <a href="#how"><span class="ka">როგორ მუშაობს</span><span class="en">How it works</span></a>
+      <a href="#price"><span class="ka">ფასები</span><span class="en">Pricing</span></a>
+    </nav>
+
+    <div class="hdr__end">
+      <div class="lang" role="group" aria-label="ენა / Language">
+        <button type="button" data-setlang="ka" aria-pressed="true">ქარ</button>
+        <span aria-hidden="true">/</span>
+        <button type="button" data-setlang="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn btn--red hdr__cta" href="#price"><span class="ka">შეუკვეთე</span><span class="en">Order</span></a>
+
+      <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu">
+        <span class="burger__open"><span class="ka">მენიუ</span><span class="en">Menu</span></span>
+        <span class="burger__close"><span class="ka">დახურვა</span><span class="en">Close</span></span>
+      </button>
+    </div>
+  </div>
+  <div class="hdr__meter"><i id="meter"></i></div>
+</header>
+
+<div class="menu" id="menu" hidden>
+  <nav class="menu__nav" aria-label="მთავარი">
+    <a href="#channels"><span class="ka">არხები</span><span class="en">Channels</span></a>
+    <a href="#box"><span class="ka">ყუთი</span><span class="en">The box</span></a>
+    <a href="#how"><span class="ka">როგორ მუშაობს</span><span class="en">How it works</span></a>
+    <a href="#price"><span class="ka">ფასები</span><span class="en">Pricing</span></a>
+    <a href="#faq"><span class="ka">კითხვები</span><span class="en">Questions</span></a>
+  </nav>
+  <div class="menu__foot">
+    <a class="btn btn--red" href="#price"><span class="ka">შეუკვეთე</span><span class="en">Order</span></a>
+    <a class="menu__tel" href="tel:+995322000000">+995 32 2 000 000</a>
+  </div>
+</div>
+
+<main id="top">
+
+<!-- ══ HERO — scroll-scrubbed film ═════════════════════════ -->
+<section class="hero" id="hero" aria-label="Televizio">
+  <div class="hero__stage">
+    <canvas class="hero__canvas" id="film" aria-hidden="true"></canvas>
+    <noscript><img class="hero__still" src="assets/frames/f097.webp" alt=""></noscript>
+
+    <!-- no-JS / reduced-motion fallback -->
+    <video class="hero__video" id="filmVideo" src="assets/video/hero.mp4" muted playsinline loop preload="none" aria-hidden="true"></video>
+
+    <div class="hero__bloom" id="bloom" aria-hidden="true"></div>
+    <div class="hero__scrim" aria-hidden="true"></div>
+
+    <!-- broadcast lower-third -->
+    <div class="third">
+      <div class="third__kick"><span class="dot" aria-hidden="true"></span><span class="ka">პირდაპირი ეთერი · თბილისი</span><span class="en">Live · Tbilisi</span></div>
+
+      <div class="third__beats">
+        <p class="beat is-on" data-beat="0">
+          <span class="ka">ხუთი პულტი.<br>სამი კაბელი.<br>ორი ანგარიში.</span>
+          <span class="en">Five remotes.<br>Three cables.<br>Two bills.</span>
+        </p>
+        <p class="beat" data-beat="1">
+          <span class="ka">გაწყვიტე<br>ყველაფერი.</span>
+          <span class="en">Cut<br>all of it.</span>
+        </p>
+        <p class="beat" data-beat="2">
+          <span class="ka">ერთი ყუთი.<br><em>1000+</em> არხი.</span>
+          <span class="en">One box.<br><em>1,000+</em> channels.</span>
+        </p>
+      </div>
+
+      <div class="third__cta" id="heroCta">
+        <a class="btn btn--red" href="#price"><span class="ka">აიღე ყუთი — 29₾/თვე</span><span class="en">Get the box — 29₾/mo</span></a>
+        <a class="btn btn--ghost" href="#channels"><span class="ka">ნახე არხების სია</span><span class="en">See the channel list</span></a>
+      </div>
+    </div>
+
+    <div class="hero__cue" id="cue" aria-hidden="true">
+      <span class="ka">გადაახვიე</span><span class="en">Scroll</span>
+      <i></i>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TICKER ══════════════════════════════════════════════ -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__row">
+    <div class="ticker__set">
+      <span>იმედი</span><span>რუსთავი 2</span><span>მთავარი არხი</span><span>ფორმულა</span><span>1TV</span><span>TV Pirveli</span><span>პალიტრანიუსი</span><span>მაესტრო</span><span>Setanta Sports</span><span>Eurosport 1</span><span>Discovery</span><span>National Geographic</span><span>HBO</span><span>AMC</span><span>Cartoon Network</span><span>Nickelodeon</span><span>Euronews</span><span>BBC World</span><span>Bloomberg</span><span>TV1000</span><span>Viasat History</span><span>TRT</span><span>Rai 1</span><span>Animal Planet</span>
+    </div>
+    <div class="ticker__set">
+      <span>იმედი</span><span>რუსთავი 2</span><span>მთავარი არხი</span><span>ფორმულა</span><span>1TV</span><span>TV Pirveli</span><span>პალიტრანიუსი</span><span>მაესტრო</span><span>Setanta Sports</span><span>Eurosport 1</span><span>Discovery</span><span>National Geographic</span><span>HBO</span><span>AMC</span><span>Cartoon Network</span><span>Nickelodeon</span><span>Euronews</span><span>BBC World</span><span>Bloomberg</span><span>TV1000</span><span>Viasat History</span><span>TRT</span><span>Rai 1</span><span>Animal Planet</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHANNELS / EPG ══════════════════════════════════════ -->
+<section class="sec sec--channels" id="channels">
+  <div class="wrap">
+    <div class="sec__head">
+      <p class="kick"><span class="ka">არხები</span><span class="en">Channels</span></p>
+      <h2 class="dsp">
+        <span class="ka">ტელეგიდი, რომელიც<br>მთელ ქვეყანას იტევს.</span>
+        <span class="en">A program guide that<br>holds the whole country.</span>
+      </h2>
+      <p class="lede">
+        <span class="ka">ქართული ეთერი, სპორტი, კინო, საბავშვო და 40-ზე მეტი ქვეყნის არხები — ერთ სიაში, ერთი ძებნით. გადაცემა გამოგრჩა? დაბრუნდი 14 დღით უკან.</span>
+        <span class="en">Georgian broadcast, sport, film, kids and channels from over 40 countries — in one list, one search away. Missed something? Rewind up to 14 days.</span>
+      </p>
+    </div>
+
+    <!-- EPG -->
+    <div class="epg">
+      <div class="epg__scroll" tabindex="0" role="region" aria-label="ტელეგიდი / Program guide">
+        <div class="epg__inner">
+          <div class="epg__ruler">
+            <div class="epg__rname"><span class="ka">არხი</span><span class="en">Channel</span></div>
+            <div class="epg__times">
+              <span>18:00</span><span>19:00</span><span>20:00</span><span>21:00</span><span>22:00</span><span>23:00</span>
+            </div>
+          </div>
+
+          <div class="epg__body">
+            <span class="epg__now" style="--now:.46" aria-hidden="true"><b><span class="ka">ახლა</span><span class="en">Now</span></b></span>
+
+            <div class="epg__row">
+              <div class="epg__ch"><b>101</b> იმედი</div>
+              <div class="epg__progs">
+                <div class="prog" style="--span:3">ქალის სახე</div>
+                <div class="prog" style="--span:1">მოამბე</div>
+                <div class="prog is-live" style="--span:4">შუა ქალაქში</div>
+                <div class="prog" style="--span:4">ფილმი: ჭრელი</div>
+              </div>
+            </div>
+
+            <div class="epg__row">
+              <div class="epg__ch"><b>102</b> რუსთავი 2</div>
+              <div class="epg__progs">
+                <div class="prog" style="--span:2">სერიალი</div>
+                <div class="prog" style="--span:2">კურიერი</div>
+                <div class="prog is-live" style="--span:3">პროფილი</div>
+                <div class="prog" style="--span:2">P.S.</div>
+                <div class="prog" style="--span:3">ღამის კინო</div>
+              </div>
+            </div>
+
+            <div class="epg__row">
+              <div class="epg__ch"><b>103</b> მთავარი არხი</div>
+              <div class="epg__progs">
+                <div class="prog" style="--span:4">დღის ამბები</div>
+                <div class="prog is-live" style="--span:4">პოსტფაქტუმ</div>
+                <div class="prog" style="--span:4">დოკუმენტური</div>
+              </div>
+            </div>
+
+            <div class="epg__row">
+              <div class="epg__ch"><b>104</b> ფორმულა</div>
+              <div class="epg__progs">
+                <div class="prog" style="--span:3">ახალი ამბები</div>
+                <div class="prog is-live" style="--span:5">ღამის შოუ</div>
+                <div class="prog" style="--span:4">სერიალი</div>
+              </div>
+            </div>
+
+            <div class="epg__row">
+              <div class="epg__ch"><b>212</b> Setanta Sports</div>
+              <div class="epg__progs">
+                <div class="prog" style="--span:2">Serie A</div>
+                <div class="prog is-live" style="--span:4">UCL — Live</div>
+                <div class="prog" style="--span:2">Highlights</div>
+                <div class="prog" style="--span:4">NBA</div>
+              </div>
+            </div>
+
+            <div class="epg__row">
+              <div class="epg__ch"><b>215</b> Eurosport 1</div>
+              <div class="epg__progs">
+                <div class="prog" style="--span:4">Cycling</div>
+                <div class="prog is-live" style="--span:3">Snooker</div>
+                <div class="prog" style="--span:5">Tennis</div>
+              </div>
+            </div>
+
+            <div class="epg__row">
+              <div class="epg__ch"><b>330</b> Discovery</div>
+              <div class="epg__progs">
+                <div class="prog" style="--span:3">Gold Rush</div>
+                <div class="prog is-live" style="--span:4">How It's Made</div>
+                <div class="prog" style="--span:5">Mythbusters</div>
+              </div>
+            </div>
+
+            <div class="epg__row">
+              <div class="epg__ch"><b>334</b> National Geographic</div>
+              <div class="epg__progs">
+                <div class="prog" style="--span:4">Cosmos</div>
+                <div class="prog is-live" style="--span:4">Air Crash</div>
+                <div class="prog" style="--span:4">Wild Georgia</div>
+              </div>
+            </div>
+
+            <div class="epg__row">
+              <div class="epg__ch"><b>451</b> Cartoon Network</div>
+              <div class="epg__progs">
+                <div class="prog" style="--span:2">Ben 10</div>
+                <div class="prog is-live" style="--span:4">Adventure Time</div>
+                <div class="prog" style="--span:6">Gumball</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="epg__hint">
+        <span class="ka">გადაფურცლე გვერდზე · ნაჩვენებია 1024 არხიდან 9</span>
+        <span class="en">Swipe sideways · showing 9 of 1,024 channels</span>
+      </p>
+    </div>
+
+    <dl class="stats">
+      <div><dt>1 024</dt><dd><span class="ka">არხი გამოწერაში</span><span class="en">channels in the plan</span></dd></div>
+      <div><dt>14 <span class="u"><span class="ka">დღე</span><span class="en">days</span></span></dt><dd><span class="ka">არქივი უკან დაბრუნებისთვის</span><span class="en">of catch-up archive</span></dd></div>
+      <div><dt>40+</dt><dd><span class="ka">ქვეყანა ეთერში</span><span class="en">countries on air</span></dd></div>
+      <div><dt>5</dt><dd><span class="ka">მოწყობილობა ერთ ანგარიშზე</span><span class="en">devices per account</span></dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ══ THE BOX ═════════════════════════════════════════════ -->
+<section class="sec sec--box" id="box">
+  <div class="wrap box">
+    <div class="box__media">
+      <video src="assets/video/box-loop.mp4" poster="assets/img/box-poster.webp" muted playsinline preload="none" data-autoplay aria-label="Televizio Android TV box"></video>
+      <div class="box__halo" aria-hidden="true"></div>
+      <p class="box__cap">
+        <span>Televizio One</span>
+        <span>112 × 112 × 18 mm</span>
+        <span>4K HDR</span>
+      </p>
+    </div>
+
+    <div class="box__copy">
+      <p class="kick"><span class="ka">მოწყობილობა</span><span class="en">The device</span></p>
+      <h2 class="dsp dsp--m">
+        <span class="ka">ჩართე დენში.<br>ჩართე HDMI-ში.<br>უყურე.</span>
+        <span class="en">Plug in power.<br>Plug in HDMI.<br>Watch.</span>
+      </h2>
+      <p class="lede">
+        <span class="ka">ყუთი მოდის უკვე დაყენებული Televizio-ს აპლიკაციით. არანაირი კონფიგურაცია, არანაირი ტექნიკოსის ვიზიტი. მუშაობს ნებისმიერ ტელევიზორთან, რომელსაც HDMI შესასვლელი აქვს — თუნდაც 2010 წლის.</span>
+        <span class="en">The box ships with the Televizio app already installed. No configuration, no technician visit. It works with any TV that has an HDMI input — even one from 2010.</span>
+      </p>
+
+      <table class="spec">
+        <caption class="vh"><span class="ka">ტექნიკური მახასიათებლები</span><span class="en">Technical specification</span></caption>
+        <tbody>
+          <tr><th scope="row"><span class="ka">სისტემა</span><span class="en">System</span></th><td>Android TV 11</td></tr>
+          <tr><th scope="row"><span class="ka">გამოსახულება</span><span class="en">Picture</span></th><td>4K HDR10+ · 60fps</td></tr>
+          <tr><th scope="row"><span class="ka">მეხსიერება</span><span class="en">Memory</span></th><td>2 GB RAM · 16 GB</td></tr>
+          <tr><th scope="row"><span class="ka">ქსელი</span><span class="en">Network</span></th><td>Wi-Fi 5 dual-band · Ethernet</td></tr>
+          <tr><th scope="row"><span class="ka">პორტები</span><span class="en">Ports</span></th><td>HDMI 2.1 · 2 × USB · microSD</td></tr>
+          <tr><th scope="row"><span class="ka">პულტი</span><span class="en">Remote</span></th><td>Bluetooth 5.0 · <span class="ka">ხმოვანი ძებნა</span><span class="en">voice search</span></td></tr>
+          <tr><th scope="row"><span class="ka">გარანტია</span><span class="en">Warranty</span></th><td><span class="ka">24 თვე</span><span class="en">24 months</span></td></tr>
+        </tbody>
+      </table>
+
+      <p class="box__note">
+        <span class="ka"><b>149₾</b> ერთჯერადად, ან <b>უფასოდ</b> 12-თვიან გამოწერასთან ერთად.</span>
+        <span class="en"><b>149₾</b> one-off, or <b>free</b> with a 12-month subscription.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ════════════════════════════════════════ -->
+<section class="sec sec--how" id="how">
+  <div class="wrap">
+    <div class="sec__head sec__head--tight">
+      <p class="kick"><span class="ka">დაწყება</span><span class="en">Getting started</span></p>
+      <h2 class="dsp dsp--m">
+        <span class="ka">შეკვეთიდან ეთერამდე —<br>ორ დღეში.</span>
+        <span class="en">From order to on air —<br>in two days.</span>
+      </h2>
+    </div>
+
+    <ol class="steps">
+      <li class="step">
+        <span class="step__n" aria-hidden="true">1</span>
+        <h3><span class="ka">აირჩიე პაკეტი</span><span class="en">Pick a plan</span></h3>
+        <p><span class="ka">შეავსე ფორმა ან დაგვირეკე. ხელშეკრულება ხელმოსაწერად მოგდის ელფოსტაზე.</span>
+           <span class="en">Fill in the form or call us. The contract arrives by email for signing.</span></p>
+      </li>
+      <li class="step">
+        <span class="step__n" aria-hidden="true">2</span>
+        <h3><span class="ka">მიიღე ყუთი</span><span class="en">Receive the box</span></h3>
+        <p><span class="ka">კურიერი თბილისში მოიტანს 24 საათში, რეგიონებში — 48 საათში. მიტანა უფასოა.</span>
+           <span class="en">A courier delivers within 24 hours in Tbilisi, 48 hours in the regions. Delivery is free.</span></p>
+      </li>
+      <li class="step">
+        <span class="step__n" aria-hidden="true">3</span>
+        <h3><span class="ka">ჩართე და უყურე</span><span class="en">Plug in and watch</span></h3>
+        <p><span class="ka">ყუთი უკვე მიბმულია შენს ანგარიშზე. Wi-Fi პაროლი შეიყვანე — ეთერი ჩართულია.</span>
+           <span class="en">The box is already linked to your account. Enter your Wi-Fi password and you are on air.</span></p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══ PRICING ═════════════════════════════════════════════ -->
+<section class="sec sec--price" id="price">
+  <div class="wrap">
+    <div class="sec__head sec__head--center">
+      <p class="kick"><span class="ka">ფასები</span><span class="en">Pricing</span></p>
+      <h2 class="dsp dsp--m">
+        <span class="ka">ერთი ანგარიში.<br>ყოველთვე იგივე.</span>
+        <span class="en">One bill.<br>The same every month.</span>
+      </h2>
+      <p class="lede lede--center">
+        <span class="ka">დამალული საფასურის, ჩართვის ტარიფისა და პირველი წლის „აქციური" ფასის გარეშე. გააუქმე ნებისმიერ დროს.</span>
+        <span class="en">No hidden fees, no activation charge, no first-year “promo” price. Cancel any time.</span>
+      </p>
+    </div>
+
+    <div class="plans">
+      <article class="plan">
+        <h3 class="plan__name"><span class="ka">ბაზისური</span><span class="en">Basic</span></h3>
+        <p class="plan__price"><b>19</b><span>₾ / <span class="ka">თვე</span><span class="en">mo</span></span></p>
+        <ul class="plan__list">
+          <li><span class="ka">180+ არხი</span><span class="en">180+ channels</span></li>
+          <li><span class="ka">HD ხარისხი</span><span class="en">HD quality</span></li>
+          <li><span class="ka">1 მოწყობილობა</span><span class="en">1 device</span></li>
+          <li><span class="ka">3 დღიანი არქივი</span><span class="en">3-day archive</span></li>
+        </ul>
+        <a class="btn btn--ghost plan__cta" href="#contact"><span class="ka">აირჩიე</span><span class="en">Choose</span></a>
+      </article>
+
+      <article class="plan plan--featured">
+        <p class="plan__flag"><span class="ka">ყველაზე პოპულარული</span><span class="en">Most popular</span></p>
+        <h3 class="plan__name"><span class="ka">სტანდარტი</span><span class="en">Standard</span></h3>
+        <p class="plan__price"><b>29</b><span>₾ / <span class="ka">თვე</span><span class="en">mo</span></span></p>
+        <ul class="plan__list">
+          <li><span class="ka">520+ არხი</span><span class="en">520+ channels</span></li>
+          <li><span class="ka">Full HD ხარისხი</span><span class="en">Full HD quality</span></li>
+          <li><span class="ka">3 მოწყობილობა</span><span class="en">3 devices</span></li>
+          <li><span class="ka">7 დღიანი არქივი</span><span class="en">7-day archive</span></li>
+          <li><span class="ka">ყუთი უფასოდ 12 თვეზე</span><span class="en">Free box on 12 months</span></li>
+        </ul>
+        <a class="btn btn--red plan__cta" href="#contact"><span class="ka">აირჩიე</span><span class="en">Choose</span></a>
+      </article>
+
+      <article class="plan">
+        <h3 class="plan__name"><span class="ka">პრემიუმი</span><span class="en">Premium</span></h3>
+        <p class="plan__price"><b>45</b><span>₾ / <span class="ka">თვე</span><span class="en">mo</span></span></p>
+        <ul class="plan__list">
+          <li><span class="ka">1024 არხი</span><span class="en">1,024 channels</span></li>
+          <li><span class="ka">4K HDR ხარისხი</span><span class="en">4K HDR quality</span></li>
+          <li><span class="ka">5 მოწყობილობა</span><span class="en">5 devices</span></li>
+          <li><span class="ka">14 დღიანი არქივი</span><span class="en">14-day archive</span></li>
+          <li><span class="ka">სპორტული პაკეტი შედის</span><span class="en">Sport pack included</span></li>
+        </ul>
+        <a class="btn btn--ghost plan__cta" href="#contact"><span class="ka">აირჩიე</span><span class="en">Choose</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ═════════════════════════════════════════════════ -->
+<section class="sec sec--faq" id="faq">
+  <div class="wrap faq">
+    <div class="faq__head">
+      <p class="kick"><span class="ka">კითხვები</span><span class="en">Questions</span></p>
+      <h2 class="dsp dsp--s">
+        <span class="ka">სანამ შეუკვეთავ.</span>
+        <span class="en">Before you order.</span>
+      </h2>
+    </div>
+
+    <div class="faq__list">
+      <details class="qa">
+        <summary><span class="ka">რა ინტერნეტი მჭირდება?</span><span class="en">What internet speed do I need?</span></summary>
+        <div class="qa__body"><p>
+          <span class="ka">HD-სთვის 10 Mbps საკმარისია, 4K-სთვის — 25 Mbps. მუშაობს ნებისმიერ ქართულ პროვაიდერზე; ჩვენ ინტერნეტს არ ვყიდით და არ გიბამთ ერთ ოპერატორზე.</span>
+          <span class="en">10 Mbps is enough for HD, 25 Mbps for 4K. It works on any Georgian provider — we don’t sell internet and we don’t tie you to one operator.</span>
+        </p></div>
+      </details>
+
+      <details class="qa">
+        <summary><span class="ka">შემიძლია ტელეფონზე ან ლეპტოპზე ვუყურო?</span><span class="en">Can I watch on a phone or laptop?</span></summary>
+        <div class="qa__body"><p>
+          <span class="ka">დიახ. ერთი ანგარიში მუშაობს ყუთზე, iOS-სა და Android-ზე, ასევე ბრაუზერში. მოწყობილობების რაოდენობა პაკეტზეა დამოკიდებული.</span>
+          <span class="en">Yes. One account works on the box, on iOS and Android, and in the browser. How many devices depends on your plan.</span>
+        </p></div>
+      </details>
+
+      <details class="qa">
+        <summary><span class="ka">საზღვარგარეთ იმუშავებს?</span><span class="en">Does it work outside Georgia?</span></summary>
+        <div class="qa__body"><p>
+          <span class="ka">ქართული არხების უმეტესობა საზღვარგარეთაც ხელმისაწვდომია. ნაწილი საერთაშორისო არხისა ლიცენზიით შემოიფარგლება საქართველოს ტერიტორიით — სია გამოწერამდე გამოგიგზავნით.</span>
+          <span class="en">Most Georgian channels are available abroad. Some international channels are licensed for Georgia only — we send you that list before you subscribe.</span>
+        </p></div>
+      </details>
+
+      <details class="qa">
+        <summary><span class="ka">რა ხდება, თუ გავაუქმებ?</span><span class="en">What happens if I cancel?</span></summary>
+        <div class="qa__body"><p>
+          <span class="ka">გამოწერა ჩერდება მიმდინარე პერიოდის ბოლოს. თუ ყუთი უფასოდ მიიღე 12-თვიან გეგმაზე და პირველ წელს წყვეტ, ყუთის ნარჩენი ღირებულება იფარება ბოლო ანგარიშში.</span>
+          <span class="en">The subscription stops at the end of the current period. If you took the free box on a 12-month plan and leave within the first year, the remaining value of the box is settled on your final bill.</span>
+        </p></div>
+      </details>
+
+      <details class="qa">
+        <summary><span class="ka">უკვე მაქვს Android TV. ყუთი მჭირდება?</span><span class="en">I already have an Android TV. Do I need the box?</span></summary>
+        <div class="qa__body"><p>
+          <span class="ka">არა. Televizio-ს აპლიკაცია დაინსტალირდება არსებულ Android TV-ზე, Google TV-სა და Fire TV-ზე. ყუთი მათთვისაა, ვისაც ჩვეულებრივი ტელევიზორი აქვს.</span>
+          <span class="en">No. The Televizio app installs on an existing Android TV, Google TV or Fire TV. The box is for people with an ordinary television.</span>
+        </p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA / CONTACT ═══════════════════════════════════════ -->
+<section class="sec sec--cta" id="contact">
+  <div class="wrap cta">
+    <span class="cta__star" aria-hidden="true"><img src="assets/img/icon-red.png" alt="" width="512" height="512"></span>
+    <h2 class="dsp dsp--m">
+      <span class="ka">დაიწყე დღეს<br>საღამოს ეთერით.</span>
+      <span class="en">Start with<br>tonight’s broadcast.</span>
+    </h2>
+    <div class="cta__row">
+      <a class="btn btn--red btn--lg" href="tel:+995322000000">+995 32 2 000 000</a>
+      <a class="btn btn--ghost btn--lg" href="mailto:sales@televizio.ge">sales@televizio.ge</a>
+    </div>
+    <p class="cta__fine">
+      <span class="ka">ორშაბათი–შაბათი, 09:00–21:00 · მიტანა უფასოა მთელ საქართველოში</span>
+      <span class="en">Monday–Saturday, 09:00–21:00 · Free delivery across Georgia</span>
+    </p>
+  </div>
+</section>
+
+</main>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════ -->
+<footer class="ftr">
+  <div class="wrap ftr__in">
+    <img class="ftr__logo" src="assets/img/logo-red.png" alt="Televizio" width="900" height="280">
+    <div class="ftr__cols">
+      <div>
+        <p class="ftr__lbl"><span class="ka">კომპანია</span><span class="en">Company</span></p>
+        <p>შპს „ტელევიზიო“<br>Chavchavadze Ave 37, Tbilisi 0179<br><span class="ka">ს/ნ 400000000</span><span class="en">Reg. 400000000</span></p>
+      </div>
+      <div>
+        <p class="ftr__lbl"><span class="ka">კონტაქტი</span><span class="en">Contact</span></p>
+        <p><a href="tel:+995322000000">+995 32 2 000 000</a><br><a href="mailto:hello@televizio.ge">hello@televizio.ge</a></p>
+      </div>
+      <div>
+        <p class="ftr__lbl"><span class="ka">იურიდიული</span><span class="en">Legal</span></p>
+        <p><a href="#"><span class="ka">წესები და პირობები</span><span class="en">Terms of service</span></a><br>
+           <a href="#"><span class="ka">კონფიდენციალურობა</span><span class="en">Privacy</span></a></p>
+      </div>
+    </div>
+    <p class="ftr__base">© 2026 Televizio · televizio.ge</p>
+  </div>
+</footer>
+
+<script src="assets/js/vendor/gsap.min.js"></script>
+<script src="assets/js/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
