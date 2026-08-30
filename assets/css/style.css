@@ -697,6 +697,34 @@ body.is-locked{ overflow:hidden; }
 }
 
 /* ═══ THE BOX ═════════════════════════════════════════════ */
+/* Wide enough and tall enough, the section holds the screen while it
+   assembles, the way the wall and the statistics do. Anywhere smaller
+   it just flows, because the two columns stack into more than a
+   screenful. */
+.box__run{ height:auto; }
+.box__stage{ padding-block:clamp(72px,11vw,150px); }
+
+@media (min-width:901px) and (min-height:700px){
+  .sec--box{ padding-block:0; }
+  .box__run{ height:230vh; }
+  .box__stage{
+    position:sticky; top:0;
+    height:100svh;
+    display:flex; align-items:center;
+    padding-block:0;
+  }
+  .box{ align-items:center; }
+  .box__media{ position:static; }
+}
+@media (prefers-reduced-motion:reduce){
+  .sec--box{ padding-block:clamp(72px,11vw,150px) 0; }
+  .box__run{ height:auto; }
+  .box__stage{
+    position:relative; height:auto;
+    padding-block:0 clamp(72px,11vw,150px);
+  }
+}
+
 .box{
   display:grid;
   grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);

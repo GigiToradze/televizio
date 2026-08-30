@@ -134,11 +134,22 @@ three.js is ~188 KB gzipped. It is fetched once, lazily, shared between the wall
 the field, and only when one of them is within 500–600 px of the viewport. Both render
 loops stop whenever their canvas leaves the screen.
 
-## The product film
+## The box
 
-`box-loop.mp4` in "the box" section starts when it scrolls into view, loops, and
-pauses when it scrolls out — an IntersectionObserver in `main.js` drives it. It is
-muted and `playsinline`, so it autoplays everywhere without a gesture.
+Same shape as the wall and the statistics: a sticky stage in a 230vh runway holds the
+screen while the section assembles — the product film fades up, then the headline, the
+lede, then the spec sheet fills in a line at a time, then the price, then a beat before
+the page releases. Reading the box report itself row by row is the point of the
+sequence.
+
+It only pins above 901px wide and 700px tall, because below that the two columns stack
+into more than a screenful and pinning would trap you. Everywhere else the same
+timeline runs against a normal scroll range, and the runway collapses to the content's
+own height.
+
+`box-loop.mp4` starts when it scrolls into view, loops, and pauses when it scrolls out
+— an IntersectionObserver in `main.js` drives it. It is muted and `playsinline`, so it
+autoplays everywhere without a gesture.
 
 ## Languages
 
