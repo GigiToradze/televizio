@@ -96,10 +96,10 @@ Every one of these sits in its own module in `main.js` and every one is skipped 
 - **The channel strip**, under the hero. Logos ride past desaturated; the one under
   the cursor comes up to full colour and scale with a red halo behind it, and the lane
   slows to a twelfth of its speed while the pointer is over the strip, so the logo you
-  are looking at does not slide out from under you. A tuner sweep still crosses the
-  whole strip on a thirteen-second cycle. The lane runs on GSAP, so
+  are looking at does not slide out from under you. The lane runs on GSAP, so
   `ScrollTrigger.getVelocity()` also drags it faster while you scroll. Coarse pointers
   have no way to reveal anything, so they get the logos part-desaturated instead.
+  The strip carries no rules above or below it — it sits straight on the black.
 - **The wall.** 1,024 instanced cells scatter through depth and assemble into a 32×32
   grid as you scroll a pinned section, each one landing on its own delay and flickering
   at its own rate once it settles. It is the number made literal: that is what a

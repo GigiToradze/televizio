@@ -480,10 +480,9 @@ body.is-locked{ overflow:hidden; }
 
 /* ── channel strip ────────────────────────────────────────── */
 /* Logos ride past in grey; the one under the cursor comes up to
-   full colour and size, and the tuner sweep still crosses the lot. */
+   full colour and size. */
 .scan{
   position:relative; z-index:2;
-  border-block:1px solid var(--rule);
   background:linear-gradient(180deg,#070708,#000);
   overflow:hidden;
   padding:6px 0 0;
@@ -495,21 +494,6 @@ body.is-locked{ overflow:hidden; }
 .scan::before{ left:0;  background:linear-gradient(to right,#000,transparent); }
 .scan::after{  right:0; background:linear-gradient(to left,#000,transparent); }
 
-.scan__head{
-  position:absolute; top:0; bottom:30px; width:170px; z-index:3;
-  background:linear-gradient(90deg,
-    transparent, rgba(228,33,28,.05) 42%, rgba(228,33,28,.26) 70%,
-    rgba(255,130,120,.6) 79%, rgba(228,33,28,.08) 84%, transparent);
-  mix-blend-mode:screen;
-  pointer-events:none;
-  animation:sweep 13s cubic-bezier(.55,0,.45,1) infinite;
-}
-@keyframes sweep{
-  0%   { transform:translateX(-190px); opacity:0; }
-  6%   { opacity:1; }
-  92%  { opacity:1; }
-  100% { transform:translateX(calc(100vw + 190px)); opacity:0; }
-}
 
 .scan__lane{ display:flex; width:max-content; }
 .scan__set{ display:flex; align-items:center; }
@@ -545,8 +529,7 @@ body.is-locked{ overflow:hidden; }
 
 .scan__meta{
   position:relative; z-index:5;
-  padding:8px var(--pad);
-  border-top:1px solid var(--rule);
+  padding:2px var(--pad) 14px;
   font:400 .62rem/1 var(--f-mono);
   letter-spacing:.2em; text-transform:uppercase;
   color:#5C5C64;
@@ -558,10 +541,8 @@ body.is-locked{ overflow:hidden; }
 @media (max-width:640px){
   .logo{ height:76px; width:clamp(116px,34vw,150px); }
   .logo img{ max-height:26px; }
-  .scan__head{ width:120px; }
 }
 @media (prefers-reduced-motion:reduce){
-  .scan__head{ animation:none; opacity:0; }
   .logo img{ transition:filter .2s ease, opacity .2s ease; }
   .logo:hover img{ transform:none; }
 }
