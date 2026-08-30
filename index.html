@@ -3,22 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Televizio — ერთი ყუთი. ათასობით არხი.</title>
-<meta name="description" content="Televizio — Android TV ბოქსი და 1000+ ტელეარხის გამოწერა. ერთი მოწყობილობა, ერთი ანგარიშსწორება, ყველა არხი ერთ ადგილას.">
+<title>Televizio — Android TV ბოქსი და 1000+ არხის გამოწერა</title>
+<meta name="description" content="Televizio — Android TV ბოქსი და 1000+ ტელეარხის გამოწერა საქართველოში. ერთი მოწყობილობა, ერთი ანგარიშსწორება, 14-დღიანი არქივი. 19₾-დან თვეში, მიტანა უფასოა.">
+<link rel="canonical" href="https://televizio.ge/">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="icon" href="assets/img/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <meta name="theme-color" content="#000000">
 
-<meta property="og:title" content="Televizio — ერთი ყუთი. ათასობით არხი.">
-<meta property="og:description" content="Android TV ბოქსი და 1000+ არხის გამოწერა. ერთი მოწყობილობა, ერთი ანგარიშსწორება.">
-<meta property="og:image" content="assets/img/icon-red.png">
+<meta property="og:site_name" content="Televizio">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://televizio.ge/">
+<meta property="og:locale" content="ka_GE">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:title" content="Televizio — ერთი ყუთი. ათასობით არხი.">
+<meta property="og:description" content="Android TV ბოქსი და 1000+ არხის გამოწერა. ერთი მოწყობილობა, ერთი ანგარიშსწორება, 14-დღიანი არქივი.">
+<meta property="og:image" content="https://televizio.ge/assets/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Televizio — საღამოს მისაღები ოთახი, ეკრანზე Televizio-ს მთავარი გვერდი">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Televizio — ერთი ყუთი. ათასობით არხი.">
+<meta name="twitter:description" content="Android TV ბოქსი და 1000+ არხის გამოწერა საქართველოში.">
+<meta name="twitter:image" content="https://televizio.ge/assets/img/og.jpg">
 
+<link rel="preload" as="image" href="assets/img/room.webp" fetchpriority="high">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/eurostile-geo-900.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/eurostile-geo-700.woff2" crossorigin>
-<link rel="preload" as="font" type="font/woff2" href="assets/fonts/eurostile-geo-400.woff2" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+Georgian:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 
 <noscript><style>
@@ -83,7 +97,6 @@
       <img class="hero__room" src="assets/img/room.webp" alt="საღამოს მისაღები ოთახი; კედელზე დამონტაჟებულ ტელევიზორზე ჩართულია Televizio-ს მთავარი ეკრანი" width="1584" height="672" fetchpriority="high">
       <span class="hero__tvglow" id="tvglow" aria-hidden="true"></span>
       <span class="hero__neonglow" aria-hidden="true"></span>
-      <span class="hero__sheen" id="sheen" aria-hidden="true"></span>
       <span class="hero__vig" aria-hidden="true"></span>
     </div>
   </div>
@@ -143,20 +156,20 @@
         <div class="epg__inner">
           <div class="epg__ruler">
             <div class="epg__rname"><span class="ka">არხი</span><span class="en">Channel</span></div>
-            <div class="epg__times">
+            <div class="epg__times" id="epgTimes">
               <span>18:00</span><span>19:00</span><span>20:00</span><span>21:00</span><span>22:00</span><span>23:00</span>
             </div>
           </div>
 
-          <div class="epg__body">
-            <span class="epg__now" style="--now:.46" aria-hidden="true"><b><span class="ka">ახლა</span><span class="en">Now</span></b></span>
+          <div class="epg__body" id="epgBody">
+            <span class="epg__now" id="epgNow" style="--now:.46" aria-hidden="true"><b><span class="ka">ახლა</span><span class="en">Now</span></b></span>
 
             <div class="epg__row">
               <div class="epg__ch"><b>101</b> იმედი</div>
               <div class="epg__progs">
                 <div class="prog" style="--span:3">ქალის სახე</div>
                 <div class="prog" style="--span:1">მოამბე</div>
-                <div class="prog is-live" style="--span:4">შუა ქალაქში</div>
+                <div class="prog" style="--span:4">შუა ქალაქში</div>
                 <div class="prog" style="--span:4">ფილმი: ჭრელი</div>
               </div>
             </div>
@@ -166,7 +179,7 @@
               <div class="epg__progs">
                 <div class="prog" style="--span:2">სერიალი</div>
                 <div class="prog" style="--span:2">კურიერი</div>
-                <div class="prog is-live" style="--span:3">პროფილი</div>
+                <div class="prog" style="--span:3">პროფილი</div>
                 <div class="prog" style="--span:2">P.S.</div>
                 <div class="prog" style="--span:3">ღამის კინო</div>
               </div>
@@ -176,7 +189,7 @@
               <div class="epg__ch"><b>103</b> მთავარი არხი</div>
               <div class="epg__progs">
                 <div class="prog" style="--span:4">დღის ამბები</div>
-                <div class="prog is-live" style="--span:4">პოსტფაქტუმ</div>
+                <div class="prog" style="--span:4">პოსტფაქტუმ</div>
                 <div class="prog" style="--span:4">დოკუმენტური</div>
               </div>
             </div>
@@ -185,7 +198,7 @@
               <div class="epg__ch"><b>104</b> ფორმულა</div>
               <div class="epg__progs">
                 <div class="prog" style="--span:3">ახალი ამბები</div>
-                <div class="prog is-live" style="--span:5">ღამის შოუ</div>
+                <div class="prog" style="--span:5">ღამის შოუ</div>
                 <div class="prog" style="--span:4">სერიალი</div>
               </div>
             </div>
@@ -194,7 +207,7 @@
               <div class="epg__ch"><b>212</b> Setanta Sports</div>
               <div class="epg__progs">
                 <div class="prog" style="--span:2">Serie A</div>
-                <div class="prog is-live" style="--span:4">UCL — Live</div>
+                <div class="prog" style="--span:4">UCL — Live</div>
                 <div class="prog" style="--span:2">Highlights</div>
                 <div class="prog" style="--span:4">NBA</div>
               </div>
@@ -204,7 +217,7 @@
               <div class="epg__ch"><b>215</b> Eurosport 1</div>
               <div class="epg__progs">
                 <div class="prog" style="--span:4">Cycling</div>
-                <div class="prog is-live" style="--span:3">Snooker</div>
+                <div class="prog" style="--span:3">Snooker</div>
                 <div class="prog" style="--span:5">Tennis</div>
               </div>
             </div>
@@ -213,7 +226,7 @@
               <div class="epg__ch"><b>330</b> Discovery</div>
               <div class="epg__progs">
                 <div class="prog" style="--span:3">Gold Rush</div>
-                <div class="prog is-live" style="--span:4">How It's Made</div>
+                <div class="prog" style="--span:4">How It's Made</div>
                 <div class="prog" style="--span:5">Mythbusters</div>
               </div>
             </div>
@@ -222,7 +235,7 @@
               <div class="epg__ch"><b>334</b> Nat Geo</div>
               <div class="epg__progs">
                 <div class="prog" style="--span:4">Cosmos</div>
-                <div class="prog is-live" style="--span:4">Air Crash</div>
+                <div class="prog" style="--span:4">Air Crash</div>
                 <div class="prog" style="--span:4">Wild Georgia</div>
               </div>
             </div>
@@ -231,7 +244,7 @@
               <div class="epg__ch"><b>451</b> Cartoon Network</div>
               <div class="epg__progs">
                 <div class="prog" style="--span:2">Ben 10</div>
-                <div class="prog is-live" style="--span:4">Adventure Time</div>
+                <div class="prog" style="--span:4">Adventure Time</div>
                 <div class="prog" style="--span:6">Gumball</div>
               </div>
             </div>
@@ -245,10 +258,10 @@
     </div>
 
     <dl class="stats">
-      <div><dt>1 024</dt><dd><span class="ka">არხი გამოწერაში</span><span class="en">channels in the plan</span></dd></div>
-      <div><dt>14 <span class="u"><span class="ka">დღე</span><span class="en">days</span></span></dt><dd><span class="ka">არქივი უკან დაბრუნებისთვის</span><span class="en">of catch-up archive</span></dd></div>
-      <div><dt>40+</dt><dd><span class="ka">ქვეყანა ეთერში</span><span class="en">countries on air</span></dd></div>
-      <div><dt>5</dt><dd><span class="ka">მოწყობილობა ერთ ანგარიშზე</span><span class="en">devices per account</span></dd></div>
+      <div><dt data-count="1024" data-format="space">1 024</dt><dd><span class="ka">არხი გამოწერაში</span><span class="en">channels in the plan</span></dd></div>
+      <div><dt><span data-count="14">14</span> <span class="u"><span class="ka">დღე</span><span class="en">days</span></span></dt><dd><span class="ka">არქივი უკან დაბრუნებისთვის</span><span class="en">of catch-up archive</span></dd></div>
+      <div><dt><span data-count="40">40</span>+</dt><dd><span class="ka">ქვეყანა ეთერში</span><span class="en">countries on air</span></dd></div>
+      <div><dt data-count="5">5</dt><dd><span class="ka">მოწყობილობა ერთ ანგარიშზე</span><span class="en">devices per account</span></dd></div>
     </dl>
   </div>
 </section>
@@ -357,7 +370,7 @@
           <li><span class="ka">1 მოწყობილობა</span><span class="en">1 device</span></li>
           <li><span class="ka">3 დღიანი არქივი</span><span class="en">3-day archive</span></li>
         </ul>
-        <a class="btn btn--ghost plan__cta" href="#contact"><span class="ka">აირჩიე</span><span class="en">Choose</span></a>
+        <a class="btn btn--ghost plan__cta" href="#contact" aria-label="Basic — choose this plan"><span class="ka">აირჩიე</span><span class="en">Choose</span></a>
       </article>
 
       <article class="plan plan--featured">
@@ -371,7 +384,7 @@
           <li><span class="ka">7 დღიანი არქივი</span><span class="en">7-day archive</span></li>
           <li><span class="ka">ყუთი უფასოდ 12 თვეზე</span><span class="en">Free box on 12 months</span></li>
         </ul>
-        <a class="btn btn--red plan__cta" href="#contact"><span class="ka">აირჩიე</span><span class="en">Choose</span></a>
+        <a class="btn btn--red plan__cta" href="#contact" aria-label="Standard — choose this plan"><span class="ka">აირჩიე</span><span class="en">Choose</span></a>
       </article>
 
       <article class="plan">
@@ -384,7 +397,7 @@
           <li><span class="ka">14 დღიანი არქივი</span><span class="en">14-day archive</span></li>
           <li><span class="ka">სპორტული პაკეტი შედის</span><span class="en">Sport pack included</span></li>
         </ul>
-        <a class="btn btn--ghost plan__cta" href="#contact"><span class="ka">აირჩიე</span><span class="en">Choose</span></a>
+        <a class="btn btn--ghost plan__cta" href="#contact" aria-label="Premium — choose this plan"><span class="ka">აირჩიე</span><span class="en">Choose</span></a>
       </article>
     </div>
   </div>
@@ -447,6 +460,7 @@
 
 <!-- ══ CTA / CONTACT ═══════════════════════════════════════ -->
 <section class="sec sec--cta" id="contact">
+  <canvas class="cta__field" id="field" aria-hidden="true"></canvas>
   <div class="wrap cta">
     <span class="cta__star" aria-hidden="true"><img src="assets/img/icon-outline.png" alt="" width="512" height="512"></span>
     <h2 class="dsp dsp--m">
@@ -489,8 +503,71 @@
   </div>
 </footer>
 
+<!-- ══ MOBILE ORDER BAR ════════════════════════════════════ -->
+<div class="dock" id="dock" aria-hidden="true">
+  <p class="dock__price">
+    <b>29₾</b><span><span class="ka">/ თვე</span><span class="en">/ mo</span></span>
+  </p>
+  <a class="btn btn--red dock__cta" href="#price" tabindex="-1"><span class="ka">შეუკვეთე</span><span class="en">Order</span></a>
+</div>
+
 <script src="assets/js/vendor/gsap.min.js"></script>
 <script src="assets/js/vendor/ScrollTrigger.min.js"></script>
 <script src="assets/js/main.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://televizio.ge/#org",
+      "name": "Televizio",
+      "url": "https://televizio.ge/",
+      "logo": "https://televizio.ge/assets/img/icon-red.png",
+      "email": "hello@televizio.ge",
+      "telephone": "+995322000000",
+      "areaServed": { "@type": "Country", "name": "Georgia" },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Chavchavadze Ave 37",
+        "addressLocality": "Tbilisi",
+        "postalCode": "0179",
+        "addressCountry": "GE"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://televizio.ge/#site",
+      "url": "https://televizio.ge/",
+      "name": "Televizio",
+      "inLanguage": ["ka", "en"],
+      "publisher": { "@id": "https://televizio.ge/#org" }
+    },
+    {
+      "@type": "Product",
+      "name": "Televizio One",
+      "description": "Android TV ბოქსი Televizio-ს აპლიკაციით და 1000+ არხის გამოწერით.",
+      "image": "https://televizio.ge/assets/img/og.jpg",
+      "brand": { "@id": "https://televizio.ge/#org" },
+      "offers": [
+        { "@type": "Offer", "name": "Basic",    "price": "19", "priceCurrency": "GEL", "availability": "https://schema.org/InStock", "url": "https://televizio.ge/#price" },
+        { "@type": "Offer", "name": "Standard", "price": "29", "priceCurrency": "GEL", "availability": "https://schema.org/InStock", "url": "https://televizio.ge/#price" },
+        { "@type": "Offer", "name": "Premium",  "price": "45", "priceCurrency": "GEL", "availability": "https://schema.org/InStock", "url": "https://televizio.ge/#price" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "რა ინტერნეტი მჭირდება?", "acceptedAnswer": { "@type": "Answer", "text": "HD-სთვის 10 Mbps საკმარისია, 4K-სთვის — 25 Mbps. მუშაობს ნებისმიერ ქართულ პროვაიდერზე." } },
+        { "@type": "Question", "name": "შემიძლია ტელეფონზე ან ლეპტოპზე ვუცვაო?", "acceptedAnswer": { "@type": "Answer", "text": "დიახ. ერთი ანგარიში მუშაობს ყუთზე, iOS-სა და Android-ზე, ასევე ბრაუზერში." } },
+        { "@type": "Question", "name": "საზღვარგარეთ იმუშავებს?", "acceptedAnswer": { "@type": "Answer", "text": "ქართული არხების უმეტესობა საზღვარგარეთაც ხელმისაწვდომია." } },
+        { "@type": "Question", "name": "რა ხდება, თუ გავაუქმებ?", "acceptedAnswer": { "@type": "Answer", "text": "გამოწერა ცედება მიმდინარე პერიოდის ბოლოს." } },
+        { "@type": "Question", "name": "უკვე მაქვს Android TV. ყუთი მჭირდება?", "acceptedAnswer": { "@type": "Answer", "text": "არა. Televizio-ს აპლიკაცია დაინსტალირდება არსებულ Android TV-ზე, Google TV-სა და Fire TV-ზე." } }
+      ]
+    }
+  ]
+}
+</script>
 </body>
 </html>

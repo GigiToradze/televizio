@@ -22,25 +22,34 @@ a plain S3 bucket). Nothing is generated at build time.
 ```
 index.html                 all markup, both languages
 assets/css/style.css       @font-face, tokens + all styles
-assets/js/main.js          language switch, menu, hero parallax, reveals
-assets/js/vendor/          GSAP 3.15 + ScrollTrigger (vendored, no CDN)
+assets/js/main.js          ten small modules, listed in its header comment
+assets/js/vendor/          GSAP 3.15 + ScrollTrigger, three.js r185 (no CDN)
 assets/fonts/              Eurostile GEO_Mt, four weights as woff2
 assets/video/box-loop.mp4  looping product reveal in "the box" section
-assets/img/                room.webp (hero), logo lockups, icons, star mask
+assets/img/                room.webp (hero), og.jpg, logos, icons, star mask
+robots.txt, sitemap.xml    both assume the site is served from televizio.ge
 ```
 
 ## Typography
 
-**Eurostile GEO_Mt** carries both scripts — Georgian and Latin come from the same
-family, so the two language versions look identical in weight and colour. Four
-upright weights are self-hosted as woff2 (`400` body, `600` labels, `700` headings,
-`900` hero). **IBM Plex Mono** is loaded from Google Fonts and used only for
-technical surfaces: the programme-guide time ruler, spec values, buttons, nav and
-meta lines. Georgian inside those mono runs falls back to Eurostile automatically.
+Three faces, three jobs.
 
-The font is a commercial licence from typeface.ge. The woff2 files here were built
-from the TTFs with `fontTools`; confirm the licence covers web embedding before the
-site goes public, and re-export if you need a subset.
+- **Eurostile GEO_Mt** — headlines, nav, buttons, numbers, channel names. Self-hosted
+  as four woff2 weights (400/600/700/900) and it carries both scripts, so Georgian and
+  Latin headlines share the same letterforms.
+- **IBM Plex Sans** with **Noto Sans Georgian** — every paragraph. Eurostile is a
+  display face; at body sizes it slows reading down, in Georgian especially. Anything
+  that is a sentence uses `--f-text` instead.
+- **IBM Plex Mono** — the technical surfaces only: the guide's time ruler, spec
+  values, eyebrows, meta lines.
+
+English headlines set in caps (`[data-lang="en"]` in the CSS), which is what Eurostile
+was drawn for; they also take a slightly smaller size, since caps read optically
+larger. Georgian keeps mixed case — Mkhedruli has no capitals.
+
+The Eurostile licence is a commercial one from typeface.ge. The woff2 files here were
+built from the TTFs with `fontTools`; confirm the licence covers web embedding before
+the site goes public.
 
 ## Brand assets
 
@@ -59,27 +68,45 @@ separator and eyebrow marker takes the colour of its own text.
 
 ## The hero
 
-`room.webp` sits on a CSS 3D stage: `.hero__stage` sets the perspective, `.hero__plate`
-holds `transform-style: preserve-3d`, and the layers inside sit at different
-`translateZ` depths — the bias-light glow behind the set at 52px, the neon sign's halo
-at 34px, a pointer-tracked sheen at 76px. Each depth carries a counter-scale
-(`(perspective − z) / perspective`) so every layer lands exactly on the photograph at
-rest and only separates once the plate tilts.
+`room.webp` fills the section with two light layers over it — the bias glow behind the
+television and the neon sign's halo — each positioned as a fraction of the image and
+blended with `screen`, so the photograph's own light appears to keep burning. The
+television's glow breathes on a nine-second cycle; the neon flickers on its own,
+longer one. A vignette and a left-to-right scrim carry the copy.
 
-Pointer position drives `rotationX` / `rotationY` (±4.2°) through `gsap.quickTo`, the
-copy slides the opposite way for parallax, and the closer the pointer gets to the
-television the brighter the room burns — that's the `--tvglow` custom property being
-tweened, read by the glow layer's `opacity`. Before anyone touches it a slow idle drift
-keeps the room alive; the first pointer move kills it for good. Scroll adds a second
-parallax as the hero leaves.
+There is no pointer tilt. The section moves on scroll only: the plate drifts down and
+scales fractionally while the copy rises and fades out, both scrubbed.
 
-Coarse pointers, touch devices and `prefers-reduced-motion` get the photograph, the
-glow and the scroll parallax, with no tilt and no sheen. On phones the hero re-lays out
-entirely: the room becomes a 52svh band with the copy beneath it.
+On phones the hero re-lays out entirely — the room becomes a 52svh band framed on the
+television and the neon sign, with the copy beneath it.
 
-If you replace `room.webp`, check the three hard-coded frame positions: `TV` in
-`main.js` and the `left`/`top` of `.hero__tvglow` and `.hero__neonglow` in the CSS,
-all expressed as a fraction of the image.
+If you replace `room.webp`, move the two glows with it: the `left`/`top` on
+`.hero__tvglow` and `.hero__neonglow` in the CSS, both fractions of the image.
+
+## What moves, and why
+
+Every one of these sits in its own module in `main.js` and every one is skipped under
+`prefers-reduced-motion`.
+
+- **Hero power-on.** One orchestrated GSAP timeline: the room lifts out of near-black
+  as the bias glow comes up, then the eyebrow, headline, lede and buttons land in
+  sequence. The photograph keeps drifting on scroll as the section leaves.
+- **A guide on the real clock.** The programme grid is not a screenshot. It reads
+  `Date`, opens the ruler two hours before the current hour, puts the playhead at the
+  true position, labels it with the actual time, and marks whichever block each
+  channel is really inside. It re-ticks every 30 seconds. The programme titles are
+  still invented; the timeline around them is not.
+- **A ticker that answers to the scroll.** The channel tape runs on GSAP rather than a
+  CSS animation, and `ScrollTrigger.getVelocity()` drags it faster while you scroll,
+  then eases it back to its own pace.
+- **Counters** on the four statistics, running once when they come into view.
+- **The signal field.** A three.js `Points` grid in the closing section — a custom
+  shader sends concentric rings outward from the centre and bulges toward the pointer.
+  It writes clip space directly, so there is no camera maths and no lighting. three.js
+  is ~188 KB gzipped, so it is loaded with a dynamic `import()` that only fires when
+  that section is within 500 px of the viewport, and the render loop stops whenever the
+  canvas leaves the screen.
+- **Reveals** on section content, and the red signal meter under the header.
 
 ## The product film
 
@@ -93,6 +120,30 @@ Georgian is the default. Every string is in the markup twice, as
 `<span class="ka">` / `<span class="en">`, and CSS shows one set based on
 `<html data-lang>`. The choice is stored in `localStorage` under `televizio-lang`.
 To add or change copy, edit both spans together.
+
+## SEO
+
+- `title`, `description`, canonical, `robots`, full Open Graph and Twitter card sets,
+  and a 1200×630 `og.jpg` built from the hero photograph with the wordmark on it.
+- JSON-LD at the end of `index.html`: `Organization`, `WebSite`, `Product` with the
+  three offers, and `FAQPage` carrying all five questions — the answers are visible on
+  the page, which is what Google requires for the rich result.
+- `robots.txt` and `sitemap.xml`, both pointing at `https://televizio.ge/`. **Change
+  the domain in all four places** (`canonical`, `og:url`, JSON-LD `@id`s, sitemap) if
+  the site lives anywhere else.
+- One real limitation: both languages live at one URL and switch with JavaScript, so
+  there is nothing to declare `hreflang` against. Crawlers index the Georgian set. If
+  the English version needs to rank on its own, it needs its own URL — `/en/` with the
+  markup pre-switched server-side.
+
+## UX notes
+
+- The header nav marks the section you are actually reading (`aria-current`).
+- On phones a dock at the bottom keeps the price and the order button in reach, and
+  gets out of the way once you reach the pricing cards.
+- The mobile menu traps focus while open and returns it to the button on Escape.
+- Plan buttons carry `aria-label`s naming the plan, so "Choose" is not the only thing
+  a screen reader hears.
 
 ## Placeholders to replace before launch
 
@@ -112,8 +163,9 @@ All invented, all realistic — none of it is real business data.
 
 ## Accessibility and fallbacks
 
-- `prefers-reduced-motion`: the tilt, sheen, reveals and ticker are disabled; the
-  hero keeps the photograph and its glow.
+- `prefers-reduced-motion`: the hero timeline, reveals, counters, ticker and the
+  WebGL field are all skipped — three.js is never even fetched. The hero keeps the
+  photograph and its glow, and the counters print their final numbers.
 - No JavaScript: the hero photograph renders as-is, all copy is visible, and the
   site reads top to bottom in Georgian.
 - Keyboard: skip link, visible red focus ring, `<details>` FAQ, Escape closes the
