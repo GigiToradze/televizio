@@ -213,36 +213,59 @@
   })();
 
   /* ── 5b. the statistics open from the middle out ──────── */
-  (function statsFan() {
+  /* Scrubbed, like the wall: the middle number arrives first, then the
+     pair either side, then the outer pair, and each one counts as it
+     lands. Scroll back and it runs in reverse. */
+  (function statsScroll() {
     var stats = document.querySelector('.stats');
     if (!stats) return;
     var cells = Array.prototype.slice.call(stats.querySelectorAll('[data-tier]'));
+    var counted = Array.prototype.slice.call(stats.querySelectorAll('[data-count]'));
     if (!cells.length) return;
 
-    if (!hasGSAP || reduced) return;
+    function write(el, n) {
+      var v = Math.round(n);
+      el.textContent = el.dataset.format === 'space'
+        ? String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+        : String(v);
+    }
 
-    gsap.set(cells, { opacity: 0, y: 26, scale: 0.94 });
+    if (!hasGSAP || reduced) {
+      counted.forEach(function (el) { write(el, +el.dataset.count); });
+      return;
+    }
 
-    ScrollTrigger.create({
-      trigger: stats,
-      start: 'top 82%',
-      once: true,
-      onEnter: function () {
-        [0, 1, 2].forEach(function (tier) {
-          var group = cells.filter(function (c) { return +c.dataset.tier === tier; });
-          gsap.to(group, {
-            opacity: 1, y: 0, scale: 1,
-            duration: 0.8, ease: 'power3.out',
-            delay: tier * 0.22
-          });
-        });
-      }
+    counted.forEach(function (el) { write(el, 0); });
+    gsap.set(cells, { opacity: 0, y: 30, scale: 0.94 });
+
+    var tl = gsap.timeline({
+      scrollTrigger: { trigger: stats, start: 'top 88%', end: 'top 32%', scrub: 0.5 }
+    });
+
+    [0, 1, 2].forEach(function (tier) {
+      var group = cells.filter(function (c) { return +c.dataset.tier === tier; });
+      var at = tier * 0.55;
+
+      tl.to(group, {
+        opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power2.out'
+      }, at);
+
+      group.forEach(function (cell) {
+        var el = cell.querySelector('[data-count]');
+        if (!el) return;
+        var box = { n: 0 };
+        tl.to(box, {
+          n: +el.dataset.count, duration: 1.1, ease: 'power2.out',
+          onUpdate: function () { write(el, box.n); }
+        }, at);
+      });
     });
   })();
 
   /* ── 6. counters ──────────────────────────────────────── */
   (function counters() {
-    var els = document.querySelectorAll('[data-count]');
+    var els = Array.prototype.slice.call(document.querySelectorAll('[data-count]'))
+      .filter(function (el) { return !el.closest('.stats'); });
     if (!els.length) return;
 
     function write(el, n) {

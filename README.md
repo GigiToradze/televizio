@@ -116,10 +116,11 @@ Every one of these sits in its own module in `main.js` and every one is skipped 
 - **The signal field.** A three.js `Points` grid in the closing section — a custom
   shader sends concentric rings outward from the centre and bulges toward the pointer.
   It writes clip space directly, so there is no camera maths and no lighting.
-- **The statistics opening from the middle out.** Five numbers, and they arrive in
-  three waves — the middle one, then the pair either side, then the outer pair — off
-  one ScrollTrigger reading a `data-tier` on each cell. The four that are counts also
-  run up from zero. Plus the red signal meter under the header.
+- **The statistics opening from the middle out.** Five numbers arriving in three
+  waves — the middle one, then the pair either side, then the outer pair — read off a
+  `data-tier` on each cell. Scrubbed against scroll position like the wall, so the
+  numbers climb as you come down the page and run back down if you scroll up. Plus the
+  red signal meter under the header.
 
 Hairlines are gone everywhere except where a grid genuinely needs them: the programme
 guide, the spec table and the FAQ rows. Sections, cards and the header are separated by
