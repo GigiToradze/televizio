@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════
    TELEVIZIO — main.js
-   1. language switch  2. hero parallax  3. scroll-scrubbed film
-   4. signal meter      5. reveals + ambient video
+   1. language switch  2. mobile menu   3. hero parallax
+   4. signal meter      5. reveals    6. ambient video
    ═══════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
@@ -35,7 +35,7 @@
     });
   })();
 
-  /* ── 1b. mobile menu ──────────────────────────────────── */
+  /* ── 2. mobile menu ───────────────────────────────────── */
   (function menu() {
     var burger = document.getElementById('burger');
     var panel = document.getElementById('menu');
@@ -66,7 +66,7 @@
     });
   })();
 
-  /* ── 2. hero: the room tilted in 3D ───────────────────── */
+  /* ── 3. hero: the room tilted in 3D ───────────────────── */
   (function heroTilt() {
     var hero  = document.getElementById('hero');
     var plate = document.getElementById('plate');
@@ -144,140 +144,7 @@
     hero.addEventListener('pointerleave', onLeave);
   })();
 
-  /* ── 2. the scroll-scrubbed film ──────────────────────── */
-  (function filmScrub() {
-    var film = document.getElementById('film');
-    var canvas = document.getElementById('filmCanvas');
-    var bloom = document.getElementById('bloom');
-    var cue = document.getElementById('cue');
-    var cta = document.getElementById('filmCta');
-    var beats = Array.prototype.slice.call(document.querySelectorAll('.beat'));
-    if (!film || !canvas) return;
-
-    var COUNT = 97;                       // assets/frames/f001..f097.webp
-    var ctx = canvas.getContext('2d', { alpha: false });
-    var images = new Array(COUNT);
-    var loaded = new Array(COUNT);
-    var current = -1;
-    var lastDrawn = 0;
-
-    /* Reduced motion or no GSAP: play the plain video instead. */
-    if (reduced || !hasGSAP) {
-      film.classList.add('is-fallback');
-      var v = document.getElementById('filmVideo');
-      if (v) { v.preload = 'auto'; v.play().catch(function () {}); }
-      beats.forEach(function (b, i) { b.classList.toggle('is-on', i === 2); });
-      if (cta) cta.classList.add('is-on');
-      if (cue) cue.style.opacity = '0';
-      return;
-    }
-
-    function src(i) {
-      return 'assets/frames/f' + String(i + 1).padStart(3, '0') + '.webp';
-    }
-
-    function sizeCanvas() {
-      var dpr = Math.min(window.devicePixelRatio || 1, 2);
-      var w = canvas.clientWidth || window.innerWidth;
-      var h = canvas.clientHeight || window.innerHeight;
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-      draw(lastDrawn, true);
-    }
-
-    /* cover on landscape-ish viewports, contain on tall ones —
-       letterboxing is invisible because the footage sits on pure black */
-    function draw(i, force) {
-      if (!force && i === current) return;
-      var img = images[i];
-      if (!img || !loaded[i]) {
-        for (var k = i; k >= 0; k--) { if (loaded[k]) { img = images[k]; i = k; break; } }
-        if (!img) return;
-      }
-      current = i;
-      lastDrawn = i;
-
-      var cw = canvas.width, ch = canvas.height;
-      var iw = img.naturalWidth, ih = img.naturalHeight;
-      var wide = cw / ch >= 1.15;
-      var fit = wide ? Math.max(cw / iw, ch / ih) : Math.min(cw / iw, ch / ih);
-      var dw = iw * fit, dh = ih * fit;
-      /* on portrait the copy owns the lower third, so sit the film above it */
-      var anchor = wide ? 0.5 : 0.40;
-
-      ctx.fillStyle = '#000';
-      ctx.fillRect(0, 0, cw, ch);
-      ctx.drawImage(img, (cw - dw) / 2, (ch - dh) * anchor, dw, dh);
-    }
-
-    /* Load frame 1 first so the stage is never empty, then stream the rest. */
-    function load(i, cb) {
-      var img = new Image();
-      img.decoding = 'async';
-      img.onload = function () { loaded[i] = true; if (cb) cb(); };
-      img.onerror = function () { if (cb) cb(); };
-      img.src = src(i);
-      images[i] = img;
-    }
-
-    load(0, function () { sizeCanvas(); });
-
-    var next = 1;
-    function stream() {
-      if (next >= COUNT) return;
-      var i = next++;
-      load(i, function () {
-        if (i === current) draw(i, true);
-        stream();
-      });
-    }
-    // two parallel streams keeps the sequence ahead of a fast scroll
-    setTimeout(function () { stream(); stream(); }, 200);
-
-    window.addEventListener('resize', sizeCanvas);
-    sizeCanvas();
-
-    /* --- beat sequencing -------------------------------- */
-    var BEATS = [
-      { in: 0.00, out: 0.235 },   // tangled cables
-      { in: 0.305, out: 0.495 },  // the spark
-      { in: 0.735, out: 1.01 }    // the box
-    ];
-
-    function setBeats(p) {
-      for (var i = 0; i < beats.length; i++) {
-        var on = p >= BEATS[i].in && p < BEATS[i].out;
-        if (beats[i].classList.contains('is-on') !== on) beats[i].classList.toggle('is-on', on);
-      }
-      if (cta) cta.classList.toggle('is-on', p >= 0.80);
-    }
-
-    /* bloom peaks with the explosion (~0.46–0.62) */
-    function bloomAt(p) {
-      if (p < 0.30 || p > 0.80) return 0;
-      if (p < 0.50) return (p - 0.30) / 0.20 * 0.9;
-      if (p < 0.60) return 0.9 + (p - 0.50) / 0.10 * 0.1;
-      return Math.max(0, 1 - (p - 0.60) / 0.20);
-    }
-
-    ScrollTrigger.create({
-      trigger: film,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: true,
-      onUpdate: function (self) {
-        var p = self.progress;
-        draw(Math.min(COUNT - 1, Math.round(p * (COUNT - 1))));
-        setBeats(p);
-        if (bloom) bloom.style.opacity = bloomAt(p).toFixed(3);
-        if (cue) cue.style.opacity = String(Math.max(0, 1 - p * 14));
-      }
-    });
-
-    setBeats(0);
-  })();
-
-  /* ── 3. header signal meter ───────────────────────────── */
+  /* ── 4. header signal meter ───────────────────────────── */
   (function meter() {
     var bar = document.getElementById('meter');
     if (!bar || !hasGSAP) return;
@@ -288,7 +155,7 @@
     });
   })();
 
-  /* ── 4. reveals ───────────────────────────────────────── */
+  /* ── 5. reveals ───────────────────────────────────────── */
   (function reveals() {
     if (!hasGSAP || reduced) return;
 
@@ -323,7 +190,7 @@
     });
   })();
 
-  /* ── 5. ambient product video ─────────────────────────── */
+  /* ── 6. ambient product video ─────────────────────────── */
   (function ambient() {
     var vids = document.querySelectorAll('video[data-autoplay]');
     if (!vids.length) return;
@@ -339,7 +206,7 @@
         if (e.isIntersecting) {
           v.preload = 'auto';
           v.play().catch(function () {});
-        } else if (!v.ended) {
+        } else {
           v.pause();
         }
       });

@@ -403,6 +403,7 @@ body.is-locked{ overflow:hidden; }
   box-shadow:0 0 10px 2px rgba(228,33,28,.9);
   animation:pulse 1.9s ease-in-out infinite;
 }
+@keyframes pulse{ 50%{ opacity:.25; } }
 .hero__h1{
   font-family:var(--f-dsp);
   font-weight:900;
@@ -446,126 +447,6 @@ body.is-locked{ overflow:hidden; }
   .hero__neonglow{ animation:none; }
   .hero__sheen{ display:none; }
   .hero__kick .dot{ animation:none; }
-}
-
-/* ═══ THE FILM — scroll-scrubbed ══════════════════════════ */
-.film{
-  position:relative;
-  height:340vh;               /* scroll runway for the scrub */
-  border-top:0;
-}
-.film__stage{
-  position:sticky; top:0;
-  height:100svh; min-height:520px;
-  overflow:hidden;
-  background:var(--black);
-}
-.film__canvas{
-  position:absolute; inset:0;
-  width:100%; height:100%;
-}
-.film__video{
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  object-fit:contain;
-  display:none;
-}
-/* no scrub available: collapse the runway, show the plain film */
-.film.is-fallback{ height:auto; }
-.film.is-fallback .film__stage{ position:relative; }
-.film.is-fallback .film__video{ display:block; }
-.film.is-fallback .film__canvas{ display:none; }
-
-.film__bloom{
-  position:absolute; inset:0;
-  background:radial-gradient(58% 46% at 50% 52%, rgba(228,33,28,.85) 0%, rgba(228,33,28,.32) 34%, rgba(0,0,0,0) 68%);
-  mix-blend-mode:screen;
-  opacity:0;
-  pointer-events:none;
-}
-.film__scrim{
-  position:absolute; inset:0;
-  background:
-    linear-gradient(to top, #000 0%, rgba(0,0,0,.86) 22%, rgba(0,0,0,.22) 48%, rgba(0,0,0,0) 70%),
-    linear-gradient(to bottom, rgba(0,0,0,.85) 0%, rgba(0,0,0,.35) 9%, rgba(0,0,0,0) 18%),
-    linear-gradient(to right, rgba(0,0,0,.7) 0%, rgba(0,0,0,0) 46%);
-  pointer-events:none;
-}
-
-/* broadcast lower-third */
-.third{
-  position:absolute; left:0; right:0; bottom:clamp(28px,6vh,72px);
-  padding-inline:var(--pad);
-  max-width:var(--max); margin-inline:auto;
-}
-.third__kick{
-  display:flex; align-items:center; gap:.6em;
-  font:500 .66rem/1 var(--f-mono);
-  letter-spacing:.24em; text-transform:uppercase;
-  color:#fff;
-  margin-bottom:clamp(14px,1.6vw,20px);
-}
-.third__kick .dot{
-  width:7px; height:7px; border-radius:50%;
-  background:var(--red);
-  box-shadow:0 0 10px 2px rgba(228,33,28,.9);
-  animation:pulse 1.9s ease-in-out infinite;
-}
-@keyframes pulse{ 50%{ opacity:.25; } }
-
-.third__beats{ position:relative; }
-.beat{
-  font-family:var(--f-dsp);
-  font-weight:900;
-  font-size:clamp(1.9rem,8.4vw,6rem);
-  line-height:.94;
-  letter-spacing:-.035em;
-  opacity:0;
-  visibility:hidden;
-  transform:translateY(14px);
-  transition:opacity .5s ease, transform .5s cubic-bezier(.2,.7,.2,1), visibility .5s;
-}
-.beat + .beat{ position:absolute; inset:0; }
-.beat.is-on{ opacity:1; visibility:visible; transform:none; }
-.beat em{
-  font-style:normal;
-  color:var(--red);
-  text-shadow:0 0 40px rgba(228,33,28,.55);
-}
-.beat::after{
-  content:"";
-  display:block;
-  width:64px; height:3px;
-  margin-top:clamp(14px,1.8vw,22px);
-  background:var(--red);
-  box-shadow:0 0 18px 1px rgba(228,33,28,.8);
-}
-
-.third__cta{
-  display:flex; flex-wrap:wrap; gap:12px;
-  margin-top:clamp(22px,3vw,34px);
-  opacity:0;
-  transform:translateY(10px);
-  pointer-events:none;
-  transition:opacity .5s ease .05s, transform .5s cubic-bezier(.2,.7,.2,1) .05s;
-}
-.third__cta.is-on{ opacity:1; transform:none; pointer-events:auto; }
-
-.film__cue{
-  position:absolute; right:var(--pad); bottom:clamp(28px,6vh,72px);
-  display:flex; flex-direction:column; align-items:center; gap:10px;
-  font:500 .62rem/1 var(--f-mono);
-  letter-spacing:.22em; text-transform:uppercase;
-  color:var(--dim);
-  writing-mode:vertical-rl;
-}
-.film__cue i{
-  display:block; width:1px; height:44px;
-  background:linear-gradient(to bottom,var(--red),transparent);
-}
-@media (max-width:900px){
-  .film__cue{ display:none; }
-  .film{ height:330vh; }   /* shorter runway so phones reach the content sooner */
 }
 
 /* ── ticker ───────────────────────────────────────────────── */
@@ -991,5 +872,4 @@ body.is-locked{ overflow:hidden; }
 .rv{ opacity:0; transform:translateY(22px); }
 @media (prefers-reduced-motion:reduce){
   .rv{ opacity:1 !important; transform:none !important; }
-  .third__cta{ opacity:1; pointer-events:auto; }
 }

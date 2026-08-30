@@ -9,8 +9,8 @@ Static HTML/CSS/JS. No build step, no dependencies to install.
 npx serve -l 4173 .
 ```
 
-Then open http://localhost:4173. Any static server works; the page must be served over
-HTTP (not `file://`) so the frame sequence loads.
+Then open http://localhost:4173. Any static server works; serve it over HTTP rather
+than opening the file directly, so the fonts and video load.
 
 ## Deploy
 
@@ -22,12 +22,10 @@ a plain S3 bucket). Nothing is generated at build time.
 ```
 index.html                 all markup, both languages
 assets/css/style.css       @font-face, tokens + all styles
-assets/js/main.js          language switch, hero scrub, menu, reveals
+assets/js/main.js          language switch, menu, hero parallax, reveals
 assets/js/vendor/          GSAP 3.15 + ScrollTrigger (vendored, no CDN)
 assets/fonts/              Eurostile GEO_Mt, four weights as woff2
-assets/frames/f001..f097   hero film, one webp per frame (1.8 MB total)
-assets/video/hero.mp4      hero fallback for reduced-motion / no-GSAP
-assets/video/box-loop.mp4  product reveal in "the box" section
+assets/video/box-loop.mp4  looping product reveal in "the box" section
 assets/img/                room.webp (hero), logo lockups, icons, star mask
 ```
 
@@ -79,27 +77,15 @@ Coarse pointers, touch devices and `prefers-reduced-motion` get the photograph, 
 glow and the scroll parallax, with no tilt and no sheen. On phones the hero re-lays out
 entirely: the room becomes a 52svh band with the copy beneath it.
 
-## The film
-
-`assets/frames/` is the source video decimated to every second frame (97 frames from
-8.04 s at 24 fps) and painted into a `<canvas>` by GSAP ScrollTrigger, so the film is
-scrubbed by scroll position rather than played. It runs as the second section — the
-"cut the cables" argument between the hero and the channel guide. The scroll runway is
-`.film { height }` in the CSS — 340vh on desktop, 330vh on phones.
-
-To swap the film, re-run:
-
-```bash
-ffmpeg -i source.mp4 -vf "select='not(mod(n\,2))',scale=1280:720" -vsync 0 \
-  -c:v libwebp -f image2 -quality 72 -preset photo assets/frames/f%03d.webp
-```
-
-then update `COUNT` in `assets/js/main.js` and the `BEATS` milestones (progress ranges,
-0–1) that decide when each headline and the red bloom appear.
-
-If you replace `room.webp`, check the two hard-coded frame positions: `TV` in
+If you replace `room.webp`, check the three hard-coded frame positions: `TV` in
 `main.js` and the `left`/`top` of `.hero__tvglow` and `.hero__neonglow` in the CSS,
 all expressed as a fraction of the image.
+
+## The product film
+
+`box-loop.mp4` in "the box" section starts when it scrolls into view, loops, and
+pauses when it scrolls out — an IntersectionObserver in `main.js` drives it. It is
+muted and `playsinline`, so it autoplays everywhere without a gesture.
 
 ## Languages
 
@@ -126,10 +112,9 @@ All invented, all realistic — none of it is real business data.
 
 ## Accessibility and fallbacks
 
-- `prefers-reduced-motion`: the tilt, sheen, scrub, reveals and ticker are disabled;
-  the film section collapses to one screen and plays `hero.mp4` instead.
-- No JavaScript: the hero photograph renders as-is, the film section collapses to one
-  screen showing its final frame, all copy is visible, and the site reads top to
-  bottom in Georgian.
+- `prefers-reduced-motion`: the tilt, sheen, reveals and ticker are disabled; the
+  hero keeps the photograph and its glow.
+- No JavaScript: the hero photograph renders as-is, all copy is visible, and the
+  site reads top to bottom in Georgian.
 - Keyboard: skip link, visible red focus ring, `<details>` FAQ, Escape closes the
   mobile menu.

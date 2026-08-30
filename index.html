@@ -20,16 +20,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="preload" as="image" href="assets/frames/f001.webp">
 
 <noscript><style>
-  .film{ height:100svh; }
-  .film__stage{ position:relative; }
-  .film__canvas{ display:none; }
-  .film__still{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
-  .beat[data-beat="2"]{ opacity:1; visibility:visible; transform:none; }
-  .third__cta{ opacity:1; transform:none; pointer-events:auto; }
-  .film__cue{ display:none; }
   .rv{ opacity:1; transform:none; }
 </style></noscript>
 </head>
@@ -114,49 +106,6 @@
     <div class="hero__cta">
       <a class="btn btn--red" href="#price"><span class="ka">აიღე ყუთი — 29₾/თვე</span><span class="en">Get the box — 29₾/mo</span></a>
       <a class="btn btn--ghost" href="#channels"><span class="ka">ნახე არხების სია</span><span class="en">See the channel list</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- ══ THE FILM — scroll-scrubbed ═════════════════════ -->
-<section class="film" id="film" aria-label="გადართვა / The switch">
-  <div class="film__stage">
-    <canvas class="film__canvas" id="filmCanvas" aria-hidden="true"></canvas>
-    <noscript><img class="film__still" src="assets/frames/f097.webp" alt=""></noscript>
-
-    <!-- no-JS / reduced-motion fallback -->
-    <video class="film__video" id="filmVideo" src="assets/video/hero.mp4" muted playsinline loop preload="none" aria-hidden="true"></video>
-
-    <div class="film__bloom" id="bloom" aria-hidden="true"></div>
-    <div class="film__scrim" aria-hidden="true"></div>
-
-    <!-- broadcast lower-third -->
-    <div class="third">
-      <div class="third__kick"><span class="dot" aria-hidden="true"></span><span class="ka">გადართვა</span><span class="en">The switch</span></div>
-
-      <div class="third__beats">
-        <p class="beat is-on" data-beat="0">
-          <span class="ka">ხუთი პულტი.<br>სამი კაბელი.<br>ორი ანგარიში.</span>
-          <span class="en">Five remotes.<br>Three cables.<br>Two bills.</span>
-        </p>
-        <p class="beat" data-beat="1">
-          <span class="ka">გაწყვიტე<br>ყველაფერი.</span>
-          <span class="en">Cut<br>all of it.</span>
-        </p>
-        <p class="beat" data-beat="2">
-          <span class="ka">დარჩა<br>ერთი <em>ყუთი</em>.</span>
-          <span class="en">What is left:<br>one <em>box</em>.</span>
-        </p>
-      </div>
-
-      <div class="third__cta" id="filmCta">
-        <a class="btn btn--ghost" href="#box"><span class="ka">გაიცანი ყუთი</span><span class="en">Meet the box</span></a>
-      </div>
-    </div>
-
-    <div class="film__cue" id="cue" aria-hidden="true">
-      <span class="ka">გადაახვიე</span><span class="en">Scroll</span>
-      <i></i>
     </div>
   </div>
 </section>
@@ -308,7 +257,7 @@
 <section class="sec sec--box" id="box">
   <div class="wrap box">
     <div class="box__media">
-      <video src="assets/video/box-loop.mp4" poster="assets/img/box-poster.webp" muted playsinline preload="none" data-autoplay aria-label="Televizio Android TV box"></video>
+      <video src="assets/video/box-loop.mp4" poster="assets/img/box-poster.webp" muted playsinline loop preload="none" data-autoplay aria-label="Televizio Android TV box"></video>
       <div class="box__halo" aria-hidden="true"></div>
       <p class="box__cap">
         <span>Televizio One</span>
