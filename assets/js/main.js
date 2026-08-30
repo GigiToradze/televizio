@@ -311,15 +311,30 @@
 
     var tape = gsap.to(row, { xPercent: -50, duration: 74, ease: 'none', repeat: -1 });
     var settle;
+    var held = false;
+
+    /* a logo you are looking at should not slide out from under you */
+    var strip = row.closest('.scan');
+    if (strip) {
+      strip.addEventListener('pointerenter', function () {
+        held = true;
+        gsap.to(tape, { timeScale: 0.12, duration: 0.5, ease: 'power2.out' });
+      });
+      strip.addEventListener('pointerleave', function () {
+        held = false;
+        gsap.to(tape, { timeScale: 1, duration: 0.9, ease: 'power2.out' });
+      });
+    }
 
     /* scrolling drags the tape along with you, then it settles back */
     ScrollTrigger.create({
       onUpdate: function (self) {
+        if (held) return;
         var v = Math.abs(gsap.utils.clamp(-6, 6, self.getVelocity() / 320));
         tape.timeScale(1 + v);
         clearTimeout(settle);
         settle = setTimeout(function () {
-          gsap.to(tape, { timeScale: 1, duration: 1.2, ease: 'power2.out' });
+          if (!held) gsap.to(tape, { timeScale: 1, duration: 1.2, ease: 'power2.out' });
         }, 140);
       }
     });

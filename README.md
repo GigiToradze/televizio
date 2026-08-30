@@ -27,6 +27,7 @@ assets/js/vendor/          GSAP 3.15 + ScrollTrigger, three.js r185 (no CDN)
 assets/fonts/              Eurostile GEO_Mt, four weights as woff2
 assets/video/box-loop.mp4  looping product reveal in "the box" section
 assets/img/                room.webp (hero), og.jpg, logos, icons, star mask
+assets/img/channels/       26 channel marks — PLACEHOLDERS, see the README there
 robots.txt, sitemap.xml    both assume the site is served from televizio.ge
 favicon.ico                only so browsers stop asking for it
 ```
@@ -92,12 +93,13 @@ Every one of these sits in its own module in `main.js` and every one is skipped 
 - **Hero power-on.** One orchestrated GSAP timeline: the room lifts out of near-black
   as the bias glow comes up, then the eyebrow, headline, lede and buttons land in
   sequence. The photograph keeps drifting on scroll as the section leaves.
-- **The tuner scan strip**, under the hero. Not a logo marquee — a spectrum. Every
-  channel is a bar whose height is its signal, with its number and name beneath, and
-  the bars run a travelling wave through a staggered `animation-delay`. A scan head
-  crosses the strip on an eleven-second sweep, lighting whatever it passes, the way a
-  tuner looks while it searches the band. The whole lane runs on GSAP so
-  `ScrollTrigger.getVelocity()` can drag it faster while you scroll.
+- **The channel strip**, under the hero. Logos ride past desaturated; the one under
+  the cursor comes up to full colour and scale with a red halo behind it, and the lane
+  slows to a twelfth of its speed while the pointer is over the strip, so the logo you
+  are looking at does not slide out from under you. A tuner sweep still crosses the
+  whole strip on a thirteen-second cycle. The lane runs on GSAP, so
+  `ScrollTrigger.getVelocity()` also drags it faster while you scroll. Coarse pointers
+  have no way to reveal anything, so they get the logos part-desaturated instead.
 - **The wall.** 1,024 instanced cells scatter through depth and assemble into a 32×32
   grid as you scroll a pinned section, each one landing on its own delay and flickering
   at its own rate once it settles. It is the number made literal: that is what a
@@ -182,6 +184,7 @@ All invented, all realistic — none of it is real business data.
 | Company | Chavchavadze Ave 37, Tbilisi 0179; reg. 400000000 |
 | Legal links | Terms and Privacy point at `#` |
 | Plan buttons | "Choose" links jump to `#contact`; wire them to a real order form |
+| Channel marks | All 26 files in `assets/img/channels/` are stand-ins, not the broadcasters' logos — replace them with licensed artwork |
 
 ## Accessibility and fallbacks
 
