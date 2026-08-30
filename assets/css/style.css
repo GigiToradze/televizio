@@ -302,7 +302,7 @@ body.is-locked{ overflow:hidden; }
   .hdr__cta{ display:none; }
 }
 
-/* ═══ HERO — the room, tilted in 3D ══════════════════════ */
+/* ═══ HERO — three rooms, crossfading ════════════════════ */
 .hero{
   position:relative;
   min-height:100svh;
@@ -311,53 +311,18 @@ body.is-locked{ overflow:hidden; }
   isolation:isolate;
 }
 
-.hero__stage{
-  position:absolute; inset:0;
-  z-index:0;
-}
-.hero__plate{
-  position:absolute; inset:0;
-  will-change:transform;
-}
-.hero__room{
+.hero__stage{ position:absolute; inset:0; z-index:0; }
+.hero__plate{ position:absolute; inset:0; will-change:transform; }
+
+.hero__scene{
   position:absolute; inset:0;
   width:100%; height:100%;
   object-fit:cover;
   object-position:64% 46%;
-  transform:scale(1.06);
+  transform:scale(1.04);
+  opacity:0;
 }
-
-/* the bias light behind the set, breathing */
-.hero__tvglow{
-  position:absolute;
-  left:73.3%; top:36.5%;
-  width:46%; aspect-ratio:1.5;
-  transform:translate(-50%,-50%);
-  background:radial-gradient(closest-side, rgba(228,33,28,.62), rgba(228,33,28,.18) 52%, transparent 76%);
-  mix-blend-mode:screen;
-  filter:blur(6px);
-  opacity:var(--tvglow, .74);
-  pointer-events:none;
-  animation:bias 9s ease-in-out infinite;
-}
-@keyframes bias{ 50%{ opacity:calc(var(--tvglow, .74) * 1.22); } }
-.hero__neonglow{
-  position:absolute;
-  left:52.7%; top:33.1%;
-  width:13%; aspect-ratio:2.4;
-  transform:translate(-50%,-50%);
-  background:radial-gradient(closest-side, rgba(255,64,52,.5), transparent 72%);
-  mix-blend-mode:screen;
-  filter:blur(5px);
-  pointer-events:none;
-  animation:flicker 7s ease-in-out infinite;
-}
-@keyframes flicker{
-  0%,100%{ opacity:.75; }
-  46%{ opacity:1; }
-  49%{ opacity:.55; }
-  52%{ opacity:.95; }
-}
+.hero__scene.is-on{ opacity:1; }
 
 .hero__vig{
   position:absolute; inset:0;
@@ -365,13 +330,13 @@ body.is-locked{ overflow:hidden; }
   pointer-events:none;
 }
 
-/* keeps the copy legible over the empty wall */
+/* keeps the copy legible whichever room is on */
 .hero__scrim{
   position:absolute; inset:0; z-index:1;
   background:
-    linear-gradient(to right, #000 0%, rgba(0,0,0,.9) 26%, rgba(0,0,0,.35) 50%, rgba(0,0,0,0) 68%),
+    linear-gradient(to right, #000 0%, rgba(0,0,0,.9) 26%, rgba(0,0,0,.42) 52%, rgba(0,0,0,0) 72%),
     linear-gradient(to bottom, rgba(0,0,0,.7) 0%, rgba(0,0,0,0) 16%),
-    linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,0) 22%);
+    linear-gradient(to top, rgba(0,0,0,.8) 0%, rgba(0,0,0,0) 26%);
   pointer-events:none;
 }
 
@@ -380,7 +345,7 @@ body.is-locked{ overflow:hidden; }
   width:100%;
   max-width:var(--max);
   margin-inline:auto;
-  padding:calc(var(--hdr-h) + clamp(24px,5vh,60px)) var(--pad) clamp(40px,7vh,80px);
+  padding:calc(var(--hdr-h) + clamp(24px,5vh,60px)) var(--pad) clamp(56px,9vh,96px);
   will-change:transform;
 }
 .hero__kick{
@@ -415,6 +380,27 @@ body.is-locked{ overflow:hidden; }
   margin-top:clamp(24px,3vw,36px);
 }
 
+/* which room you are looking at */
+.hero__dots{
+  position:absolute; z-index:3;
+  left:50%; bottom:clamp(18px,3.2vh,34px);
+  transform:translateX(-50%);
+  display:flex; gap:10px;
+}
+.hero__dots button{
+  appearance:none; border:0; padding:0;
+  width:32px; height:3px;
+  border-radius:2px;
+  background:rgba(255,255,255,.24);
+  cursor:pointer;
+  transition:background .45s ease, width .45s cubic-bezier(.2,.8,.2,1);
+}
+.hero__dots button:hover{ background:rgba(255,255,255,.5); }
+.hero__dots button[aria-selected="true"]{
+  width:52px;
+  background:var(--red);
+}
+
 @media (max-width:900px){
   /* portrait: the room becomes a band, the copy sits under it */
   .hero{ min-height:0; display:block; padding-bottom:clamp(36px,7vw,56px); }
@@ -425,14 +411,10 @@ body.is-locked{ overflow:hidden; }
       linear-gradient(to bottom, rgba(0,0,0,.72) 0%, rgba(0,0,0,0) 20%),
       linear-gradient(to top, #000 0%, rgba(0,0,0,.5) 14%, rgba(0,0,0,0) 34%);
   }
-  .hero__room{ object-position:68% 44%; }
-  .hero__copy{ padding-top:clamp(20px,4vw,32px); }
+  .hero__scene{ object-position:68% 44%; }
+  .hero__copy{ padding-top:clamp(20px,4vw,32px); padding-bottom:0; }
   .hero__lede{ max-width:none; }
-}
-
-@media (prefers-reduced-motion:reduce){
-  .hero__neonglow,
-  .hero__tvglow{ animation:none; }
+  .hero__dots{ bottom:auto; top:calc(52svh - 26px); }
 }
 
 /* ── channel strip ────────────────────────────────────────── */

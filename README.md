@@ -26,7 +26,7 @@ assets/js/main.js          ten small modules, listed in its header comment
 assets/js/vendor/          GSAP 3.15 + ScrollTrigger, three.js r185 (no CDN)
 assets/fonts/              Eurostile GEO_Mt, four weights as woff2
 assets/video/box-loop.mp4  looping product reveal in "the box" section
-assets/img/                room.webp (hero), og.jpg, logos, icons, star mask
+assets/img/                scene-1..3.webp (hero), og.jpg, logos, icons, star
 assets/img/channels/       26 channel marks — PLACEHOLDERS, see the README there
 robots.txt, sitemap.xml    both assume the site is served from televizio.ge
 favicon.ico                only so browsers stop asking for it
@@ -75,20 +75,18 @@ separator and eyebrow marker takes the colour of its own text.
 
 ## The hero
 
-`room.webp` fills the section with two light layers over it — the bias glow behind the
-television and the neon sign's halo — each positioned as a fraction of the image and
-blended with `screen`, so the photograph's own light appears to keep burning. The
-television's glow breathes on a nine-second cycle; the neon flickers on its own,
-longer one. A vignette and a left-to-right scrim carry the copy.
+Three rooms, not one: a film night, a match, the evening news. They crossfade every
+6.5 seconds over 1.4, driven by a timer in `main.js`, with dot indicators centred at the
+bottom that both show which room is up and switch to it on click. The rotation stops
+when the hero scrolls out of view and when the tab is hidden, and never starts at all
+under `prefers-reduced-motion` — that gets the first room and working dots.
 
-There is no pointer tilt. The section moves on scroll only: the plate drifts down and
-scales fractionally while the copy rises and fades out, both scrubbed.
+The scenes already carry their own light, so there are no glow layers over them any
+more; a vignette and a left-to-right scrim carry the copy. The section moves on scroll
+only: the plate drifts down and scales fractionally while the copy rises and fades out.
 
-On phones the hero re-lays out entirely — the room becomes a 52svh band framed on the
-television and the neon sign, with the copy beneath it.
-
-If you replace `room.webp`, move the two glows with it: the `left`/`top` on
-`.hero__tvglow` and `.hero__neonglow` in the CSS, both fractions of the image.
+On phones the hero re-lays out — the rooms become a 52svh band with the dots sitting at
+its lower edge and the copy beneath.
 
 ## What moves, and why
 

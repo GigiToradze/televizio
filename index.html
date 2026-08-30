@@ -27,7 +27,7 @@
 <meta name="twitter:description" content="Android TV ბოქსი და 1000+ არხის გამოწერა საქართველოში.">
 <meta name="twitter:image" content="https://televizio.ge/assets/img/og.jpg">
 
-<link rel="preload" as="image" href="assets/img/room.webp" fetchpriority="high">
+<link rel="preload" as="image" href="assets/img/scene-1.webp" fetchpriority="high">
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/eurostile-geo-900.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/eurostile-geo-700.woff2" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -104,9 +104,12 @@
 <section class="hero" id="hero">
   <div class="hero__stage" id="stage">
     <div class="hero__plate" id="plate">
-      <img class="hero__room" src="assets/img/room.webp" alt="საღამოს მისაღები ოთახი; კედელზე დამონტაჟებულ ტელევიზორზე ჩართულია Televizio-ს მთავარი ეკრანი" width="1584" height="672" fetchpriority="high">
-      <span class="hero__tvglow" id="tvglow" aria-hidden="true"></span>
-      <span class="hero__neonglow" aria-hidden="true"></span>
+      <img class="hero__scene is-on" src="assets/img/scene-1.webp" alt="ოთხი მეგობარი საღამოს ფილმს უყურებს კედელზე დაკიდებულ ტელევიზორში"
+           width="1584" height="672" fetchpriority="high">
+      <img class="hero__scene" src="assets/img/scene-2.webp" alt="მეგობრები ფეხბურთის მატჩს უყურებენ; კედელზე Televizio-ს ნეონის აბრა"
+           width="1584" height="672" loading="lazy">
+      <img class="hero__scene" src="assets/img/scene-3.webp" alt="ხანდაზმული წყვილი ბუხრის წინ სიახლეებს უყურებს"
+           width="1584" height="672" loading="lazy">
       <span class="hero__vig" aria-hidden="true"></span>
     </div>
   </div>
@@ -131,10 +134,15 @@
       <a class="btn btn--ghost" href="#channels"><span class="ka">ნახე არხების სია</span><span class="en">See the channel list</span></a>
     </div>
   </div>
+
+  <div class="hero__dots" id="heroDots" role="tablist" aria-label="ეკრანები / Scenes">
+    <button type="button" role="tab" aria-selected="true"  aria-label="1"></button>
+    <button type="button" role="tab" aria-selected="false" aria-label="2"></button>
+    <button type="button" role="tab" aria-selected="false" aria-label="3"></button>
+  </div>
 </section>
 
-<!-- ══ TICKER ══════════════════════════════════════════════ -->
-<!-- ══ TUNER SCAN ══════════════════════════════════════════ -->
+<!-- ══ CHANNEL STRIP ═══════════════════════════════════════ -->
 <div class="scan" aria-hidden="true">
   <div class="scan__lane" id="scanLane">
     <div class="scan__set"><span class="logo"><img src="assets/img/channels/imedi.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/rustavi2.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/mtavari.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/formula.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/1tv.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/tv-pirveli.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/palitranews.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/maestro.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/setanta.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/eurosport.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/sport1.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/discovery.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/natgeo.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/animal-planet.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/tlc.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/hbo.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/amc.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/tv1000.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/cartoon.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/nickelodeon.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/euronews.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/bbc-world.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/bloomberg.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/trt.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/rai1.svg" alt="" loading="lazy" width="200" height="88"></span><span class="logo"><img src="assets/img/channels/viasat.svg" alt="" loading="lazy" width="200" height="88"></span></div>

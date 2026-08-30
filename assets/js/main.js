@@ -86,35 +86,90 @@
     });
   })();
 
-  /* ── 3. hero ──────────────────────────────────────────── */
+  /* ── 3. hero: three rooms, crossfading ───────────────── */
   (function hero() {
     var section = document.getElementById('hero');
     var plate = document.getElementById('plate');
     var copy = document.getElementById('heroCopy');
+    var dotBox = document.getElementById('heroDots');
+    var scenes = document.querySelectorAll('.hero__scene');
+    var dots = dotBox ? dotBox.querySelectorAll('button') : [];
     if (!section || !plate) return;
 
+    var HOLD = 6.5;          // seconds a room stays up
+    var FADE = 1.4;          // seconds to cross to the next
+    var at = 0;
+    var timer = null;
+
+    function mark(i) {
+      for (var d = 0; d < dots.length; d++) {
+        dots[d].setAttribute('aria-selected', String(d === i));
+      }
+    }
+
+    /* no GSAP or no appetite for motion: first room, no rotation */
     if (!hasGSAP || reduced) {
-      section.style.setProperty('--tvglow', '.74');
+      mark(0);
+      if (dots.length) {
+        dots.forEach(function (dot, i) {
+          dot.addEventListener('click', function () {
+            scenes.forEach(function (s, n) { s.classList.toggle('is-on', n === i); });
+            mark(i);
+          });
+        });
+      }
       return;
     }
 
-    /* the set powers on: the room lifts out of the dark, then the copy lands */
+    gsap.set(scenes, { opacity: 0 });
+    gsap.set(scenes[0], { opacity: 1 });
+    mark(0);
+
+    function show(next) {
+      if (next === at) return;
+      gsap.to(scenes[at], { opacity: 0, duration: FADE, ease: 'power1.inOut' });
+      gsap.to(scenes[next], { opacity: 1, duration: FADE, ease: 'power1.inOut' });
+      at = next;
+      mark(next);
+    }
+
+    function queue() {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        show((at + 1) % scenes.length);
+        queue();
+      }, HOLD * 1000);
+    }
+    queue();
+
+    dots.forEach(function (dot, i) {
+      dot.addEventListener('click', function () { show(i); queue(); });
+    });
+
+    /* a room nobody is looking at does not need to change */
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) {
+        if (e[0].isIntersecting) queue(); else clearTimeout(timer);
+      }, { threshold: 0 }).observe(section);
+    }
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) clearTimeout(timer); else queue();
+    });
+
+    /* the opening, and the drift as the section leaves */
     gsap.timeline({ defaults: { ease: 'power3.out' } })
       .fromTo(plate,
         { scale: 1.14, filter: 'brightness(.15) saturate(.4)' },
         { scale: 1, filter: 'brightness(1) saturate(1)', duration: 1.5 })
-      .fromTo(section,
-        { '--tvglow': 0 },
-        { '--tvglow': 0.74, duration: 1.6 }, 0.2)
       .from('.hero__kick', { y: 14, opacity: 0, duration: 0.7 }, 0.55)
       .from('.hero__h1', {
         y: 26, opacity: 0, duration: 0.9,
         clipPath: 'inset(0% 0% 100% 0%)'
       }, 0.7)
       .from('.hero__lede', { y: 16, opacity: 0, duration: 0.7 }, 0.95)
-      .from('.hero__cta > *', { y: 14, opacity: 0, duration: 0.6, stagger: 0.08 }, 1.05);
+      .from('.hero__cta > *', { y: 14, opacity: 0, duration: 0.6, stagger: 0.08 }, 1.05)
+      .from(dotBox, { opacity: 0, duration: 0.6 }, 1.2);
 
-    /* and drifts away as the section leaves */
     gsap.to(plate, {
       yPercent: 9, scale: 1.04, ease: 'none',
       scrollTrigger: { trigger: section, start: 'top top', end: 'bottom top', scrub: true }
