@@ -41,6 +41,8 @@
   .wall__stage{ position:relative; height:auto; min-height:0; padding-block:96px; }
   .wall__canvas{ display:none; }
   .steps__rail i{ transform:scaleX(1); }
+  .stats__run{ height:auto; }
+  .stats__stage{ position:relative; height:auto; min-height:0; padding-block:96px; }
 </style></noscript>
 </head>
 <body>
@@ -275,14 +277,18 @@
   </div>
   </div>
 
-  <div class="wrap wall__foot">
-    <dl class="stats">
-      <div data-tier="2"><dt><span data-count="14">14</span> <span class="u"><span class="ka">დღე</span><span class="en">days</span></span></dt><dd><span class="ka">არქივი უკან დაბრუნებისთვის</span><span class="en">of catch-up archive</span></dd></div>
-      <div data-tier="1"><dt><span data-count="40">40</span>+</dt><dd><span class="ka">ქვეყანა ეთერში</span><span class="en">countries on air</span></dd></div>
-      <div data-tier="0"><dt data-count="1024" data-format="space">1 024</dt><dd><span class="ka">არხი გამოწერაში</span><span class="en">channels in the plan</span></dd></div>
-      <div data-tier="1"><dt>4K</dt><dd><span class="ka">მაქსიმალური ხარისხი</span><span class="en">maximum picture quality</span></dd></div>
-      <div data-tier="2"><dt data-count="5">5</dt><dd><span class="ka">მოწყობილობა ერთ ანგარიშზე</span><span class="en">devices per account</span></dd></div>
-    </dl>
+  <div class="stats__run">
+    <div class="stats__stage">
+      <div class="wrap">
+        <dl class="stats">
+          <div data-tier="2"><dt><span data-count="14">14</span> <span class="u"><span class="ka">დღე</span><span class="en">days</span></span></dt><dd><span class="ka">არქივი უკან დაბრუნებისთვის</span><span class="en">of catch-up archive</span></dd></div>
+          <div data-tier="1"><dt><span data-count="40">40</span>+</dt><dd><span class="ka">ქვეყანა ეთერში</span><span class="en">countries on air</span></dd></div>
+          <div data-tier="0"><dt data-count="1024" data-format="space">1 024</dt><dd><span class="ka">არხი გამოწერაში</span><span class="en">channels in the plan</span></dd></div>
+          <div data-tier="1"><dt>4K</dt><dd><span class="ka">მაქსიმალური ხარისხი</span><span class="en">maximum picture quality</span></dd></div>
+          <div data-tier="2"><dt data-count="5">5</dt><dd><span class="ka">მოწყობილობა ერთ ანგარიშზე</span><span class="en">devices per account</span></dd></div>
+        </dl>
+      </div>
+    </div>
   </div>
 </section>
 

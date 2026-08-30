@@ -620,9 +620,9 @@ body.is-locked{ overflow:hidden; }
 /* stats */
 .stats{
   display:grid;
+  width:100%;
   grid-template-columns:repeat(auto-fit,minmax(158px,1fr));
-  gap:clamp(28px,3.4vw,48px) clamp(24px,3vw,40px);
-  margin:clamp(38px,5vw,64px) 0 0;
+  gap:clamp(26px,3.2vw,48px) clamp(24px,3vw,40px);
 }
 .stats dt{
   font-family:var(--f-dsp);
@@ -681,7 +681,20 @@ body.is-locked{ overflow:hidden; }
   font-style:normal;
   color:var(--red);
 }
-.wall__foot{ margin-top:clamp(48px,7vw,96px); }
+/* the statistics hold the screen the way the wall does */
+.stats__run{ height:190vh; }
+.stats__stage{
+  position:sticky; top:0;
+  height:100svh; min-height:460px;
+  display:flex; align-items:center;
+}
+@media (prefers-reduced-motion:reduce){
+  .stats__run{ height:auto; }
+  .stats__stage{
+    position:relative; height:auto; min-height:0;
+    padding-block:clamp(72px,11vw,150px);
+  }
+}
 
 /* ═══ THE BOX ═════════════════════════════════════════════ */
 .box{

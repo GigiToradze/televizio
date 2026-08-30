@@ -238,8 +238,13 @@
     counted.forEach(function (el) { write(el, 0); });
     gsap.set(cells, { opacity: 0, y: 30, scale: 0.94 });
 
+    /* the stage is sticky, so this maps onto the whole time it holds
+       the screen, with the tail left as a beat where all five stand */
+    var run = document.querySelector('.stats__run');
     var tl = gsap.timeline({
-      scrollTrigger: { trigger: stats, start: 'top 88%', end: 'top 32%', scrub: 0.5 }
+      scrollTrigger: run
+        ? { trigger: run, start: 'top top', end: 'bottom bottom', scrub: 0.5 }
+        : { trigger: stats, start: 'top 88%', end: 'top 32%', scrub: 0.5 }
     });
 
     [0, 1, 2].forEach(function (tier) {
@@ -260,6 +265,8 @@
         }, at);
       });
     });
+
+    tl.to({}, { duration: 0.85 });   // hold, all five standing
   })();
 
   /* ── 6. counters ──────────────────────────────────────── */
