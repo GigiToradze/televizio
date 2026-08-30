@@ -282,7 +282,7 @@
     var rows = epg.querySelectorAll('.epg__row');
     var hint = epg.querySelector('.epg__hint');
 
-    var pinned = window.matchMedia('(min-width:1100px) and (min-height:640px)').matches;
+    var pinned = window.matchMedia('(min-width:1200px) and (min-height:640px)').matches;
 
     gsap.set([h2, lede], { opacity: 0, y: 24 });
     gsap.set(epg, { opacity: 0 });
@@ -318,7 +318,7 @@
     var rows = copy.querySelectorAll('.spec tbody tr');
     var note = copy.querySelector('.box__note');
 
-    var pinned = window.matchMedia('(min-width:901px) and (min-height:700px)').matches;
+    var pinned = window.matchMedia('(min-width:1000px) and (min-height:760px)').matches;
 
     gsap.set([media, head, lede, note], { opacity: 0, y: 24 });
     gsap.set(rows, { opacity: 0, y: 14 });

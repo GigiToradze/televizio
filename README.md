@@ -49,6 +49,11 @@ English headlines set in caps (`[data-lang="en"]` in the CSS), which is what Eur
 was drawn for; they also take a slightly smaller size, since caps read optically
 larger. Georgian keeps mixed case — Mkhedruli has no capitals.
 
+Every section heading is one size: `.dsp`, and nothing else. The `--m` and `--s`
+modifiers are gone deliberately, so no section can quietly drift out of step. Where a
+heading has to share a row with something — the guide, the box — the layout gives it a
+column wide enough rather than shrinking the type.
+
 The Eurostile licence is a commercial one from typeface.ge. The woff2 files here were
 built from the TTFs with `fontTools`; confirm the licence covers web embedding before
 the site goes public.

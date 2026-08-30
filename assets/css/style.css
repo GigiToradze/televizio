@@ -145,14 +145,10 @@ ul,ol{ margin:0; padding:0; list-style:none; }
 [data-lang="en"] .hero__h1{ letter-spacing:-.005em; }
 /* caps set optically larger — give them a little less size and a little more room */
 [data-lang="en"] .dsp{ font-size:clamp(1.95rem,4.5vw,3.7rem); }
-[data-lang="en"] .dsp--m{ font-size:clamp(1.7rem,3.6vw,2.95rem); }
-[data-lang="en"] .dsp--s{ font-size:clamp(1.45rem,2.6vw,2.1rem); }
 [data-lang="en"] .sec__head{ max-width:min(64ch,100%); }
 
 /* ── type ─────────────────────────────────────────────────── */
 .dsp{ font-size:clamp(1.95rem,4.5vw,3.7rem); }
-[data-lang="en"] .dsp--m{ font-size:clamp(1.7rem,3.6vw,2.95rem); }
-[data-lang="en"] .dsp--s{ font-size:clamp(1.45rem,2.6vw,2.1rem); }
 [data-lang="en"] .sec__head{ max-width:min(64ch,100%); }
 
 /* ── type ─────────────────────────────────────────────────── */
@@ -164,8 +160,8 @@ ul,ol{ margin:0; padding:0; list-style:none; }
   letter-spacing:-.025em;
   text-wrap:balance;
 }
-.dsp--m{ font-size:clamp(1.9rem,4.2vw,3.4rem); }
-.dsp--s{ font-size:clamp(1.6rem,3vw,2.4rem); }
+/* one size for every section heading — the modifiers are gone on
+   purpose, so nothing drifts out of step again */
 
 .lede{
   font-family:var(--f-text);
@@ -516,7 +512,7 @@ body.is-locked{ overflow:hidden; }
 
 /* Wide enough, the heading sits beside the guide so the pair fits one
    screen, and the section can hold it while the guide fills in. */
-@media (min-width:1100px) and (min-height:640px){
+@media (min-width:1200px) and (min-height:640px){
   .sec--channels{ padding-block:0; }
   .guide__run{ height:250vh; }
   .guide__stage{
@@ -527,16 +523,12 @@ body.is-locked{ overflow:hidden; }
   }
   .guide{
     display:grid;
-    grid-template-columns:minmax(0,.46fr) minmax(0,1fr);
+    grid-template-columns:minmax(0,.85fr) minmax(0,1fr);
     gap:clamp(36px,4vw,64px);
     align-items:center;
   }
   .guide .sec__head{ max-width:none; }
   .guide .epg{ margin-top:0; }
-  /* the heading has a column, not a page, to set in */
-  .guide .dsp{ font-size:clamp(1.7rem,2.5vw,2.7rem); }
-  [data-lang="en"] .guide .dsp{ font-size:clamp(1.6rem,2.3vw,2.5rem); }
-  .guide .lede{ font-size:.98rem; }
 }
 @media (prefers-reduced-motion:reduce){
   .sec--channels{ padding-block:0; }
@@ -554,7 +546,7 @@ body.is-locked{ overflow:hidden; }
 .epg__scroll{ overflow-x:auto; overflow-y:hidden; scrollbar-width:thin; }
 .epg__scroll::-webkit-scrollbar{ height:6px; }
 .epg__scroll::-webkit-scrollbar-thumb{ background:var(--rule-2); }
-.epg__inner{ min-width:760px; --chw:184px; }
+.epg__inner{ min-width:640px; --chw:170px; }
 
 .epg__ruler{
   display:grid; grid-template-columns:var(--chw,190px) 1fr;
@@ -739,7 +731,7 @@ body.is-locked{ overflow:hidden; }
 .box__run{ height:auto; }
 .box__stage{ padding-block:clamp(72px,11vw,150px); }
 
-@media (min-width:901px) and (min-height:700px){
+@media (min-width:1000px) and (min-height:760px){
   .sec--box{ padding-block:0; }
   .box__run{ height:230vh; }
   .box__stage{
@@ -762,7 +754,7 @@ body.is-locked{ overflow:hidden; }
 
 .box{
   display:grid;
-  grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);
   gap:clamp(32px,5vw,80px);
   align-items:start;
 }
@@ -798,7 +790,7 @@ body.is-locked{ overflow:hidden; }
   text-align:left;
 }
 .spec th,.spec td{
-  padding:12px 0;
+  padding:10px 0;
   border-bottom:1px solid var(--rule);
   font:400 .82rem/1.4 var(--f-mono);
   letter-spacing:.03em;
