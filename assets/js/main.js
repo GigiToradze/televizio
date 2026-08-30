@@ -190,7 +190,7 @@
     if (!hasGSAP || reduced) return;
 
     var groups = [
-      '.sec__head > *', '.epg', '.stats > div', '.box__media', '.box__copy > *',
+      '.sec__head > *', '.epg', '.box__media', '.box__copy > *',
       '.step', '.plan', '.qa', '.cta > *', '.ftr__logo'
     ];
 
@@ -209,6 +209,34 @@
           });
         }
       });
+    });
+  })();
+
+  /* ── 5b. the statistics open from the middle out ──────── */
+  (function statsFan() {
+    var stats = document.querySelector('.stats');
+    if (!stats) return;
+    var cells = Array.prototype.slice.call(stats.querySelectorAll('[data-tier]'));
+    if (!cells.length) return;
+
+    if (!hasGSAP || reduced) return;
+
+    gsap.set(cells, { opacity: 0, y: 26, scale: 0.94 });
+
+    ScrollTrigger.create({
+      trigger: stats,
+      start: 'top 82%',
+      once: true,
+      onEnter: function () {
+        [0, 1, 2].forEach(function (tier) {
+          var group = cells.filter(function (c) { return +c.dataset.tier === tier; });
+          gsap.to(group, {
+            opacity: 1, y: 0, scale: 1,
+            duration: 0.8, ease: 'power3.out',
+            delay: tier * 0.22
+          });
+        });
+      }
     });
   })();
 

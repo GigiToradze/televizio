@@ -116,8 +116,14 @@ Every one of these sits in its own module in `main.js` and every one is skipped 
 - **The signal field.** A three.js `Points` grid in the closing section — a custom
   shader sends concentric rings outward from the centre and bulges toward the pointer.
   It writes clip space directly, so there is no camera maths and no lighting.
-- **Counters** on the four statistics, running once when they come into view, and the
-  red signal meter under the header.
+- **The statistics opening from the middle out.** Five numbers, and they arrive in
+  three waves — the middle one, then the pair either side, then the outer pair — off
+  one ScrollTrigger reading a `data-tier` on each cell. The four that are counts also
+  run up from zero. Plus the red signal meter under the header.
+
+Hairlines are gone everywhere except where a grid genuinely needs them: the programme
+guide, the spec table and the FAQ rows. Sections, cards and the header are separated by
+space and by the panel colour instead.
 
 three.js is ~188 KB gzipped. It is fetched once, lazily, shared between the wall and
 the field, and only when one of them is within 500–600 px of the viewport. Both render
