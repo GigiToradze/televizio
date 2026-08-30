@@ -309,9 +309,9 @@
   /* ── 5c. the box reports itself, row by row ───────────── */
   (function boxScroll() {
     var run = document.querySelector('.box__run');
-    var media = document.querySelector('.box__media');
+    var film = document.querySelector('.box__film');
     var copy = document.querySelector('.box__copy');
-    if (!run || !media || !copy || !hasGSAP || reduced) return;
+    if (!run || !film || !copy || !hasGSAP || reduced) return;
 
     var head = copy.querySelector('.dsp');
     var lede = copy.querySelector('.lede');
@@ -320,9 +320,10 @@
 
     var pinned = window.matchMedia('(min-width:1000px) and (min-height:760px)').matches;
 
-    gsap.set([media, head, lede, note], { opacity: 0, y: 24 });
+    var cap = copy.querySelector('.box__cap');
+    gsap.set([head, lede, note, cap], { opacity: 0, y: 24 });
     gsap.set(rows, { opacity: 0, y: 14 });
-    gsap.set(media, { scale: 0.95 });
+    gsap.set(film, { opacity: 0 });
 
     var tl = gsap.timeline({
       scrollTrigger: pinned
@@ -330,13 +331,13 @@
         : { trigger: run, start: 'top 78%', end: 'top 18%', scrub: 0.5 }
     });
 
-    tl.to(media, { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power2.out' }, 0)
+    tl.to(film, { opacity: 1, duration: 1.1, ease: 'power2.out' }, 0)
       .to(head,  { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0.35)
       .to(lede,  { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0.75)
       /* the spec sheet fills in a line at a time, like the box
          listing what it is */
       .to(rows,  { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.16 }, 1.05)
-      .to(note,  { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, 2.35)
+      .to([note, cap], { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.1 }, 2.35)
       .to({},    { duration: pinned ? 0.9 : 0.2 });   // hold
   })();
 

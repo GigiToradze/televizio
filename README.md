@@ -146,11 +146,16 @@ loops stop whenever their canvas leaves the screen.
 
 ## The box
 
+The product film runs the full width of the section: a band across the top on a phone,
+edge to edge behind everything once the section is wide and tall enough to hold the
+screen, scaled and pushed right so the box lands clear of the copy, with a left-to-right
+scrim carrying the text over it.
+
 Same shape as the wall and the statistics: a sticky stage in a 230vh runway holds the
-screen while the section assembles — the product film fades up, then the headline, the
-lede, then the spec sheet fills in a line at a time, then the price, then a beat before
-the page releases. Reading the box report itself row by row is the point of the
-sequence.
+screen while the section assembles — the film fades up, then the headline, the lede,
+then the spec sheet fills in a line at a time, then the price and the caption, then a
+beat before the page releases. Reading the box report itself row by row is the point of
+the sequence.
 
 It only pins above 901px wide and 700px tall, because below that the two columns stack
 into more than a screenful and pinning would trap you. Everywhere else the same
