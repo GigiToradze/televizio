@@ -108,11 +108,16 @@ Every one of these sits in its own module in `main.js` and every one is skipped 
   thousand channels looks like. One `InstancedBufferGeometry`, one `uP` uniform per
   frame, everything else on the GPU. The headline animates outside the WebGL module, so
   it still arrives if three.js never loads.
-- **A guide on the real clock.** The programme grid is not a screenshot. It reads
-  `Date`, opens the ruler two hours before the current hour, puts the playhead at the
-  true position, labels it with the actual time, and marks whichever block each
-  channel is really inside. It re-ticks every 30 seconds. The programme titles are
-  still invented; the timeline around them is not.
+- **A guide on the real clock, tuning in row by row.** The programme grid is not a
+  screenshot. It reads `Date`, opens the ruler two hours before the current hour, puts
+  the playhead at the true position, labels it with the actual time, and marks
+  whichever block each channel is really inside, re-ticking every 30 seconds. The
+  programme titles are invented; the timeline around them is not. On a wide screen the
+  section holds itself the way the wall does — heading beside the guide so the pair
+  fits one screen, then the heading, the lede, the ruler and the nine channel rows
+  arrive one at a time. It pins above 1100px wide and 640px tall; below that the
+  heading goes back over the guide and the same timeline runs against a normal scroll
+  range.
 - **The signal reaching each stage.** A red rail draws across the three steps as you
   scroll them, and each step's tally lights as the signal arrives — the section is a
   real sequence, so the rail is carrying real information.

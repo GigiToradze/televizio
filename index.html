@@ -45,6 +45,8 @@
   .stats__stage{ position:relative; height:auto; min-height:0; padding-block:96px; }
   .box__run{ height:auto; }
   .box__stage{ position:relative; height:auto; min-height:0; padding-block:96px; }
+  .guide__run{ height:auto; }
+  .guide__stage{ position:relative; height:auto; min-height:0; padding-block:96px; }
 </style></noscript>
 </head>
 <body>
@@ -143,125 +145,129 @@
 
 <!-- ══ CHANNELS / EPG ══════════════════════════════════════ -->
 <section class="sec sec--channels" id="channels">
-  <div class="wrap">
-    <div class="sec__head">
-      <h2 class="dsp">
-        <span class="ka">ტელეგიდი, რომელიც<br>მთელ ქვეყანას იტევს.</span>
-        <span class="en">A program guide that<br>holds the whole country.</span>
-      </h2>
-      <p class="lede">
-        <span class="ka">ქართული ეთერი, სპორტი, კინო, საბავშვო და 40-ზე მეტი ქვეყნის არხები — ერთ სიაში, ერთი ძებნით. გადაცემა გამოგრჩა? დაბრუნდი 14 დღით უკან.</span>
-        <span class="en">Georgian broadcast, sport, film, kids and channels from over 40 countries — in one list, one search away. Missed something? Rewind up to 14 days.</span>
-      </p>
-    </div>
-
-    <!-- EPG -->
-    <div class="epg">
-      <div class="epg__scroll" tabindex="0" role="region" aria-label="ტელეგიდი / Program guide">
-        <div class="epg__inner">
-          <div class="epg__ruler">
-            <div class="epg__rname"><span class="ka">არხი</span><span class="en">Channel</span></div>
-            <div class="epg__times" id="epgTimes">
-              <span>18:00</span><span>19:00</span><span>20:00</span><span>21:00</span><span>22:00</span><span>23:00</span>
-            </div>
-          </div>
-
-          <div class="epg__body" id="epgBody">
-            <span class="epg__now" id="epgNow" style="--now:.46" aria-hidden="true"><b><span class="ka">ახლა</span><span class="en">Now</span></b></span>
-
-            <div class="epg__row">
-              <div class="epg__ch"><b>101</b> იმედი</div>
-              <div class="epg__progs">
-                <div class="prog" style="--span:3">ქალის სახე</div>
-                <div class="prog" style="--span:1">მოამბე</div>
-                <div class="prog" style="--span:4">შუა ქალაქში</div>
-                <div class="prog" style="--span:4">ფილმი: ჭრელი</div>
-              </div>
-            </div>
-
-            <div class="epg__row">
-              <div class="epg__ch"><b>102</b> რუსთავი 2</div>
-              <div class="epg__progs">
-                <div class="prog" style="--span:2">სერიალი</div>
-                <div class="prog" style="--span:2">კურიერი</div>
-                <div class="prog" style="--span:3">პროფილი</div>
-                <div class="prog" style="--span:2">P.S.</div>
-                <div class="prog" style="--span:3">ღამის კინო</div>
-              </div>
-            </div>
-
-            <div class="epg__row">
-              <div class="epg__ch"><b>103</b> მთავარი არხი</div>
-              <div class="epg__progs">
-                <div class="prog" style="--span:4">დღის ამბები</div>
-                <div class="prog" style="--span:4">პოსტფაქტუმ</div>
-                <div class="prog" style="--span:4">დოკუმენტური</div>
-              </div>
-            </div>
-
-            <div class="epg__row">
-              <div class="epg__ch"><b>104</b> ფორმულა</div>
-              <div class="epg__progs">
-                <div class="prog" style="--span:3">ახალი ამბები</div>
-                <div class="prog" style="--span:5">ღამის შოუ</div>
-                <div class="prog" style="--span:4">სერიალი</div>
-              </div>
-            </div>
-
-            <div class="epg__row">
-              <div class="epg__ch"><b>212</b> Setanta Sports</div>
-              <div class="epg__progs">
-                <div class="prog" style="--span:2">Serie A</div>
-                <div class="prog" style="--span:4">UCL — Live</div>
-                <div class="prog" style="--span:2">Highlights</div>
-                <div class="prog" style="--span:4">NBA</div>
-              </div>
-            </div>
-
-            <div class="epg__row">
-              <div class="epg__ch"><b>215</b> Eurosport 1</div>
-              <div class="epg__progs">
-                <div class="prog" style="--span:4">Cycling</div>
-                <div class="prog" style="--span:3">Snooker</div>
-                <div class="prog" style="--span:5">Tennis</div>
-              </div>
-            </div>
-
-            <div class="epg__row">
-              <div class="epg__ch"><b>330</b> Discovery</div>
-              <div class="epg__progs">
-                <div class="prog" style="--span:3">Gold Rush</div>
-                <div class="prog" style="--span:4">How It's Made</div>
-                <div class="prog" style="--span:5">Mythbusters</div>
-              </div>
-            </div>
-
-            <div class="epg__row">
-              <div class="epg__ch"><b>334</b> Nat Geo</div>
-              <div class="epg__progs">
-                <div class="prog" style="--span:4">Cosmos</div>
-                <div class="prog" style="--span:4">Air Crash</div>
-                <div class="prog" style="--span:4">Wild Georgia</div>
-              </div>
-            </div>
-
-            <div class="epg__row">
-              <div class="epg__ch"><b>451</b> Cartoon Network</div>
-              <div class="epg__progs">
-                <div class="prog" style="--span:2">Ben 10</div>
-                <div class="prog" style="--span:4">Adventure Time</div>
-                <div class="prog" style="--span:6">Gumball</div>
-              </div>
-            </div>
-          </div>
+  <div class="guide__run">
+    <div class="guide__stage">
+      <div class="wrap guide">
+        <div class="sec__head">
+          <h2 class="dsp">
+            <span class="ka">ტელეგიდი, რომელიც<br>მთელ ქვეყანას იტევს.</span>
+            <span class="en">A program guide that<br>holds the whole country.</span>
+          </h2>
+          <p class="lede">
+            <span class="ka">ქართული ეთერი, სპორტი, კინო, საბავშვო და 40-ზე მეტი ქვეყნის არხები — ერთ სიაში, ერთი ძებნით. გადაცემა გამოგრჩა? დაბრუნდი 14 დღით უკან.</span>
+            <span class="en">Georgian broadcast, sport, film, kids and channels from over 40 countries — in one list, one search away. Missed something? Rewind up to 14 days.</span>
+          </p>
         </div>
-      </div>
-      <p class="epg__hint">
-        <span class="ka">გადაფურცლე გვერდზე · ნაჩვენებია 1024 არხიდან 9</span>
-        <span class="en">Swipe sideways · showing 9 of 1,024 channels</span>
-      </p>
-    </div>
 
+        <!-- EPG -->
+        <div class="epg">
+          <div class="epg__scroll" tabindex="0" role="region" aria-label="ტელეგიდი / Program guide">
+            <div class="epg__inner">
+              <div class="epg__ruler">
+                <div class="epg__rname"><span class="ka">არხი</span><span class="en">Channel</span></div>
+                <div class="epg__times" id="epgTimes">
+                  <span>18:00</span><span>19:00</span><span>20:00</span><span>21:00</span><span>22:00</span><span>23:00</span>
+                </div>
+              </div>
+
+              <div class="epg__body" id="epgBody">
+                <span class="epg__now" id="epgNow" style="--now:.46" aria-hidden="true"><b><span class="ka">ახლა</span><span class="en">Now</span></b></span>
+
+                <div class="epg__row">
+                  <div class="epg__ch"><b>101</b> იმედი</div>
+                  <div class="epg__progs">
+                    <div class="prog" style="--span:3">ქალის სახე</div>
+                    <div class="prog" style="--span:1">მოამბე</div>
+                    <div class="prog" style="--span:4">შუა ქალაქში</div>
+                    <div class="prog" style="--span:4">ფილმი: ჭრელი</div>
+                  </div>
+                </div>
+
+                <div class="epg__row">
+                  <div class="epg__ch"><b>102</b> რუსთავი 2</div>
+                  <div class="epg__progs">
+                    <div class="prog" style="--span:2">სერიალი</div>
+                    <div class="prog" style="--span:2">კურიერი</div>
+                    <div class="prog" style="--span:3">პროფილი</div>
+                    <div class="prog" style="--span:2">P.S.</div>
+                    <div class="prog" style="--span:3">ღამის კინო</div>
+                  </div>
+                </div>
+
+                <div class="epg__row">
+                  <div class="epg__ch"><b>103</b> მთავარი არხი</div>
+                  <div class="epg__progs">
+                    <div class="prog" style="--span:4">დღის ამბები</div>
+                    <div class="prog" style="--span:4">პოსტფაქტუმ</div>
+                    <div class="prog" style="--span:4">დოკუმენტური</div>
+                  </div>
+                </div>
+
+                <div class="epg__row">
+                  <div class="epg__ch"><b>104</b> ფორმულა</div>
+                  <div class="epg__progs">
+                    <div class="prog" style="--span:3">ახალი ამბები</div>
+                    <div class="prog" style="--span:5">ღამის შოუ</div>
+                    <div class="prog" style="--span:4">სერიალი</div>
+                  </div>
+                </div>
+
+                <div class="epg__row">
+                  <div class="epg__ch"><b>212</b> Setanta Sports</div>
+                  <div class="epg__progs">
+                    <div class="prog" style="--span:2">Serie A</div>
+                    <div class="prog" style="--span:4">UCL — Live</div>
+                    <div class="prog" style="--span:2">Highlights</div>
+                    <div class="prog" style="--span:4">NBA</div>
+                  </div>
+                </div>
+
+                <div class="epg__row">
+                  <div class="epg__ch"><b>215</b> Eurosport 1</div>
+                  <div class="epg__progs">
+                    <div class="prog" style="--span:4">Cycling</div>
+                    <div class="prog" style="--span:3">Snooker</div>
+                    <div class="prog" style="--span:5">Tennis</div>
+                  </div>
+                </div>
+
+                <div class="epg__row">
+                  <div class="epg__ch"><b>330</b> Discovery</div>
+                  <div class="epg__progs">
+                    <div class="prog" style="--span:3">Gold Rush</div>
+                    <div class="prog" style="--span:4">How It's Made</div>
+                    <div class="prog" style="--span:5">Mythbusters</div>
+                  </div>
+                </div>
+
+                <div class="epg__row">
+                  <div class="epg__ch"><b>334</b> Nat Geo</div>
+                  <div class="epg__progs">
+                    <div class="prog" style="--span:4">Cosmos</div>
+                    <div class="prog" style="--span:4">Air Crash</div>
+                    <div class="prog" style="--span:4">Wild Georgia</div>
+                  </div>
+                </div>
+
+                <div class="epg__row">
+                  <div class="epg__ch"><b>451</b> Cartoon Network</div>
+                  <div class="epg__progs">
+                    <div class="prog" style="--span:2">Ben 10</div>
+                    <div class="prog" style="--span:4">Adventure Time</div>
+                    <div class="prog" style="--span:6">Gumball</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="epg__hint">
+            <span class="ka">გადაფურცლე გვერდზე · ნაჩვენებია 1024 არხიდან 9</span>
+            <span class="en">Swipe sideways · showing 9 of 1,024 channels</span>
+          </p>
+        </div>
+
+      </div>
+    </div>
   </div>
 </section>
 

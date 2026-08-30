@@ -511,6 +511,41 @@ body.is-locked{ overflow:hidden; }
 /* ═══ CHANNELS / EPG ══════════════════════════════════════ */
 .sec--channels{ border-top:0; }
 
+.guide__run{ height:auto; }
+.guide__stage{ padding-block:clamp(72px,11vw,150px); }
+
+/* Wide enough, the heading sits beside the guide so the pair fits one
+   screen, and the section can hold it while the guide fills in. */
+@media (min-width:1100px) and (min-height:640px){
+  .sec--channels{ padding-block:0; }
+  .guide__run{ height:250vh; }
+  .guide__stage{
+    position:sticky; top:0;
+    height:100svh;
+    display:flex; align-items:center;
+    padding-block:0;
+  }
+  .guide{
+    display:grid;
+    grid-template-columns:minmax(0,.46fr) minmax(0,1fr);
+    gap:clamp(36px,4vw,64px);
+    align-items:center;
+  }
+  .guide .sec__head{ max-width:none; }
+  .guide .epg{ margin-top:0; }
+  /* the heading has a column, not a page, to set in */
+  .guide .dsp{ font-size:clamp(1.7rem,2.5vw,2.7rem); }
+  [data-lang="en"] .guide .dsp{ font-size:clamp(1.6rem,2.3vw,2.5rem); }
+  .guide .lede{ font-size:.98rem; }
+}
+@media (prefers-reduced-motion:reduce){
+  .sec--channels{ padding-block:0; }
+  .guide__run{ height:auto; }
+  .guide__stage{ position:relative; height:auto; padding-block:clamp(72px,11vw,150px); }
+  .guide{ display:block; }
+  .guide .epg{ margin-top:clamp(38px,5vw,64px); }
+}
+
 .epg{
   margin-top:clamp(38px,5vw,64px);
   border:1px solid var(--rule);
@@ -519,7 +554,7 @@ body.is-locked{ overflow:hidden; }
 .epg__scroll{ overflow-x:auto; overflow-y:hidden; scrollbar-width:thin; }
 .epg__scroll::-webkit-scrollbar{ height:6px; }
 .epg__scroll::-webkit-scrollbar-thumb{ background:var(--rule-2); }
-.epg__inner{ min-width:900px; --chw:220px; }
+.epg__inner{ min-width:760px; --chw:184px; }
 
 .epg__ruler{
   display:grid; grid-template-columns:var(--chw,190px) 1fr;
@@ -612,7 +647,7 @@ body.is-locked{ overflow:hidden; }
   color:var(--dim);
 }
 @media (max-width:640px){
-  .epg__inner{ --chw:180px; }
+  .epg__inner{ --chw:200px; }
   .epg__ch{ font-size:.84rem; }
   .epg__row{ min-height:56px; }
 }

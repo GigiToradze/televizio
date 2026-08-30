@@ -190,7 +190,7 @@
     if (!hasGSAP || reduced) return;
 
     var groups = [
-      '.sec__head > *', '.epg',
+      '.sec:not(#channels) .sec__head > *',
       '.step', '.plan', '.qa', '.cta > *', '.ftr__logo'
     ];
 
@@ -267,6 +267,43 @@
     });
 
     tl.to({}, { duration: 0.85 });   // hold, all five standing
+  })();
+
+  /* ── 5a. the guide fills in while the section holds ───── */
+  (function guideScroll() {
+    var run = document.querySelector('.guide__run');
+    var head = document.querySelector('.guide .sec__head');
+    var epg = document.querySelector('.guide .epg');
+    if (!run || !head || !epg || !hasGSAP || reduced) return;
+
+    var h2 = head.querySelector('.dsp');
+    var lede = head.querySelector('.lede');
+    var ruler = epg.querySelector('.epg__ruler');
+    var rows = epg.querySelectorAll('.epg__row');
+    var hint = epg.querySelector('.epg__hint');
+
+    var pinned = window.matchMedia('(min-width:1100px) and (min-height:640px)').matches;
+
+    gsap.set([h2, lede], { opacity: 0, y: 24 });
+    gsap.set(epg, { opacity: 0 });
+    gsap.set(ruler, { opacity: 0 });
+    gsap.set(rows, { opacity: 0, x: -18 });
+    if (hint) gsap.set(hint, { opacity: 0 });
+
+    var tl = gsap.timeline({
+      scrollTrigger: pinned
+        ? { trigger: run, start: 'top top', end: 'bottom bottom', scrub: 0.5 }
+        : { trigger: run, start: 'top 78%', end: 'top 12%', scrub: 0.5 }
+    });
+
+    tl.to(h2,    { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0)
+      .to(lede,  { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0.4)
+      .to(epg,   { opacity: 1, duration: 0.5 }, 0.7)
+      .to(ruler, { opacity: 1, duration: 0.5, ease: 'power2.out' }, 0.7)
+      /* the guide tunes in one channel at a time */
+      .to(rows,  { opacity: 1, x: 0, duration: 0.45, ease: 'power2.out', stagger: 0.13 }, 0.95)
+      .to(hint,  { opacity: 1, duration: 0.5 }, 2.3)
+      .to({},    { duration: pinned ? 0.9 : 0.2 });   // hold
   })();
 
   /* ── 5c. the box reports itself, row by row ───────────── */
