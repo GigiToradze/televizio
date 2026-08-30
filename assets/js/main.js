@@ -566,7 +566,10 @@
       ScrollTrigger.create({
         trigger: '.wall__run',
         start: 'top top', end: 'bottom bottom', scrub: 0.4,
-        onUpdate: function (self) { uniforms.uP.value = self.progress; }
+        onUpdate: function (self) {
+          /* land the grid at 76% and let the rest of the runway hold it */
+          uniforms.uP.value = Math.min(1, self.progress / 0.76);
+        }
       });
 
       var visible = false, running = false;
@@ -581,6 +584,19 @@
         visible = e[0].isIntersecting;
         if (visible && !running) { running = true; loop(); }
       }, { threshold: 0 }).observe(canvas);
+    });
+  })();
+
+  /* ── 10b. the wall's headline lands with the first cells ─ */
+  (function wallCopy() {
+    var run = document.querySelector('.wall__run');
+    var copy = document.querySelector('.wall__copy');
+    if (!run || !copy || !hasGSAP || reduced) return;
+
+    gsap.set(copy, { opacity: 0, y: 26 });
+    gsap.to(copy, {
+      opacity: 1, y: 0, ease: 'power2.out',
+      scrollTrigger: { trigger: run, start: 'top top', end: '26% top', scrub: 0.5 }
     });
   })();
 

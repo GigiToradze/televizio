@@ -100,11 +100,14 @@ Every one of these sits in its own module in `main.js` and every one is skipped 
   `ScrollTrigger.getVelocity()` also drags it faster while you scroll. Coarse pointers
   have no way to reveal anything, so they get the logos part-desaturated instead.
   The strip carries no rules above or below it — it sits straight on the black.
-- **The wall.** 1,024 instanced cells scatter through depth and assemble into a 32×32
-  grid as you scroll a pinned section, each one landing on its own delay and flickering
-  at its own rate once it settles. It is the number made literal: that is what a
+- **The wall.** A sticky stage in a 230vh runway holds the screen while 1,024 instanced
+  cells scatter through depth and assemble into a 32×32 grid, each one landing on its
+  own delay and flickering at its own rate once it settles. The headline fades up with
+  the first cells, the grid lands at 76% of the runway, and the rest is a beat where it
+  stands before the page moves on. It is the number made literal: that is what a
   thousand channels looks like. One `InstancedBufferGeometry`, one `uP` uniform per
-  frame, everything else on the GPU.
+  frame, everything else on the GPU. The headline animates outside the WebGL module, so
+  it still arrives if three.js never loads.
 - **A guide on the real clock.** The programme grid is not a screenshot. It reads
   `Date`, opens the ruler two hours before the current hour, puts the playhead at the
   true position, labels it with the actual time, and marks whichever block each
