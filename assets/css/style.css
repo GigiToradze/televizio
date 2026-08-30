@@ -86,7 +86,6 @@ ul,ol{ margin:0; padding:0; list-style:none; }
 }
 
 /* brand star, drawn as a mask so it takes the colour of its text */
-.kick::before,
 .plan__list li::before,
 .ticker__set span::after,
 .box__cap span + span::before{
@@ -152,14 +151,37 @@ ul,ol{ margin:0; padding:0; list-style:none; }
 [data-lang="en"] .sec__head{ max-width:min(64ch,100%); }
 
 /* ── type ─────────────────────────────────────────────────── */
+/* Section eyebrows are tuner readouts: a tally light, a channel
+   number, a name. The tally lights while you are in that section. */
 .kick{
-  font:500 .6875rem/1 var(--f-mono);
-  letter-spacing:.22em;
+  display:inline-flex; align-items:center; gap:.85em;
+  padding:7px 14px 7px 9px;
+  border:1px solid var(--rule-2);
+  border-radius:2px;
+  font:500 .66rem/1 var(--f-mono);
+  letter-spacing:.2em;
   text-transform:uppercase;
-  color:var(--red);
+  color:#CFCFD6;
   margin-bottom:clamp(18px,2.2vw,28px);
+  transition:border-color .5s ease, color .5s ease;
 }
-.kick::before{ margin-right:.5em; vertical-align:.12em; }
+.kick::before{                       /* tally */
+  content:"";
+  order:-2;
+  width:6px; height:6px; border-radius:50%;
+  background:#3B0E0C;
+  transition:background .45s ease, box-shadow .45s ease;
+}
+.kick::after{                        /* channel number */
+  content:attr(data-ch);
+  order:-1;
+  color:var(--dim);
+  letter-spacing:.14em;
+  transition:color .5s ease;
+}
+.kick.is-live{ border-color:rgba(228,33,28,.5); color:#fff; }
+.kick.is-live::before{ background:var(--red); box-shadow:0 0 10px 2px rgba(228,33,28,.85); }
+.kick.is-live::after{ color:var(--red); }
 
 .dsp{
   font-family:var(--f-dsp);
@@ -456,32 +478,92 @@ body.is-locked{ overflow:hidden; }
   .hero__kick .dot{ animation:none; }
 }
 
-/* ── ticker ───────────────────────────────────────────────── */
-.ticker{
-  border-block:1px solid var(--rule);
-  background:var(--black);
-  overflow:hidden;
+/* ── tuner scan strip ─────────────────────────────────────── */
+/* A tuner sweeping the band: every channel is a bar in a spectrum
+   with its number and name under it, and a scan head crosses the
+   strip lighting whatever it passes. */
+.scan{
   position:relative; z-index:2;
+  border-block:1px solid var(--rule);
+  background:linear-gradient(180deg,#070708,#000);
+  overflow:hidden;
+  padding:18px 0 0;
 }
-.ticker::before,.ticker::after{
-  content:""; position:absolute; top:0; bottom:0; width:14vw; z-index:2;
+.scan::before,.scan::after{
+  content:""; position:absolute; top:0; bottom:0; width:16vw; z-index:3;
   pointer-events:none;
 }
-.ticker::before{ left:0; background:linear-gradient(to right,#000,transparent); }
-.ticker::after{ right:0; background:linear-gradient(to left,#000,transparent); }
-.ticker__row{ display:flex; width:max-content; animation:slide 58s linear infinite; }
-.ticker__set{ display:flex; }
-.ticker__set span{
+.scan::before{ left:0;  background:linear-gradient(to right,#000,transparent); }
+.scan::after{  right:0; background:linear-gradient(to left,#000,transparent); }
+
+/* the scan head */
+.scan__head{
+  position:absolute; top:0; bottom:22px; width:150px; z-index:2;
+  background:linear-gradient(90deg,
+    transparent, rgba(228,33,28,.05) 42%, rgba(228,33,28,.30) 68%,
+    rgba(255,120,110,.85) 78%, rgba(228,33,28,.10) 82%, transparent);
+  mix-blend-mode:screen;
+  pointer-events:none;
+  animation:sweep 11s cubic-bezier(.55,0,.45,1) infinite;
+}
+@keyframes sweep{
+  0%   { transform:translateX(-160px); opacity:0; }
+  6%   { opacity:1; }
+  92%  { opacity:1; }
+  100% { transform:translateX(calc(100vw + 160px)); opacity:0; }
+}
+
+.scan__lane{ display:flex; width:max-content; }
+.scan__set{ display:flex; align-items:flex-end; }
+
+.ch{
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  width:118px; flex:none;
+  padding-bottom:2px;
+}
+.ch__bar{
   display:block;
-  padding:16px 22px;
-  font:400 .78rem/1 var(--f-mono);
-  letter-spacing:.05em;
-  color:var(--dim);
+  width:2px;
+  height:calc(4px + var(--h) * 34px);
+  background:linear-gradient(to top, var(--red), #FF6A60);
+  box-shadow:0 0 8px -1px rgba(228,33,28,.8);
+  transform-origin:50% 100%;
+  animation:eq 1.9s ease-in-out infinite alternate;
+  animation-delay:calc(var(--i) * -95ms);
+}
+@keyframes eq{ from{ transform:scaleY(.32); } to{ transform:scaleY(1); } }
+
+.ch__n{
+  font:500 .62rem/1 var(--f-mono);
+  letter-spacing:.14em;
+  color:var(--red);
+}
+.ch__name{
+  font-style:normal;
+  font-family:var(--f-body);
+  font-weight:600;
+  font-size:.7rem;
+  letter-spacing:.06em;
+  color:#8A8A92;
   white-space:nowrap;
 }
-.ticker__set span::after{ margin-left:.7em; vertical-align:.12em; color:var(--red); opacity:.7; }
-@keyframes slide{ to{ transform:translateX(-50%); } }
-@media (prefers-reduced-motion:reduce){ .ticker__row{ animation:none; } }
+.scan__meta{
+  position:relative; z-index:3;
+  margin-top:12px;
+  padding:8px var(--pad);
+  border-top:1px solid var(--rule);
+  font:400 .62rem/1 var(--f-mono);
+  letter-spacing:.2em; text-transform:uppercase;
+  color:#5C5C64;
+}
+@media (max-width:640px){
+  .ch{ width:96px; }
+  .scan__head{ width:110px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .scan__head{ animation:none; opacity:0; }
+  .ch__bar{ animation:none; }
+}
 
 /* ═══ CHANNELS / EPG ══════════════════════════════════════ */
 .sec--channels{ border-top:0; }
@@ -620,6 +702,48 @@ body.is-locked{ overflow:hidden; }
   letter-spacing:.03em;
 }
 
+/* ═══ THE WALL — 1,024 cells ══════════════════════════════ */
+.sec--wall{
+  padding-block:0 clamp(72px,11vw,150px);
+  border-top:0;
+}
+.wall__run{ height:230vh; }          /* scrub runway for the assembly */
+/* with no scrub there is nothing to scroll through */
+@media (prefers-reduced-motion:reduce){
+  .wall__run{ height:auto; }
+  .wall__stage{
+    position:relative; height:auto; min-height:0;
+    padding-block:clamp(72px,11vw,150px);
+  }
+  .wall__canvas{ display:none; }
+}
+.wall{ position:relative; }
+.wall__stage{
+  position:sticky; top:0;
+  height:100svh; min-height:520px;
+  overflow:hidden;
+  display:flex; align-items:center;
+}
+.wall__canvas{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+}
+.wall__copy{
+  position:relative; z-index:1;
+  width:100%; max-width:var(--max);
+  margin-inline:auto;
+  padding-inline:var(--pad);
+}
+@media (max-width:900px){
+  .wall__stage{ align-items:flex-end; padding-bottom:clamp(40px,8vh,80px); }
+}
+.wall__copy .dsp em{
+  font-style:normal;
+  color:var(--red);
+  text-shadow:0 0 46px rgba(228,33,28,.6);
+}
+.wall__foot{ margin-top:clamp(48px,7vw,96px); }
+
 /* ═══ THE BOX ═════════════════════════════════════════════ */
 .box{
   display:grid;
@@ -685,6 +809,7 @@ body.is-locked{ overflow:hidden; }
 
 /* ═══ HOW IT WORKS ════════════════════════════════════════ */
 .steps{
+  position:relative;
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
   gap:1px;
@@ -692,20 +817,45 @@ body.is-locked{ overflow:hidden; }
   background:var(--rule);
   border:1px solid var(--rule);
 }
+/* the signal reaching each stage in turn */
+.steps__rail{
+  position:absolute; left:0; right:0; top:-1px; height:2px;
+  background:var(--rule-2);
+  z-index:2; overflow:hidden;
+}
+.steps__rail i{
+  display:block; height:100%; width:100%;
+  background:linear-gradient(90deg,var(--red),#FF6A60);
+  box-shadow:0 0 14px 1px rgba(228,33,28,.9);
+  transform:scaleX(0); transform-origin:0 50%;
+}
 .step{
   background:var(--black);
   padding:clamp(26px,3.2vw,40px);
   position:relative;
+  transition:background .5s ease;
 }
+.step.is-on{ background:#0A0506; }
 .step__n{
-  display:block;
+  display:flex; align-items:center; gap:.7em;
   font:500 .72rem/1 var(--f-mono);
-  color:var(--red);
+  color:var(--dim);
   letter-spacing:.2em;
   margin-bottom:clamp(28px,4vw,54px);
+  transition:color .45s ease;
 }
-.step__n::before{ content:"0"; }
-.step__n::after{ content:" / 3"; color:var(--dim); }
+.step__n::before{
+  content:"";
+  width:6px; height:6px; border-radius:50%;
+  background:#3B0E0C;
+  transition:background .45s ease, box-shadow .45s ease;
+}
+.step.is-on .step__n{ color:var(--red); }
+.step.is-on .step__n::before{
+  background:var(--red);
+  box-shadow:0 0 10px 2px rgba(228,33,28,.85);
+}
+.step__n b{ color:inherit; }
 .step h3{
   font-family:var(--f-dsp);
   font-weight:700;

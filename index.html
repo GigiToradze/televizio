@@ -37,6 +37,10 @@
 
 <noscript><style>
   .rv{ opacity:1; transform:none; }
+  .wall__run{ height:auto; }
+  .wall__stage{ position:relative; height:auto; min-height:0; padding-block:96px; }
+  .wall__canvas{ display:none; }
+  .steps__rail i{ transform:scaleX(1); }
 </style></noscript>
 </head>
 <body>
@@ -124,22 +128,21 @@
 </section>
 
 <!-- ══ TICKER ══════════════════════════════════════════════ -->
-<div class="ticker" aria-hidden="true">
-  <div class="ticker__row">
-    <div class="ticker__set">
-      <span>იმედი</span><span>რუსთავი 2</span><span>მთავარი არხი</span><span>ფორმულა</span><span>1TV</span><span>TV Pirveli</span><span>პალიტრანიუსი</span><span>მაესტრო</span><span>Setanta Sports</span><span>Eurosport 1</span><span>Discovery</span><span>National Geographic</span><span>HBO</span><span>AMC</span><span>Cartoon Network</span><span>Nickelodeon</span><span>Euronews</span><span>BBC World</span><span>Bloomberg</span><span>TV1000</span><span>Viasat History</span><span>TRT</span><span>Rai 1</span><span>Animal Planet</span>
-    </div>
-    <div class="ticker__set">
-      <span>იმედი</span><span>რუსთავი 2</span><span>მთავარი არხი</span><span>ფორმულა</span><span>1TV</span><span>TV Pirveli</span><span>პალიტრანიუსი</span><span>მაესტრო</span><span>Setanta Sports</span><span>Eurosport 1</span><span>Discovery</span><span>National Geographic</span><span>HBO</span><span>AMC</span><span>Cartoon Network</span><span>Nickelodeon</span><span>Euronews</span><span>BBC World</span><span>Bloomberg</span><span>TV1000</span><span>Viasat History</span><span>TRT</span><span>Rai 1</span><span>Animal Planet</span>
-    </div>
+<!-- ══ TUNER SCAN ══════════════════════════════════════════ -->
+<div class="scan" aria-hidden="true">
+  <span class="scan__head"></span>
+  <div class="scan__lane" id="scanLane">
+    <div class="scan__set"><span class="ch" style="--h:0.55;--i:0"><i class="ch__bar"></i><b class="ch__n">101</b><em class="ch__name">იმედი</em></span><span class="ch" style="--h:0.44;--i:1"><i class="ch__bar"></i><b class="ch__n">102</b><em class="ch__name">რუსთავი 2</em></span><span class="ch" style="--h:0.77;--i:2"><i class="ch__bar"></i><b class="ch__n">103</b><em class="ch__name">მთავარი არხი</em></span><span class="ch" style="--h:0.39;--i:3"><i class="ch__bar"></i><b class="ch__n">104</b><em class="ch__name">ფორმულა</em></span><span class="ch" style="--h:0.69;--i:4"><i class="ch__bar"></i><b class="ch__n">105</b><em class="ch__name">1TV</em></span><span class="ch" style="--h:0.58;--i:5"><i class="ch__bar"></i><b class="ch__n">106</b><em class="ch__name">TV Pirveli</em></span><span class="ch" style="--h:0.38;--i:6"><i class="ch__bar"></i><b class="ch__n">107</b><em class="ch__name">პალიტრანიუსი</em></span><span class="ch" style="--h:0.67;--i:7"><i class="ch__bar"></i><b class="ch__n">108</b><em class="ch__name">მაესტრო</em></span><span class="ch" style="--h:0.36;--i:8"><i class="ch__bar"></i><b class="ch__n">212</b><em class="ch__name">Setanta Sports</em></span><span class="ch" style="--h:0.63;--i:9"><i class="ch__bar"></i><b class="ch__n">215</b><em class="ch__name">Eurosport 1</em></span><span class="ch" style="--h:0.39;--i:10"><i class="ch__bar"></i><b class="ch__n">218</b><em class="ch__name">Sport 1</em></span><span class="ch" style="--h:0.4;--i:11"><i class="ch__bar"></i><b class="ch__n">330</b><em class="ch__name">Discovery</em></span><span class="ch" style="--h:0.62;--i:12"><i class="ch__bar"></i><b class="ch__n">334</b><em class="ch__name">Nat Geo</em></span><span class="ch" style="--h:0.89;--i:13"><i class="ch__bar"></i><b class="ch__n">337</b><em class="ch__name">Animal Planet</em></span><span class="ch" style="--h:0.42;--i:14"><i class="ch__bar"></i><b class="ch__n">340</b><em class="ch__name">TLC</em></span><span class="ch" style="--h:0.49;--i:15"><i class="ch__bar"></i><b class="ch__n">401</b><em class="ch__name">HBO</em></span><span class="ch" style="--h:0.75;--i:16"><i class="ch__bar"></i><b class="ch__n">404</b><em class="ch__name">AMC</em></span><span class="ch" style="--h:0.97;--i:17"><i class="ch__bar"></i><b class="ch__n">407</b><em class="ch__name">TV1000</em></span><span class="ch" style="--h:0.72;--i:18"><i class="ch__bar"></i><b class="ch__n">451</b><em class="ch__name">Cartoon Network</em></span><span class="ch" style="--h:0.6;--i:19"><i class="ch__bar"></i><b class="ch__n">454</b><em class="ch__name">Nickelodeon</em></span><span class="ch" style="--h:0.98;--i:20"><i class="ch__bar"></i><b class="ch__n">501</b><em class="ch__name">Euronews</em></span><span class="ch" style="--h:0.37;--i:21"><i class="ch__bar"></i><b class="ch__n">504</b><em class="ch__name">BBC World</em></span><span class="ch" style="--h:0.91;--i:22"><i class="ch__bar"></i><b class="ch__n">507</b><em class="ch__name">Bloomberg</em></span><span class="ch" style="--h:0.53;--i:23"><i class="ch__bar"></i><b class="ch__n">510</b><em class="ch__name">TRT</em></span><span class="ch" style="--h:0.44;--i:24"><i class="ch__bar"></i><b class="ch__n">513</b><em class="ch__name">Rai 1</em></span><span class="ch" style="--h:0.42;--i:25"><i class="ch__bar"></i><b class="ch__n">516</b><em class="ch__name">Viasat History</em></span></div>
+    <div class="scan__set"><span class="ch" style="--h:0.55;--i:0"><i class="ch__bar"></i><b class="ch__n">101</b><em class="ch__name">იმედი</em></span><span class="ch" style="--h:0.44;--i:1"><i class="ch__bar"></i><b class="ch__n">102</b><em class="ch__name">რუსთავი 2</em></span><span class="ch" style="--h:0.77;--i:2"><i class="ch__bar"></i><b class="ch__n">103</b><em class="ch__name">მთავარი არხი</em></span><span class="ch" style="--h:0.39;--i:3"><i class="ch__bar"></i><b class="ch__n">104</b><em class="ch__name">ფორმულა</em></span><span class="ch" style="--h:0.69;--i:4"><i class="ch__bar"></i><b class="ch__n">105</b><em class="ch__name">1TV</em></span><span class="ch" style="--h:0.58;--i:5"><i class="ch__bar"></i><b class="ch__n">106</b><em class="ch__name">TV Pirveli</em></span><span class="ch" style="--h:0.38;--i:6"><i class="ch__bar"></i><b class="ch__n">107</b><em class="ch__name">პალიტრანიუსი</em></span><span class="ch" style="--h:0.67;--i:7"><i class="ch__bar"></i><b class="ch__n">108</b><em class="ch__name">მაესტრო</em></span><span class="ch" style="--h:0.36;--i:8"><i class="ch__bar"></i><b class="ch__n">212</b><em class="ch__name">Setanta Sports</em></span><span class="ch" style="--h:0.63;--i:9"><i class="ch__bar"></i><b class="ch__n">215</b><em class="ch__name">Eurosport 1</em></span><span class="ch" style="--h:0.39;--i:10"><i class="ch__bar"></i><b class="ch__n">218</b><em class="ch__name">Sport 1</em></span><span class="ch" style="--h:0.4;--i:11"><i class="ch__bar"></i><b class="ch__n">330</b><em class="ch__name">Discovery</em></span><span class="ch" style="--h:0.62;--i:12"><i class="ch__bar"></i><b class="ch__n">334</b><em class="ch__name">Nat Geo</em></span><span class="ch" style="--h:0.89;--i:13"><i class="ch__bar"></i><b class="ch__n">337</b><em class="ch__name">Animal Planet</em></span><span class="ch" style="--h:0.42;--i:14"><i class="ch__bar"></i><b class="ch__n">340</b><em class="ch__name">TLC</em></span><span class="ch" style="--h:0.49;--i:15"><i class="ch__bar"></i><b class="ch__n">401</b><em class="ch__name">HBO</em></span><span class="ch" style="--h:0.75;--i:16"><i class="ch__bar"></i><b class="ch__n">404</b><em class="ch__name">AMC</em></span><span class="ch" style="--h:0.97;--i:17"><i class="ch__bar"></i><b class="ch__n">407</b><em class="ch__name">TV1000</em></span><span class="ch" style="--h:0.72;--i:18"><i class="ch__bar"></i><b class="ch__n">451</b><em class="ch__name">Cartoon Network</em></span><span class="ch" style="--h:0.6;--i:19"><i class="ch__bar"></i><b class="ch__n">454</b><em class="ch__name">Nickelodeon</em></span><span class="ch" style="--h:0.98;--i:20"><i class="ch__bar"></i><b class="ch__n">501</b><em class="ch__name">Euronews</em></span><span class="ch" style="--h:0.37;--i:21"><i class="ch__bar"></i><b class="ch__n">504</b><em class="ch__name">BBC World</em></span><span class="ch" style="--h:0.91;--i:22"><i class="ch__bar"></i><b class="ch__n">507</b><em class="ch__name">Bloomberg</em></span><span class="ch" style="--h:0.53;--i:23"><i class="ch__bar"></i><b class="ch__n">510</b><em class="ch__name">TRT</em></span><span class="ch" style="--h:0.44;--i:24"><i class="ch__bar"></i><b class="ch__n">513</b><em class="ch__name">Rai 1</em></span><span class="ch" style="--h:0.42;--i:25"><i class="ch__bar"></i><b class="ch__n">516</b><em class="ch__name">Viasat History</em></span></div>
   </div>
+  <p class="scan__meta"><span class="ka">სიხშირის სკანირება · 1024 არხი ნაპოვნია</span><span class="en">Scanning the band · 1,024 channels found</span></p>
 </div>
 
 <!-- ══ CHANNELS / EPG ══════════════════════════════════════ -->
 <section class="sec sec--channels" id="channels">
   <div class="wrap">
     <div class="sec__head">
-      <p class="kick"><span class="ka">არხები</span><span class="en">Channels</span></p>
+      <p class="kick" data-ch="01"><span class="ka">არხები</span><span class="en">Channels</span></p>
       <h2 class="dsp">
         <span class="ka">ტელეგიდი, რომელიც<br>მთელ ქვეყანას იტევს.</span>
         <span class="en">A program guide that<br>holds the whole country.</span>
@@ -257,6 +260,25 @@
       </p>
     </div>
 
+  </div>
+</section>
+
+<!-- ══ THE WALL — 1,024 cells, scrubbed ════════════════════ -->
+<section class="sec sec--wall" id="wall">
+  <div class="wall__run">
+  <div class="wall__stage">
+    <canvas class="wall__canvas" id="wallCanvas" aria-hidden="true"></canvas>
+    <div class="wall__copy">
+      <p class="kick" data-ch="02"><span class="ka">მასშტაბი</span><span class="en">Scale</span></p>
+      <h2 class="dsp">
+        <span class="ka"><em>1024</em> არხი.<br>ერთი პულტი.</span>
+        <span class="en"><em>1,024</em> channels.<br>One remote.</span>
+      </h2>
+    </div>
+  </div>
+  </div>
+
+  <div class="wrap wall__foot">
     <dl class="stats">
       <div><dt data-count="1024" data-format="space">1 024</dt><dd><span class="ka">არხი გამოწერაში</span><span class="en">channels in the plan</span></dd></div>
       <div><dt><span data-count="14">14</span> <span class="u"><span class="ka">დღე</span><span class="en">days</span></span></dt><dd><span class="ka">არქივი უკან დაბრუნებისთვის</span><span class="en">of catch-up archive</span></dd></div>
@@ -280,7 +302,7 @@
     </div>
 
     <div class="box__copy">
-      <p class="kick"><span class="ka">მოწყობილობა</span><span class="en">The device</span></p>
+      <p class="kick" data-ch="03"><span class="ka">მოწყობილობა</span><span class="en">The device</span></p>
       <h2 class="dsp dsp--m">
         <span class="ka">ჩართე დენში.<br>ჩართე HDMI-ში.<br>უყურე.</span>
         <span class="en">Plug in power.<br>Plug in HDMI.<br>Watch.</span>
@@ -315,7 +337,7 @@
 <section class="sec sec--how" id="how">
   <div class="wrap">
     <div class="sec__head sec__head--tight">
-      <p class="kick"><span class="ka">დაწყება</span><span class="en">Getting started</span></p>
+      <p class="kick" data-ch="04"><span class="ka">დაწყება</span><span class="en">Getting started</span></p>
       <h2 class="dsp dsp--m">
         <span class="ka">შეკვეთიდან ეთერამდე —<br>ორ დღეში.</span>
         <span class="en">From order to on air —<br>in two days.</span>
@@ -323,20 +345,21 @@
     </div>
 
     <ol class="steps">
+      <span class="steps__rail" aria-hidden="true"><i id="rail"></i></span>
       <li class="step">
-        <span class="step__n" aria-hidden="true">1</span>
+        <span class="step__n" aria-hidden="true">01 <b>/ 03</b></span>
         <h3><span class="ka">აირჩიე პაკეტი</span><span class="en">Pick a plan</span></h3>
         <p><span class="ka">შეავსე ფორმა ან დაგვირეკე. ხელშეკრულება ხელმოსაწერად მოგდის ელფოსტაზე.</span>
            <span class="en">Fill in the form or call us. The contract arrives by email for signing.</span></p>
       </li>
       <li class="step">
-        <span class="step__n" aria-hidden="true">2</span>
+        <span class="step__n" aria-hidden="true">02 <b>/ 03</b></span>
         <h3><span class="ka">მიიღე ყუთი</span><span class="en">Receive the box</span></h3>
         <p><span class="ka">კურიერი თბილისში მოიტანს 24 საათში, რეგიონებში — 48 საათში. მიტანა უფასოა.</span>
            <span class="en">A courier delivers within 24 hours in Tbilisi, 48 hours in the regions. Delivery is free.</span></p>
       </li>
       <li class="step">
-        <span class="step__n" aria-hidden="true">3</span>
+        <span class="step__n" aria-hidden="true">03 <b>/ 03</b></span>
         <h3><span class="ka">ჩართე და უყურე</span><span class="en">Plug in and watch</span></h3>
         <p><span class="ka">ყუთი უკვე მიბმულია შენს ანგარიშზე. Wi-Fi პაროლი შეიყვანე — ეთერი ჩართულია.</span>
            <span class="en">The box is already linked to your account. Enter your Wi-Fi password and you are on air.</span></p>
@@ -349,7 +372,7 @@
 <section class="sec sec--price" id="price">
   <div class="wrap">
     <div class="sec__head sec__head--center">
-      <p class="kick"><span class="ka">ფასები</span><span class="en">Pricing</span></p>
+      <p class="kick" data-ch="05"><span class="ka">ფასები</span><span class="en">Pricing</span></p>
       <h2 class="dsp dsp--m">
         <span class="ka">ერთი ანგარიში.<br>ყოველთვე იგივე.</span>
         <span class="en">One bill.<br>The same every month.</span>
@@ -407,7 +430,7 @@
 <section class="sec sec--faq" id="faq">
   <div class="wrap faq">
     <div class="faq__head">
-      <p class="kick"><span class="ka">კითხვები</span><span class="en">Questions</span></p>
+      <p class="kick" data-ch="06"><span class="ka">კითხვები</span><span class="en">Questions</span></p>
       <h2 class="dsp dsp--s">
         <span class="ka">სანამ შეუკვეთავ.</span>
         <span class="en">Before you order.</span>

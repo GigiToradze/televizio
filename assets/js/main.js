@@ -7,6 +7,7 @@
 (function () {
   'use strict';
 
+  var NL = String.fromCharCode(10);   // shader line break
   var root = document.documentElement;
   var HERE = (document.currentScript && document.currentScript.src) || '';
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -141,10 +142,22 @@
     document.querySelectorAll('.hdr__nav a[href^="#"]').forEach(function (a) {
       links[a.getAttribute('href').slice(1)] = a;
     });
+    var kicks = {};
+    document.querySelectorAll('.kick[data-ch]').forEach(function (k) {
+      var sec = k.closest('section');
+      if (sec && sec.id) kicks[sec.id] = k;
+    });
+
     function setCurrent(id) {
       for (var key in links) links[key].setAttribute('aria-current', String(key === id));
+      for (var s in kicks) kicks[s].classList.toggle('is-live', s === id);
     }
-    Object.keys(links).forEach(function (id) {
+    var watched = Object.keys(links);
+    document.querySelectorAll('.kick[data-ch]').forEach(function (k) {
+      var sec = k.closest('section');
+      if (sec && sec.id && watched.indexOf(sec.id) === -1) watched.push(sec.id);
+    });
+    watched.forEach(function (id) {
       var el = document.getElementById(id);
       if (!el) return;
       ScrollTrigger.create({
@@ -291,13 +304,12 @@
     setInterval(tick, 30000);
   })();
 
-  /* ── 8. the ticker answers to the scroll ──────────────── */
-  (function ticker() {
-    var row = document.querySelector('.ticker__row');
+  /* ── 8. the scan lane answers to the scroll ───────────── */
+  (function scanLane() {
+    var row = document.getElementById('scanLane');
     if (!row || !hasGSAP || reduced) return;
 
-    row.style.animation = 'none';           // GSAP takes the wheel
-    var tape = gsap.to(row, { xPercent: -50, duration: 58, ease: 'none', repeat: -1 });
+    var tape = gsap.to(row, { xPercent: -50, duration: 74, ease: 'none', repeat: -1 });
     var settle;
 
     /* scrolling drags the tape along with you, then it settles back */
@@ -309,6 +321,33 @@
         settle = setTimeout(function () {
           gsap.to(tape, { timeScale: 1, duration: 1.2, ease: 'power2.out' });
         }, 140);
+      }
+    });
+  })();
+
+  /* ── 8b. the signal reaching each stage ───────────────── */
+  (function signalRail() {
+    var rail = document.getElementById('rail');
+    var steps = document.querySelectorAll('.steps .step');
+    if (!rail || !steps.length) return;
+
+    if (!hasGSAP || reduced) {
+      gsap && gsap.set ? gsap.set(rail, { scaleX: 1 }) : (rail.style.transform = 'scaleX(1)');
+      steps.forEach(function (s) { s.classList.add('is-on'); });
+      return;
+    }
+
+    ScrollTrigger.create({
+      trigger: '.steps',
+      start: 'top 78%',
+      end: 'bottom 62%',
+      scrub: 0.6,
+      onUpdate: function (self) {
+        var p = self.progress;
+        rail.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+        steps.forEach(function (step, i) {
+          step.classList.toggle('is-on', p >= (i + 0.55) / steps.length);
+        });
       }
     });
   })();
@@ -334,23 +373,163 @@
     vids.forEach(function (v) { io.observe(v); });
   })();
 
-  /* ── 10. the signal field ─────────────────────────────── */
-  (function signalField() {
-    var canvas = document.getElementById('field');
-    if (!canvas || reduced) return;
-    if (!('IntersectionObserver' in window)) return;
-
-    /* three.js is ~188 KB gzipped — it only loads if you scroll this far */
+  /* three.js is ~188 KB gzipped, so it is fetched once, lazily, and
+     only when one of the two WebGL sections is nearly in view. */
+  var threePromise = null;
+  function loadThree() {
+    if (!threePromise) {
+      var url = HERE ? new URL('vendor/three.module.min.js', HERE).href
+                     : 'assets/js/vendor/three.module.min.js';
+      threePromise = import(url);
+    }
+    return threePromise;
+  }
+  function whenNear(el, margin, run) {
     var armed = false;
     var watcher = new IntersectionObserver(function (entries) {
       if (!entries[0].isIntersecting || armed) return;
       armed = true;
       watcher.disconnect();
-      var url = HERE ? new URL('vendor/three.module.min.js', HERE).href
-                     : 'assets/js/vendor/three.module.min.js';
-      import(url).then(start).catch(function () {});
-    }, { rootMargin: '500px' });
-    watcher.observe(canvas);
+      loadThree().then(run).catch(function () {});
+    }, { rootMargin: margin });
+    watcher.observe(el);
+  }
+
+  /* ── 10. the wall — 1,024 channels finding their places ─ */
+  (function channelWall() {
+    var canvas = document.getElementById('wallCanvas');
+    if (!canvas || !hasGSAP || reduced) return;
+    if (!('IntersectionObserver' in window)) return;
+
+    whenNear(canvas, '600px', function (THREE) {
+      var stage = canvas.parentNode;
+      var renderer;
+      try {
+        renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      } catch (e) { return; }
+      renderer.setClearColor(0x000000, 0);
+
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+      camera.position.set(0, 0, 9);
+
+      var SIDE = 32, N = SIDE * SIDE;        // 1,024
+      var PITCH = 0.2, CELL = 0.155;
+
+      var base = new THREE.PlaneGeometry(CELL, CELL * 0.62);
+      var geo = new THREE.InstancedBufferGeometry();
+      geo.index = base.index;
+      geo.attributes.position = base.attributes.position;
+      geo.attributes.uv = base.attributes.uv;
+      geo.instanceCount = N;
+
+      var target = new Float32Array(N * 3);
+      var origin = new Float32Array(N * 3);
+      var phase = new Float32Array(N);
+      var half = (SIDE - 1) * PITCH / 2;
+
+      for (var i = 0; i < N; i++) {
+        var col = i % SIDE, rowI = Math.floor(i / SIDE);
+        target[i * 3]     = col * PITCH - half;
+        target[i * 3 + 1] = rowI * PITCH * 0.68 - half * 0.68;
+        target[i * 3 + 2] = 0;
+        /* scattered through depth, further out the later they land */
+        var ang = Math.random() * Math.PI * 2;
+        var rad = 3.5 + Math.random() * 7;
+        origin[i * 3]     = Math.cos(ang) * rad;
+        origin[i * 3 + 1] = Math.sin(ang) * rad * 0.7;
+        origin[i * 3 + 2] = -14 - Math.random() * 22;
+        phase[i] = Math.random();
+      }
+
+      geo.setAttribute('aTarget', new THREE.InstancedBufferAttribute(target, 3));
+      geo.setAttribute('aOrigin', new THREE.InstancedBufferAttribute(origin, 3));
+      geo.setAttribute('aPhase', new THREE.InstancedBufferAttribute(phase, 1));
+
+      var uniforms = { uP: { value: 0 }, uTime: { value: 0 } };
+
+      var mat = new THREE.ShaderMaterial({
+        uniforms: uniforms,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        vertexShader: [
+          'attribute vec3 aTarget; attribute vec3 aOrigin; attribute float aPhase;',
+          'uniform float uP; uniform float uTime;',
+          'varying float vB; varying vec2 vUv;',
+          'void main(){',
+          '  float e = clamp((uP - aPhase * 0.42) / 0.58, 0.0, 1.0);',
+          '  e = e * e * (3.0 - 2.0 * e);',
+          '  vec3 c = mix(aOrigin, aTarget, e);',
+          '  vec3 p = position * mix(0.35, 1.0, e) + c;',
+          '  float flick = 0.72 + 0.28 * sin(uTime * 2.4 + aPhase * 53.0);',
+          '  vB = e * mix(0.35, flick, e);',
+          '  vUv = uv;',
+          '  gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);',
+          '}'
+        ].join(NL),
+        fragmentShader: [
+          'varying float vB; varying vec2 vUv;',
+          'void main(){',
+          '  vec2 d = abs(vUv - 0.5);',
+          '  float edge = smoothstep(0.42, 0.5, max(d.x, d.y));',
+          '  vec3 col = vec3(0.894, 0.129, 0.110);',
+          '  float a = (0.30 + edge * 0.95) * vB;',
+          '  if (a < 0.004) discard;',
+          '  gl_FragColor = vec4(col + edge * vB * 0.45, a);',
+          '}'
+        ].join(NL)
+      });
+
+      var mesh = new THREE.Mesh(geo, mat);
+      mesh.frustumCulled = false;
+      scene.add(mesh);
+
+      function resize() {
+        var w = stage.clientWidth, h = stage.clientHeight;
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        /* keep the grid inside the frame on narrow screens */
+        var fit = Math.min(1, (w / h) / 1.35);
+        mesh.scale.setScalar(0.75 + 0.25 * fit);
+        camera.position.z = 9 / Math.max(0.55, fit);
+        /* on wide screens push the grid right, clear of the headline */
+        mesh.position.x = w / h > 1.25 ? 1.9 : 0;
+        mesh.position.y = w / h > 1.25 ? 0 : 1.15;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      ScrollTrigger.create({
+        trigger: '.wall__run',
+        start: 'top top', end: 'bottom bottom', scrub: 0.4,
+        onUpdate: function (self) { uniforms.uP.value = self.progress; }
+      });
+
+      var visible = false, running = false;
+      var t0 = performance.now();
+      function loop() {
+        if (!visible) { running = false; return; }
+        uniforms.uTime.value = (performance.now() - t0) / 1000;
+        renderer.render(scene, camera);
+        requestAnimationFrame(loop);
+      }
+      new IntersectionObserver(function (e) {
+        visible = e[0].isIntersecting;
+        if (visible && !running) { running = true; loop(); }
+      }, { threshold: 0 }).observe(canvas);
+    });
+  })();
+
+  /* ── 11. the signal field ─────────────────────────────── */
+  (function signalField() {
+    var canvas = document.getElementById('field');
+    if (!canvas || reduced) return;
+    if (!('IntersectionObserver' in window)) return;
+
+    whenNear(canvas, '500px', start);
 
     function start(THREE) {
       var section = canvas.closest('section');
@@ -408,7 +587,7 @@
           '  gl_Position = vec4(p, 1.0);',
           '  gl_PointSize = (1.2 + vI * 4.2) * uDpr;',
           '}'
-        ].join('\n'),
+        ].join(NL),
         fragmentShader: [
           'varying float vI;',
           'void main(){',
@@ -416,7 +595,7 @@
           '  if (m * vI < 0.01) discard;',
           '  gl_FragColor = vec4(0.894, 0.129, 0.110, m * vI);',
           '}'
-        ].join('\n')
+        ].join(NL)
       });
 
       scene.add(new THREE.Points(geo, mat));

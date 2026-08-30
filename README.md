@@ -28,6 +28,7 @@ assets/fonts/              Eurostile GEO_Mt, four weights as woff2
 assets/video/box-loop.mp4  looping product reveal in "the box" section
 assets/img/                room.webp (hero), og.jpg, logos, icons, star mask
 robots.txt, sitemap.xml    both assume the site is served from televizio.ge
+favicon.ico                only so browsers stop asking for it
 ```
 
 ## Typography
@@ -91,22 +92,43 @@ Every one of these sits in its own module in `main.js` and every one is skipped 
 - **Hero power-on.** One orchestrated GSAP timeline: the room lifts out of near-black
   as the bias glow comes up, then the eyebrow, headline, lede and buttons land in
   sequence. The photograph keeps drifting on scroll as the section leaves.
+- **The tuner scan strip**, under the hero. Not a logo marquee — a spectrum. Every
+  channel is a bar whose height is its signal, with its number and name beneath, and
+  the bars run a travelling wave through a staggered `animation-delay`. A scan head
+  crosses the strip on an eleven-second sweep, lighting whatever it passes, the way a
+  tuner looks while it searches the band. The whole lane runs on GSAP so
+  `ScrollTrigger.getVelocity()` can drag it faster while you scroll.
+- **The wall.** 1,024 instanced cells scatter through depth and assemble into a 32×32
+  grid as you scroll a pinned section, each one landing on its own delay and flickering
+  at its own rate once it settles. It is the number made literal: that is what a
+  thousand channels looks like. One `InstancedBufferGeometry`, one `uP` uniform per
+  frame, everything else on the GPU.
 - **A guide on the real clock.** The programme grid is not a screenshot. It reads
   `Date`, opens the ruler two hours before the current hour, puts the playhead at the
   true position, labels it with the actual time, and marks whichever block each
   channel is really inside. It re-ticks every 30 seconds. The programme titles are
   still invented; the timeline around them is not.
-- **A ticker that answers to the scroll.** The channel tape runs on GSAP rather than a
-  CSS animation, and `ScrollTrigger.getVelocity()` drags it faster while you scroll,
-  then eases it back to its own pace.
-- **Counters** on the four statistics, running once when they come into view.
+- **The signal reaching each stage.** A red rail draws across the three steps as you
+  scroll them, and each step's tally lights as the signal arrives — the section is a
+  real sequence, so the rail is carrying real information.
 - **The signal field.** A three.js `Points` grid in the closing section — a custom
   shader sends concentric rings outward from the centre and bulges toward the pointer.
-  It writes clip space directly, so there is no camera maths and no lighting. three.js
-  is ~188 KB gzipped, so it is loaded with a dynamic `import()` that only fires when
-  that section is within 500 px of the viewport, and the render loop stops whenever the
-  canvas leaves the screen.
-- **Reveals** on section content, and the red signal meter under the header.
+  It writes clip space directly, so there is no camera maths and no lighting.
+- **Counters** on the four statistics, running once when they come into view, and the
+  red signal meter under the header.
+
+three.js is ~188 KB gzipped. It is fetched once, lazily, shared between the wall and
+the field, and only when one of them is within 500–600 px of the viewport. Both render
+loops stop whenever their canvas leaves the screen.
+
+## Eyebrows
+
+Section eyebrows are tuner readouts rather than labels: a tally light, a channel
+number, a name, in a hairline box. The tally lights while you are inside that section,
+driven by the same ScrollTrigger that marks the nav — so the numbering is navigation,
+not decoration, and it borrows the vocabulary of the thing the site is selling.
+
+Numbers run `01`–`06` in reading order and live in `data-ch` on each `.kick`.
 
 ## The product film
 
@@ -163,9 +185,10 @@ All invented, all realistic — none of it is real business data.
 
 ## Accessibility and fallbacks
 
-- `prefers-reduced-motion`: the hero timeline, reveals, counters, ticker and the
-  WebGL field are all skipped — three.js is never even fetched. The hero keeps the
-  photograph and its glow, and the counters print their final numbers.
+- `prefers-reduced-motion`: the hero timeline, reveals, counters, scan sweep and both
+  WebGL scenes are skipped — three.js is never fetched. The wall collapses from a
+  230vh scrub runway to a normal block, the step rail draws itself complete, the
+  counters print their final numbers, and the hero keeps the photograph and its glow.
 - No JavaScript: the hero photograph renders as-is, all copy is visible, and the
   site reads top to bottom in Georgian.
 - Keyboard: skip link, visible red focus ring, `<details>` FAQ, Escape closes the
