@@ -142,22 +142,10 @@
     document.querySelectorAll('.hdr__nav a[href^="#"]').forEach(function (a) {
       links[a.getAttribute('href').slice(1)] = a;
     });
-    var kicks = {};
-    document.querySelectorAll('.kick[data-ch]').forEach(function (k) {
-      var sec = k.closest('section');
-      if (sec && sec.id) kicks[sec.id] = k;
-    });
-
     function setCurrent(id) {
       for (var key in links) links[key].setAttribute('aria-current', String(key === id));
-      for (var s in kicks) kicks[s].classList.toggle('is-live', s === id);
     }
-    var watched = Object.keys(links);
-    document.querySelectorAll('.kick[data-ch]').forEach(function (k) {
-      var sec = k.closest('section');
-      if (sec && sec.id && watched.indexOf(sec.id) === -1) watched.push(sec.id);
-    });
-    watched.forEach(function (id) {
+    Object.keys(links).forEach(function (id) {
       var el = document.getElementById(id);
       if (!el) return;
       ScrollTrigger.create({

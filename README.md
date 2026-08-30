@@ -123,15 +123,6 @@ three.js is ~188 KB gzipped. It is fetched once, lazily, shared between the wall
 the field, and only when one of them is within 500–600 px of the viewport. Both render
 loops stop whenever their canvas leaves the screen.
 
-## Eyebrows
-
-Section eyebrows are tuner readouts rather than labels: a tally light, a channel
-number, a name, in a hairline box. The tally lights while you are inside that section,
-driven by the same ScrollTrigger that marks the nav — so the numbering is navigation,
-not decoration, and it borrows the vocabulary of the thing the site is selling.
-
-Numbers run `01`–`06` in reading order and live in `data-ch` on each `.kick`.
-
 ## The product film
 
 `box-loop.mp4` in "the box" section starts when it scrolls into view, loops, and

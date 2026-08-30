@@ -151,38 +151,12 @@ ul,ol{ margin:0; padding:0; list-style:none; }
 [data-lang="en"] .sec__head{ max-width:min(64ch,100%); }
 
 /* ── type ─────────────────────────────────────────────────── */
-/* Section eyebrows are tuner readouts: a tally light, a channel
-   number, a name. The tally lights while you are in that section. */
-.kick{
-  display:inline-flex; align-items:center; gap:.85em;
-  padding:7px 14px 7px 9px;
-  border:1px solid var(--rule-2);
-  border-radius:2px;
-  font:500 .66rem/1 var(--f-mono);
-  letter-spacing:.2em;
-  text-transform:uppercase;
-  color:#CFCFD6;
-  margin-bottom:clamp(18px,2.2vw,28px);
-  transition:border-color .5s ease, color .5s ease;
-}
-.kick::before{                       /* tally */
-  content:"";
-  order:-2;
-  width:6px; height:6px; border-radius:50%;
-  background:#3B0E0C;
-  transition:background .45s ease, box-shadow .45s ease;
-}
-.kick::after{                        /* channel number */
-  content:attr(data-ch);
-  order:-1;
-  color:var(--dim);
-  letter-spacing:.14em;
-  transition:color .5s ease;
-}
-.kick.is-live{ border-color:rgba(228,33,28,.5); color:#fff; }
-.kick.is-live::before{ background:var(--red); box-shadow:0 0 10px 2px rgba(228,33,28,.85); }
-.kick.is-live::after{ color:var(--red); }
+.dsp{ font-size:clamp(1.95rem,4.5vw,3.7rem); }
+[data-lang="en"] .dsp--m{ font-size:clamp(1.7rem,3.6vw,2.95rem); }
+[data-lang="en"] .dsp--s{ font-size:clamp(1.45rem,2.6vw,2.1rem); }
+[data-lang="en"] .sec__head{ max-width:min(64ch,100%); }
 
+/* ── type ─────────────────────────────────────────────────── */
 .dsp{
   font-family:var(--f-dsp);
   font-weight:700;
@@ -442,7 +416,6 @@ body.is-locked{ overflow:hidden; }
 .hero__h1 em{
   font-style:normal;
   color:var(--red);
-  text-shadow:0 0 44px rgba(228,33,28,.55);
 }
 .hero__lede{
   font-family:var(--f-text);
@@ -722,7 +695,6 @@ body.is-locked{ overflow:hidden; }
 .wall__copy .dsp em{
   font-style:normal;
   color:var(--red);
-  text-shadow:0 0 46px rgba(228,33,28,.6);
 }
 .wall__foot{ margin-top:clamp(48px,7vw,96px); }
 
