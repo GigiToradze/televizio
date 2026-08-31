@@ -27,7 +27,7 @@ assets/js/vendor/          GSAP 3.15 + ScrollTrigger, three.js r185 (no CDN)
 assets/fonts/              Eurostile GEO_Mt, four weights as woff2
 assets/video/box-loop.mp4  looping product reveal in "the box" section
 assets/img/                scene-1..3.webp (hero), og.jpg, logos, icons, star
-assets/img/channels/       26 channel marks — PLACEHOLDERS, see the README there
+assets/img/channels/       13 broadcaster logos, adapted for black — see the README there
 robots.txt, sitemap.xml    both assume the site is served from televizio.ge
 favicon.ico                only so browsers stop asking for it
 ```
@@ -241,7 +241,6 @@ All invented, all realistic — none of it is real business data.
 | Company | Chavchavadze Ave 37, Tbilisi 0179; reg. 400000000 |
 | Legal links | Terms and Privacy point at `#` |
 | Plan buttons | "Choose" links jump to `#contact`; wire them to a real order form |
-| Channel marks | All 26 files in `assets/img/channels/` are stand-ins, not the broadcasters' logos — replace them with licensed artwork |
 
 ## Accessibility and fallbacks
 

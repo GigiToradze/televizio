@@ -470,9 +470,14 @@ body.is-locked{ overflow:hidden; }
   pointer-events:none;
 }
 .logo img{
-  max-height:clamp(28px,2.9vw,38px); width:auto;
-  filter:grayscale(1) brightness(.66) contrast(.82);
-  opacity:.7;
+  /* both caps, so a wide wordmark and a square mark carry
+     about the same weight in the lane */
+  max-height:clamp(24px,2.5vw,32px);
+  max-width:clamp(92px,10.5vw,128px);
+  width:auto; height:auto;
+  object-fit:contain;
+  filter:grayscale(1) brightness(1.05) contrast(.9);
+  opacity:.5;
   transition:filter .42s ease, opacity .42s ease,
              transform .42s cubic-bezier(.2,.8,.2,1);
 }

@@ -1,1 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 48" width="104" height="48"><rect x="0" y="2" width="44" height="44" rx="10" fill="#6D6AF0"/><text x="22" y="35" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" font-size="28" font-weight="800" fill="#0A0A0A" text-anchor="middle">1</text><text x="54" y="33" font-family="Arial, Helvetica, 'DejaVu Sans', sans-serif" font-size="30" font-weight="600" fill="#FFF">1TV</text></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Шар_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 465 465" style="enable-background:new 0 0 465 465;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#E5003C;}
+</style>
+<path class="st0" d="M437.53,0H27.47C12.29,0,0,12.29,0,27.47v410.07C0,452.71,12.29,465,27.47,465h410.07
+	c15.18,0,27.47-12.29,27.47-27.47V27.47C465,12.29,452.71,0,437.53,0z M290.28,295.58L174.93,410.93v-230.7L290.28,64.88V295.58z"/>
+</svg>
