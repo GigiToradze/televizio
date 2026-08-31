@@ -102,7 +102,8 @@ Every one of these sits in its own module in `main.js` and every one is skipped 
   are looking at does not slide out from under you. The lane runs on GSAP, so
   `ScrollTrigger.getVelocity()` also drags it faster while you scroll. Coarse pointers
   have no way to reveal anything, so they get the logos part-desaturated instead.
-  The strip carries no rules above or below it — it sits straight on the black.
+  The strip carries no rules above or below it and no caption — it sits straight on the
+  black.
 - **The wall.** A sticky stage in a 230vh runway holds the screen while 1,024 instanced
   cells scatter through depth and assemble into a 32×32 grid, each one landing on its
   own delay and flickering at its own rate once it settles. The headline fades up with
@@ -170,6 +171,11 @@ Georgian is the default. Every string is in the markup twice, as
 `<span class="ka">` / `<span class="en">`, and CSS shows one set based on
 `<html data-lang>`. The choice is stored in `localStorage` under `televizio-lang`.
 To add or change copy, edit both spans together.
+
+The switch is a single button in the header carrying two inline SVG flags, of which CSS
+shows one: the flag of the language you would get, not the one you are in. Emoji flags
+are not an option — Windows renders them as letter pairs. Its `aria-label` says what
+the press does and changes with the language.
 
 ## SEO
 

@@ -17,25 +17,29 @@
 
   /* ── 1. language ──────────────────────────────────────── */
   (function language() {
-    var buttons = document.querySelectorAll('[data-setlang]');
+    var toggle = document.getElementById('lang');
     var stored = null;
     try { stored = localStorage.getItem('televizio-lang'); } catch (e) {}
 
     function apply(lang) {
       root.setAttribute('lang', lang);
       root.setAttribute('data-lang', lang);
-      buttons.forEach(function (b) {
-        b.setAttribute('aria-pressed', String(b.dataset.setlang === lang));
-      });
+      /* the button offers the other language, so it says so */
+      if (toggle) {
+        toggle.setAttribute('aria-label',
+          lang === 'ka' ? 'Switch to English' : 'ქართულად გადართვა');
+      }
       try { localStorage.setItem('televizio-lang', lang); } catch (e) {}
       if (hasGSAP) ScrollTrigger.refresh();
     }
 
     if (stored === 'en' || stored === 'ka') apply(stored);
 
-    buttons.forEach(function (b) {
-      b.addEventListener('click', function () { apply(b.dataset.setlang); });
-    });
+    if (toggle) {
+      toggle.addEventListener('click', function () {
+        apply(root.getAttribute('data-lang') === 'ka' ? 'en' : 'ka');
+      });
+    }
   })();
 
   /* ── 2. mobile menu ───────────────────────────────────── */
