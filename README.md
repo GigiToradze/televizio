@@ -25,7 +25,7 @@ assets/css/style.css       @font-face, tokens + all styles
 assets/js/main.js          ten small modules, listed in its header comment
 assets/js/vendor/          GSAP 3.15 + ScrollTrigger, three.js r185 (no CDN)
 assets/fonts/              Eurostile GEO_Mt, four weights as woff2
-assets/video/box-loop.mp4  looping product reveal in "the box" section
+assets/video/box-loop.mp4  looping product reveal, 1080p H.264, 1.5 MB
 assets/img/                scene-1..3.webp (hero), og.jpg, logos, icons, star
 assets/img/channels/       13 broadcaster logos, adapted for black — see the README there
 robots.txt, sitemap.xml    both assume the site is served from televizio.ge
@@ -189,6 +189,11 @@ own height.
 `box-loop.mp4` starts when it scrolls into view, loops, and pauses when it scrolls out
 — an IntersectionObserver in `main.js` drives it. It is muted and `playsinline`, so it
 autoplays everywhere without a gesture.
+
+The master is 4K HEVC, which Chrome and Firefox will not play, so it ships re-encoded
+to 1080p H.264 at CRF 26 — 1.5 MB, with `+faststart`. 1080p rather than 720p because
+the section scales it 1.24× and bleeds it edge to edge. Re-encode a replacement the
+same way and regenerate the poster from its first frame.
 
 ## Languages
 
