@@ -25,7 +25,8 @@ assets/css/style.css       @font-face, tokens + all styles
 assets/js/main.js          ten small modules, listed in its header comment
 assets/js/vendor/          GSAP 3.15 + ScrollTrigger, three.js r185 (no CDN)
 assets/fonts/              Eurostile GEO_Mt, four weights as woff2
-assets/video/box-loop.mp4  looping product reveal, 1080p H.264, 1.5 MB
+assets/video/box-loop.webm looping product reveal, 1440p VP9, 2.3 MB (preferred)
+assets/video/box-loop.mp4  the same, 1080p H.264, 3.6 MB (fallback)
 assets/img/                scene-1..3.webp (hero), og.jpg, logos, icons, star
 assets/img/channels/       13 broadcaster logos, adapted for black — see the README there
 robots.txt, sitemap.xml    both assume the site is served from televizio.ge
@@ -190,10 +191,24 @@ own height.
 — an IntersectionObserver in `main.js` drives it. It is muted and `playsinline`, so it
 autoplays everywhere without a gesture.
 
-The master is 4K HEVC, which Chrome and Firefox will not play, so it ships re-encoded
-to 1080p H.264 at CRF 26 — 1.5 MB, with `+faststart`. 1080p rather than 720p because
-the section scales it 1.24× and bleeds it edge to edge. Re-encode a replacement the
-same way and regenerate the poster from its first frame.
+The master is 4K HEVC, which Chrome and Firefox will not play, so it ships in two
+encodes and the browser takes the first it understands:
+
+```bash
+# preferred — VP9 holds the dark gradient at a third of the bitrate
+ffmpeg -i master.mp4 -an -vf "scale=2560:1440:flags=lanczos"   -c:v libvpx-vp9 -crf 31 -b:v 0 -row-mt 1 -deadline good -cpu-used 2   -pix_fmt yuv420p box-loop.webm
+
+# fallback — everything plays H.264
+ffmpeg -i master.mp4 -an -vf "scale=1920:1080:flags=lanczos"   -c:v libx264 -crf 20 -preset slow -x264-params "aq-mode=3:aq-strength=1.1"   -profile:v high -pix_fmt yuv420p -movflags +faststart box-loop.mp4
+```
+
+Two things matter here. The footage is almost entirely dark red gradient, which bands
+badly under ordinary settings — CRF 26 left visible blotching, so the H.264 encode runs
+at CRF 20 with `aq-mode=3` to push bits into the flat dark areas. And the section scales
+the film 1.24× and bleeds it edge to edge, so it is worth more than 1080p on a retina
+screen; VP9 makes 1440p affordable.
+
+Regenerate the poster from the master's first frame after any change.
 
 ## Languages
 
