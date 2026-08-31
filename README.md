@@ -76,9 +76,12 @@ separator and eyebrow marker takes the colour of its own text.
 
 ## The build credit
 
-The footer carries "Powered by" and Algorithm 360's wordmark, linked to a360.ge. Two
-copies of the mark are stacked and cross-faded on hover: a white knockout at 42%
-opacity at rest, their own colours underneath. The colour version is lifted with
+The footer credits Algorithm 360, linked to a360.ge. The sentence wraps the wordmark:
+"Powered by [mark]" in English, „შექმნილია [mark]-ის მიერ" in Georgian, where the
+suffix is a `.ka` span after the mark and the mark carries no right margin so the
+hyphen sits tight against it, as Georgian orthography wants. Two copies of the mark are
+stacked and cross-faded on hover: a white knockout at 42% opacity at rest, their own
+colours underneath. The colour version is lifted with
 `brightness(1.4)` because the navy half of their logo sits at luma 48 and all but
 disappears on black — if they publish a reverse-on-dark version of the mark, use that
 instead and drop the filter.

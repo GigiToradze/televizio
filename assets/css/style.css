@@ -1070,7 +1070,8 @@ body.is-locked{ overflow:hidden; }
 
 /* who built it — grey at rest, in its own colours on hover */
 .ftr__by{
-  display:inline-flex; align-items:center; gap:.8em;
+  display:inline-flex; align-items:center;
+  font-size:.78rem;
   text-decoration:none;
   color:var(--dim);
   transition:color .35s ease;
@@ -1080,8 +1081,10 @@ body.is-locked{ overflow:hidden; }
 .ftr__by-mark{
   position:relative;
   display:block;
-  width:104px; height:17px;
+  width:134px; height:22px;
+  margin-left:.6em;          /* the Georgian suffix hugs the mark, so no gap after */
 }
+.ftr__by-suffix{ margin-left:.1em; }
 .ftr__by-mark img{
   position:absolute; inset:0;
   width:100%; height:100%;
