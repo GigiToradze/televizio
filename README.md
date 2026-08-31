@@ -68,10 +68,23 @@ the site goes public.
 | `icon-outline.png` | outlined tile, red star | closing call to action |
 | `apple-touch-icon.png`, `favicon.png` | solid red tile | browser and home screen |
 | `star.svg` | the star alone | CSS mask for bullets and separators |
+| `a360-mono.png`, `a360-color.png` | Algorithm 360's wordmark | the footer credit, grey at rest and in colour on hover |
 
 All lockups are transparent PNGs at 2× their largest on-page size. `star.svg` is
 painted with `mask` plus `background: currentColor`, so every bullet, ticker
 separator and eyebrow marker takes the colour of its own text.
+
+## The build credit
+
+The footer carries "Powered by" and Algorithm 360's wordmark, linked to a360.ge. Two
+copies of the mark are stacked and cross-faded on hover: a white knockout at 42%
+opacity at rest, their own colours underneath. The colour version is lifted with
+`brightness(1.4)` because the navy half of their logo sits at luma 48 and all but
+disappears on black — if they publish a reverse-on-dark version of the mark, use that
+instead and drop the filter.
+
+The knockout was generated from the colour file's alpha channel, so both are the same
+artwork.
 
 ## The hero
 
