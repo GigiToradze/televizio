@@ -130,8 +130,16 @@ ul,ol{ margin:0; padding:0; list-style:none; }
 }
 
 .sec__head{ max-width:min(58ch,100%); }
-.sec__head--center{ margin-inline:auto; text-align:center; }
-.sec__head--tight{ max-width:min(42ch,100%); }
+/* A centred head has to hold the longest Georgian line whole —
+   "იგივე ყოველთვიურად." runs to about 985px — or the long word
+   overflows its box and the block reads off-centre. The lede keeps
+   its own 60ch cap, so only the heading uses the extra width. */
+.sec__head--center{
+  margin-inline:auto;
+  text-align:center;
+  max-width:min(100%, 1020px);
+}
+.sec__head--tight{ max-width:min(100%, 620px); }   /* holds "შეკვეთიდან თქვენამდე —" whole */
 
 /* English headlines run in caps — Eurostile was drawn for it */
 [data-lang="en"] .hero__h1,
@@ -146,6 +154,9 @@ ul,ol{ margin:0; padding:0; list-style:none; }
 /* caps set optically larger — give them a little less size and a little more room */
 [data-lang="en"] .dsp{ font-size:clamp(1.95rem,4.5vw,3.7rem); }
 [data-lang="en"] .sec__head{ max-width:min(64ch,100%); }
+/* comes after the rule above, so the centred head keeps its width */
+[data-lang="en"] .sec__head--center{ max-width:min(100%, 1020px); }
+[data-lang="en"] .sec__head--tight{ max-width:min(100%, 620px); }
 
 /* ── type ─────────────────────────────────────────────────── */
 .dsp{
@@ -158,6 +169,14 @@ ul,ol{ margin:0; padding:0; list-style:none; }
 }
 /* one size for every section heading — the modifiers are gone on
    purpose, so nothing drifts out of step again */
+
+/* On a phone the longest Georgian word — "ყოველთვიურად." — is wider
+   than the column at the clamp's floor, and Mkhedruli will not break.
+   Below 420px the heading follows the viewport instead. */
+@media (max-width:420px){
+  .dsp,
+  [data-lang="en"] .dsp{ font-size:clamp(1.6rem,8.4vw,2.2rem); }
+}
 
 .lede{
   font-family:var(--f-text);

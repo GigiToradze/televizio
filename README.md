@@ -49,6 +49,15 @@ English headlines set in caps (`[data-lang="en"]` in the CSS), which is what Eur
 was drawn for; they also take a slightly smaller size, since caps read optically
 larger. Georgian keeps mixed case — Mkhedruli has no capitals.
 
+Georgian words do not break, and Eurostile at 70px is wide, so any heading column
+narrower than its longest single word will let that word paint outside its box — which
+reads as the block being off-centre or crowding whatever sits beside it. The heading
+containers are sized from the longest Georgian line rather than a `ch` count for that
+reason: 500px for the FAQ column, 1020px for a centred head, 620px for a tight one.
+Below 420px the display size follows the viewport instead, since no container can grow
+there. If you change a Georgian headline, measure it — `h.scrollWidth > h.clientWidth`
+on every `.dsp` catches it.
+
 Every section heading is one size: `.dsp`, and nothing else. The `--m` and `--s`
 modifiers are gone deliberately, so no section can quietly drift out of step. Where a
 heading has to share a row with something — the guide, the box — the layout gives it a
