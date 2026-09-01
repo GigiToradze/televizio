@@ -10,6 +10,16 @@ import Settings from './pages/Settings';
 
 const qc = new QueryClient();
 
+/** The mirror of Private. Without it a successful sign-in leaves the browser
+ *  sitting on /login looking at the form it just submitted, which reads as the
+ *  button having done nothing at all. */
+function PublicOnly({ children }: { children: React.ReactNode }) {
+  const { session, loading } = useAuth();
+  if (loading) return <div className="p-6 text-neutral-500">Loading…</div>;
+  if (session) return <Navigate to="/" replace />;
+  return <>{children}</>;
+}
+
 function Private() {
   const { session, admin, loading } = useAuth();
   if (loading) return <div className="p-6 text-neutral-500">Loading…</div>;
@@ -30,7 +40,7 @@ export default function App() {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<PublicOnly><Login /></PublicOnly>} />
             <Route element={<Private />}>
               <Route index element={<div>Dashboard comes in Plan 4.</div>} />
               <Route path="channels" element={<Channels />} />
