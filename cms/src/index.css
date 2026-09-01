@@ -108,15 +108,11 @@ body{
   border-bottom:1px solid var(--rule);
   background:var(--panel);
 }
-.brand__star{
-  width:14px; height:14px;
-  background:var(--red);
-  -webkit-mask:var(--star) center/contain no-repeat;
-  mask:var(--star) center/contain no-repeat;
-}
-.brand__name{
-  font:700 .82rem/1 var(--f-dsp);
-  letter-spacing:.16em;
+/* The wordmark carries its own star, so the rail says the brand the
+   way every other Televizio surface says it. */
+.brand__logo{
+  display:block;
+  width:min(100%,132px); height:auto;
 }
 
 /* ── tally: the signature. The one thing this panel exists to
@@ -202,13 +198,20 @@ body{
 }
 .rail__foot{ margin-top:auto; padding:14px 18px 4px; }
 
+/* Headings run in the text face, not the display one. Eurostile is the
+   brand's voice and it is right on a billboard, but a heading here is
+   read at a glance, hundreds of times a day, in two scripts — and its
+   Georgian is a display cut. The wordmark in the rail carries the brand;
+   the headings only have to be legible. Plex Sans stops at 600, so that
+   is the weight — 700 would only be a synthesised bold. */
+
 /* ── stage ────────────────────────────────────────────────── */
 .stage{ grid-area:stage; overflow-y:auto; padding:26px 28px 60px; }
 
 .head{ display:flex; align-items:center; gap:14px; margin-bottom:20px; }
 .head__title{
-  font:700 1.35rem/1 var(--f-dsp);
-  letter-spacing:.02em;
+  font:600 1.28rem/1.15 var(--f-text);
+  letter-spacing:-.005em;
 }
 .head__count{ font:500 .72rem/1 var(--f-mono); color:var(--dim); }
 .head__right{ margin-left:auto; display:flex; align-items:center; gap:10px; }
@@ -341,7 +344,7 @@ body{
   padding:22px 22px 40px;
   display:flex; flex-direction:column; gap:16px;
 }
-.drawer__title{ font:700 1.05rem/1.2 var(--f-dsp); letter-spacing:.02em; }
+.drawer__title{ font:600 1.02rem/1.25 var(--f-text); letter-spacing:-.005em; }
 .drawer__foot{
   display:flex; align-items:center; gap:8px;
   padding-top:6px; margin-top:auto;
@@ -359,14 +362,10 @@ body{
 }
 .gate__form{ width:min(21rem,100%); display:flex; flex-direction:column; gap:12px; }
 .gate__mark{ display:flex; align-items:center; gap:11px; margin-bottom:6px; }
-.gate__star{
-  width:20px; height:20px; background:var(--red);
-  -webkit-mask:var(--star) center/contain no-repeat;
-  mask:var(--star) center/contain no-repeat;
-}
-.gate__name{
-  font:700 1.15rem/1 var(--f-dsp);
-  letter-spacing:.2em;
+/* the same wordmark the rail carries, so the panel opens on the brand */
+.gate__logo{
+  display:block;
+  width:min(58%,150px); height:auto;
 }
 .gate__sub{ margin-bottom:14px; }
 
@@ -556,7 +555,6 @@ select.field{ font-family:var(--f-text); }
    readable size for Georgian, and the same components either way. */
 
 [data-lang="en"] .eyebrow,
-[data-lang="en"] .brand__name,
 [data-lang="en"] .tally__state,
 [data-lang="en"] .who__role,
 [data-lang="en"] .rail__link,
@@ -672,8 +670,7 @@ select.field{ font-family:var(--f-text); }
   padding:12px 14px;
   border-bottom:1px solid var(--rule);
 }
-.fig__title{ font:600 .88rem/1 var(--f-dsp); letter-spacing:.03em; }
-[data-lang="ka"] .fig__title{ font-family:var(--f-text); font-size:.92rem; }
+.fig__title{ font:600 .9rem/1.25 var(--f-text); letter-spacing:0; }
 .fig__meta{ color:var(--dimmer); font-size:.74rem; }
 .fig__toggle{ margin-left:auto; }
 

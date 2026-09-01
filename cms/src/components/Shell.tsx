@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import logo from '../assets/logo-red.png';
 import TallyBar from './TallyBar';
 import { useLang } from '../lang/LangProvider';
 import { useChannels, usePlans } from '../lib/queries';
@@ -46,8 +47,7 @@ export default function Shell() {
   return (
     <div className="app">
       <div className="brand">
-        <span className="brand__star" aria-hidden="true" />
-        <span className="brand__name">Televizio</span>
+        <img className="brand__logo" src={logo} alt="Televizio" width={900} height={268} />
       </div>
 
       <TallyBar />

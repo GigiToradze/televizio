@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../auth/AuthProvider';
 import { useLang } from '../lang/LangProvider';
 import LangSwitch from '../components/LangSwitch';
+import logo from '../assets/logo-red.png';
 
 export default function Login() {
   const { signIn } = useAuth();
@@ -41,8 +42,7 @@ export default function Login() {
     <div className="gate">
       <form onSubmit={submit} className="gate__form">
         <div className="gate__mark">
-          <span className="gate__star" aria-hidden="true" />
-          <span className="gate__name">Televizio</span>
+          <img className="gate__logo" src={logo} alt="Televizio" width={900} height={268} />
           <span style={{ marginLeft: 'auto' }}><LangSwitch /></span>
         </div>
         <p className="eyebrow gate__sub">
