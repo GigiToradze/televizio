@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../auth/AuthProvider';
+import { useLang } from '../lang/LangProvider';
 import {
   useAdmins, useCreateAdmin, usePublications, useSaveSetting, useSiteSettings,
 } from '../lib/queries';
@@ -11,6 +12,7 @@ const ROLE_NOTE: Record<string, string> = {
 };
 
 function Admins() {
+  const { t } = useLang();
   const { admin } = useAuth();
   const admins = useAdmins();
   const create = useCreateAdmin();
@@ -21,14 +23,14 @@ function Admins() {
   return (
     <section>
       <div className="head">
-        <h2 className="head__title" style={{ fontSize: '1rem' }}>Admins</h2>
+        <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('ადმინები', 'Admins')}</h2>
         <span className="head__count">{(admins.data ?? []).length}</span>
       </div>
 
       <div className="panel panel--table">
         <table className="grid">
           <thead>
-            <tr><th>Name</th><th>Email</th><th>Role</th><th>Can do</th></tr>
+            <tr><th>{t('სახელი','Name')}</th><th>{t('ელფოსტა','Email')}</th><th>{t('როლი','Role')}</th><th>{t('უფლებები','Can do')}</th></tr>
           </thead>
           <tbody>
             {(admins.data ?? []).map((a) => (
@@ -51,7 +53,7 @@ function Admins() {
             setNote(null);
             try {
               await create.mutateAsync(form);
-              setNote(`Invite sent to ${form.email}.`);
+              setNote(t(`მოწვევა გაიგზავნა ${form.email}-ზე.`, `Invite sent to ${form.email}.`));
               setForm({ email: '', name: '', role: 'editor' });
             } catch (err) {
               setNote(err instanceof Error ? err.message : String(err));
@@ -59,17 +61,17 @@ function Admins() {
           }}
         >
           <label className="label">
-            <span className="eyebrow">Email</span>
+            <span className="eyebrow">{t('ელფოსტა', 'Email')}</span>
             <input className="field" required type="email" value={form.email}
                    onChange={(e) => setForm({ ...form, email: e.target.value })} />
           </label>
           <label className="label">
-            <span className="eyebrow">Name</span>
+            <span className="eyebrow">{t('სახელი', 'Name')}</span>
             <input className="field" required value={form.name}
                    onChange={(e) => setForm({ ...form, name: e.target.value })} />
           </label>
           <label className="label">
-            <span className="eyebrow">Role</span>
+            <span className="eyebrow">{t('როლი', 'Role')}</span>
             <select className="field" value={form.role}
                     onChange={(e) => setForm({ ...form, role: e.target.value })}>
               <option value="editor">editor</option>
@@ -78,13 +80,13 @@ function Admins() {
             </select>
           </label>
           <button type="submit" className="btn btn--signal btn--sm" disabled={create.isPending}>
-            {create.isPending ? 'Sending' : 'Send invite'}
+            {create.isPending ? t('იგზავნება', 'Sending') : t('მოწვევის გაგზავნა', 'Send invite')}
           </button>
           {note && <p className="note" style={{ gridColumn: '1 / -1' }}>{note}</p>}
         </form>
       ) : (
         <p className="note" style={{ marginTop: 10 }}>
-          Only an owner can add admins.
+          {t('ადმინის დამატება მხოლოდ მფლობელს შეუძლია.', 'Only an owner can add admins.')}
         </p>
       )}
     </section>
@@ -92,17 +94,18 @@ function Admins() {
 }
 
 function Numbers() {
+  const { t } = useLang();
   const settings = useSiteSettings();
   const save = useSaveSetting();
 
   return (
     <section style={{ marginTop: 30 }}>
       <div className="head">
-        <h2 className="head__title" style={{ fontSize: '1rem' }}>Numbers on the page</h2>
+        <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('რიცხვები გვერდზე', 'Numbers on the page')}</h2>
       </div>
       <p className="lede">
-        Figures the site prints in its own copy. Editing one here changes it
-        everywhere it appears once you publish.
+        {t('რიცხვები, რომლებსაც საიტი თავის ტექსტში ბეჭდავს. აქ შეცვლა ყველგან აისახება გამოქვეყნების შემდეგ.',
+           'Figures the site prints in its own copy. Editing one here changes it everywhere it appears once you publish.')}
       </p>
 
       <div className="panel">
@@ -134,26 +137,27 @@ function Numbers() {
 }
 
 function History() {
+  const { t } = useLang();
   const pubs = usePublications();
   const rows = pubs.data ?? [];
 
   return (
     <section style={{ marginTop: 30 }}>
       <div className="head">
-        <h2 className="head__title" style={{ fontSize: '1rem' }}>Publish history</h2>
-        <span className="head__count">last {rows.length}</span>
+        <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('გამოქვეყნების ისტორია', 'Publish history')}</h2>
+        <span className="head__count">{t(`ბოლო ${rows.length}`, `last ${rows.length}`)}</span>
       </div>
 
       <div className="panel">
         {rows.length === 0 ? (
           <p className="notice">
-            <span className="state state--standby">Never published</span>
-            The live site is still showing the content shipped with it.
+            <span className="state state--standby">{t('არასდროს', 'Never published')}</span>
+            {t('საიტი ჯერ კიდევ თან მოყოლილ შიგთავსს აჩვენებს.', 'The live site is still showing the content shipped with it.')}
           </p>
         ) : (
           <table className="grid">
             <thead>
-              <tr><th>When</th><th>Carried</th><th>Snapshot</th></tr>
+              <tr><th>{t('როდის','When')}</th><th>{t('შიგთავსი','Carried')}</th><th>{t('ანაბეჭდი','Snapshot')}</th></tr>
             </thead>
             <tbody>
               {rows.map((p) => (
@@ -163,7 +167,7 @@ function History() {
                       day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit',
                     })}
                   </span></td>
-                  <td>{p.channel_count} channels · {p.plan_count} plans</td>
+                  <td>{t(`${p.channel_count} არხი · ${p.plan_count} პაკეტი`, `${p.channel_count} channels · ${p.plan_count} plans`)}</td>
                   <td><span className="num" style={{ color: 'var(--dimmer)' }}>
                     {p.snapshot_hash.slice(0, 12)}
                   </span></td>
@@ -178,10 +182,11 @@ function History() {
 }
 
 export default function Settings() {
+  const { t } = useLang();
   return (
     <div style={{ maxWidth: 860 }}>
       <div className="head">
-        <h1 className="head__title">Settings</h1>
+        <h1 className="head__title">{t('პარამეტრები', 'Settings')}</h1>
       </div>
       <Admins />
       <Numbers />

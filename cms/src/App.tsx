@@ -11,6 +11,7 @@ import Plans from './pages/Plans';
 import Settings from './pages/Settings';
 import Subscribers from './pages/Subscribers';
 import Subscriber from './pages/Subscriber';
+import ChartPreview from './pages/ChartPreview';
 
 const qc = new QueryClient();
 
@@ -66,6 +67,11 @@ export default function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/login" element={<PublicOnly><Login /></PublicOnly>} />
+              {/* Dev only: the dashboard is behind a session, and charts have
+                  to be looked at. Dropped from the production bundle. */}
+              {import.meta.env.DEV && (
+                <Route path="/preview" element={<ChartPreview />} />
+              )}
               <Route element={<Private />}>
                 <Route index element={<Overview />} />
                 <Route path="channels" element={<Channels />} />

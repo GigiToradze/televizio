@@ -650,3 +650,82 @@ select.field{ font-family:var(--f-text); }
 .strip__logo--lg{ width:120px; height:64px; }
 /* The channels table shows the mark at row height. */
 .grid .strip__logo{ width:64px; height:26px; }
+
+/* ══ FIGURES ═════════════════════════════════════════════════
+   Grid and axes recede; the one thing painted in signal red is
+   the data itself. Colour encodes nothing here — every figure is
+   a single series and its categories are named in the axis — so
+   red stays reserved for status, where it means something.       */
+.figs{
+  display:grid; gap:14px; margin-top:18px;
+  grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+}
+
+.fig{
+  margin:0;
+  background:var(--panel);
+  border:1px solid var(--rule);
+  border-radius:3px;
+}
+.fig__head{
+  display:flex; align-items:baseline; gap:10px;
+  padding:12px 14px;
+  border-bottom:1px solid var(--rule);
+}
+.fig__title{ font:600 .88rem/1 var(--f-dsp); letter-spacing:.03em; }
+[data-lang="ka"] .fig__title{ font-family:var(--f-text); font-size:.92rem; }
+.fig__meta{ color:var(--dimmer); font-size:.74rem; }
+.fig__toggle{ margin-left:auto; }
+
+.fig__plot{ position:relative; padding:8px 6px 2px; }
+.fig__plot svg{ display:block; overflow:visible; }
+
+.fig__tip{
+  position:absolute; z-index:2;
+  transform:translate(-50%,-140%);
+  padding:5px 8px;
+  background:var(--black);
+  border:1px solid var(--rule-2);
+  border-radius:3px;
+  pointer-events:none;
+  white-space:nowrap;
+  display:flex; flex-direction:column; gap:1px;
+}
+.fig__tip b{ font:600 .84rem/1 var(--f-mono); }
+.fig__tip span{ font:500 .66rem/1 var(--f-mono); color:var(--dim); }
+
+/* ── comparison across named things ───────────────────────── */
+.across{ padding:14px; display:flex; flex-direction:column; gap:11px; }
+.across__row{ display:flex; align-items:center; gap:12px; }
+.across__label{ flex:none; width:110px; font-size:.84rem; }
+.across__track{
+  flex:1; height:12px;
+  background:var(--rule);
+  border-radius:2px;
+  overflow:hidden;
+}
+.across__fill{
+  display:block; height:100%;
+  background:var(--red);
+  border-radius:0 2px 2px 0;
+}
+.across__value{ flex:none; width:52px; text-align:right; }
+
+/* Tiles borrow status colour only where a state is being reported. */
+.figure__value.is-fault{ color:var(--red); }
+.figure__value.is-standby{ color:var(--standby); }
+
+@media (max-width:560px){
+  .figs{ grid-template-columns:1fr; }
+  .across__label{ width:78px; font-size:.78rem; }
+}
+
+/* Eurostile's lari sign collides with its numerals at tile size, so the
+   currency is set in the text face beside them rather than inside them. */
+.figure__cur{
+  font-family:var(--f-text);
+  font-size:.46em;
+  font-weight:500;
+  margin-left:.14em;
+  color:var(--dim);
+}

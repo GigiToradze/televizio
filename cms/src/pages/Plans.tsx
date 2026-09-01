@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../auth/AuthProvider';
 import { canWrite } from '../auth/guard';
+import { useLang } from '../lang/LangProvider';
 import { useChannels, usePlans, useSavePlan, type PlanRecord } from '../lib/queries';
 
 function PlanCard({ plan, editable }: { plan: PlanRecord; editable: boolean }) {
+  const { t } = useLang();
   const channels = useChannels();
   const save = useSavePlan();
   const [form, setForm] = useState(plan);
@@ -24,7 +26,7 @@ function PlanCard({ plan, editable }: { plan: PlanRecord; editable: boolean }) {
     const { plan_features: _f, plan_channels: _c, ...row } = form;
     try {
       await save.mutateAsync({ plan: row, features, channelIds });
-      setStatus('Saved');
+      setStatus(t('შენახულია', 'Saved'));
     } catch (err) {
       setStatus(err instanceof Error ? err.message : String(err));
     }
@@ -36,7 +38,7 @@ function PlanCard({ plan, editable }: { plan: PlanRecord; editable: boolean }) {
     <form className="panel plan" onSubmit={submit}>
       <div className="panel__head">
         <span className="eyebrow">{form.slug}</span>
-        {form.is_featured && <span className="tag tag--primary">featured</span>}
+        {form.is_featured && <span className="tag tag--primary">{t('გამორჩეული', 'featured')}</span>}
         <span className="plan__price">
           {form.price}<span className="plan__cur">₾</span>
         </span>
@@ -45,22 +47,22 @@ function PlanCard({ plan, editable }: { plan: PlanRecord; editable: boolean }) {
       <div className="plan__body">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           <label className="label">
-            <span className="eyebrow">Name — Georgian</span>
+            <span className="eyebrow">{t('სახელი — ქართულად', 'Name — Georgian')}</span>
             <input className="field" value={form.name_ka}
                    onChange={(e) => setForm({ ...form, name_ka: e.target.value })} />
           </label>
           <label className="label">
-            <span className="eyebrow">Name — English</span>
+            <span className="eyebrow">{t('სახელი — ინგლისურად', 'Name — English')}</span>
             <input className="field" value={form.name_en}
                    onChange={(e) => setForm({ ...form, name_en: e.target.value })} />
           </label>
           <label className="label">
-            <span className="eyebrow">Price · ₾ per month</span>
+            <span className="eyebrow">{t('ფასი · ₾ თვეში', 'Price · ₾ per month')}</span>
             <input className="field field--mono" type="number" step="1" value={form.price}
                    onChange={(e) => setForm({ ...form, price: +e.target.value })} />
           </label>
           <label className="label">
-            <span className="eyebrow">Count on the card</span>
+            <span className="eyebrow">{t('ბარათზე ნაჩვენები რაოდენობა', 'Count on the card')}</span>
             <input className="field field--mono" value={form.total_label}
                    onChange={(e) => setForm({ ...form, total_label: e.target.value })} />
           </label>
@@ -69,12 +71,12 @@ function PlanCard({ plan, editable }: { plan: PlanRecord; editable: boolean }) {
         <label className="toggle">
           <input type="checkbox" checked={form.is_featured}
                  onChange={(e) => setForm({ ...form, is_featured: e.target.checked })} />
-          <span>Featured — the raised card with the red button</span>
+          <span>{t('გამორჩეული — აწეული ბარათი წითელი ღილაკით', 'Featured — the raised card with the red button')}</span>
         </label>
 
         <div>
           <span className="eyebrow" style={{ display: 'block', marginBottom: 7 }}>
-            Features
+            {t('მახასიათებლები', 'Features')}
           </span>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             {features.map((f, i) => (
@@ -101,13 +103,13 @@ function PlanCard({ plan, editable }: { plan: PlanRecord; editable: boolean }) {
           </div>
           <button type="button" className="btn btn--quiet btn--sm" style={{ marginTop: 6 }}
                   onClick={() => setFeatures([...features, { text_ka: '', text_en: '' }])}>
-            + Add feature
+            {t('+ მახასიათებლის დამატება', '+ Add feature')}
           </button>
         </div>
 
         <div>
           <span className="eyebrow" style={{ display: 'block', marginBottom: 7 }}>
-            Channels — {channelIds.length} of {live.length}
+            {t(`არხები — ${channelIds.length} / ${live.length}`, `Channels — ${channelIds.length} of ${live.length}`)}
           </span>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {live.map((c) => {
@@ -127,7 +129,7 @@ function PlanCard({ plan, editable }: { plan: PlanRecord; editable: boolean }) {
           </div>
           {channelIds.length === 0 && (
             <p className="error" style={{ marginTop: 8 }}>
-              A plan with no channels cannot be published.
+              {t('არხების გარეშე პაკეტი ვერ გამოქვეყნდება.', 'A plan with no channels cannot be published.')}
             </p>
           )}
         </div>
@@ -136,7 +138,7 @@ function PlanCard({ plan, editable }: { plan: PlanRecord; editable: boolean }) {
       {editable && (
         <div className="panel__foot">
           <button type="submit" className="btn btn--signal btn--sm" disabled={save.isPending}>
-            {save.isPending ? 'Saving' : 'Save plan'}
+            {save.isPending ? t('ინახება', 'Saving') : t('პაკეტის შენახვა', 'Save plan')}
           </button>
           {status && <span className="eyebrow">{status}</span>}
         </div>
@@ -149,19 +151,20 @@ export default function Plans() {
   const { admin } = useAuth();
   const editable = canWrite(admin?.role, 'content');
   const plans = usePlans();
+  const { t } = useLang();
 
-  if (plans.isLoading) return <p className="eyebrow">Loading</p>;
+  if (plans.isLoading) return <p className="eyebrow">{t('იტვირთება', 'Loading')}</p>;
   if (plans.error) return <p className="error">{String(plans.error)}</p>;
 
   return (
     <section>
       <div className="head">
-        <h1 className="head__title">Plans</h1>
+        <h1 className="head__title">{t('პაკეტები', 'Plans')}</h1>
         <span className="head__count">{(plans.data ?? []).length}</span>
       </div>
       <p className="lede">
-        The pricing cards, and the channels each plan carries. The card order
-        on the site follows the order here.
+        {t('ფასების ბარათები და თითოეული პაკეტის არხები. საიტზე ბარათების რიგი აქაურ რიგს მიჰყვება.',
+           'The pricing cards, and the channels each plan carries. The card order on the site follows the order here.')}
       </p>
 
       <div className="plans">

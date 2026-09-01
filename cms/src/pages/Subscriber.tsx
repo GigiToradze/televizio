@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../auth/AuthProvider';
 import { canWrite } from '../auth/guard';
+import { useLang } from '../lang/LangProvider';
 import {
   currentSubscription, useAddPayment, useRenew, useSubscriber,
   type SubscriptionRecord,
@@ -22,6 +23,7 @@ function Renew({
 }) {
   const { admin } = useAuth();
   const renew = useRenew();
+  const { t } = useLang();
   const [amount, setAmount] = useState(subscription.price_at_signup);
   const [method, setMethod] = useState('cash');
   const [error, setError] = useState<string | null>(null);
@@ -31,19 +33,19 @@ function Renew({
   return (
     <div className="renew">
       <div>
-        <span className="eyebrow">Renew to</span>
+        <span className="eyebrow">{t('განახლება თარიღამდე', 'Renew to')}</span>
         <p className="renew__date">{to}</p>
         <p className="note">
-          Counted from the current due date, not from today.
+          {t('ითვლება მიმდინარე ვადიდან, და არა დღევანდელი დღიდან.', 'Counted from the current due date, not from today.')}
         </p>
       </div>
       <label className="label">
-        <span className="eyebrow">Amount taken</span>
+        <span className="eyebrow">{t('აღებული თანხა', 'Amount taken')}</span>
         <input className="field field--mono" type="number" value={amount}
                onChange={(e) => setAmount(+e.target.value)} />
       </label>
       <label className="label">
-        <span className="eyebrow">Method</span>
+        <span className="eyebrow">{t('მეთოდი', 'Method')}</span>
         <select className="field" value={method}
                 onChange={(e) => setMethod(e.target.value)}>
           <option value="cash">cash</option>
@@ -67,7 +69,7 @@ function Renew({
           }
         }}
       >
-        {renew.isPending ? 'Renewing' : 'Renew'}
+        {renew.isPending ? t('ახლდება', 'Renewing') : t('განახლება', 'Renew')}
       </button>
       {error && <p className="error" style={{ gridColumn: '1 / -1' }}>{error}</p>}
     </div>
@@ -76,6 +78,7 @@ function Renew({
 
 export default function Subscriber() {
   const { id } = useParams();
+  const { t } = useLang();
   const { admin } = useAuth();
   const editable = canWrite(admin?.role, 'subscribers');
   const subscriber = useSubscriber(id);
@@ -83,7 +86,7 @@ export default function Subscriber() {
   const [editing, setEditing] = useState(false);
   const today = new Date().toISOString().slice(0, 10);
 
-  if (subscriber.isLoading) return <p className="eyebrow">Loading</p>;
+  if (subscriber.isLoading) return <p className="eyebrow">{t('იტვირთება', 'Loading')}</p>;
   if (subscriber.error) return <p className="error">{String(subscriber.error)}</p>;
   const s = subscriber.data!;
 
@@ -96,7 +99,7 @@ export default function Subscriber() {
   return (
     <section style={{ maxWidth: 940 }}>
       <div className="head">
-        <Link className="eyebrow" to="/subscribers">← Subscribers</Link>
+        <Link className="eyebrow" to="/subscribers">{t('← აბონენტები', '← Subscribers')}</Link>
       </div>
 
       <div className="head">
@@ -107,7 +110,7 @@ export default function Subscriber() {
         )}
         {editable && (
           <div className="head__right">
-            <button className="btn btn--sm" onClick={() => setEditing(true)}>Edit</button>
+            <button className="btn btn--sm" onClick={() => setEditing(true)}>{t('რედაქტირება', 'Edit')}</button>
           </div>
         )}
       </div>
@@ -117,53 +120,53 @@ export default function Subscriber() {
           <span className="figure__value">
             {current ? daysLeft(current.due_on, today) : '—'}
           </span>
-          <span className="eyebrow">Days left</span>
+          <span className="eyebrow">{t('დარჩენილი დღე', 'Days left')}</span>
           <span className="figure__meta">
-            {current ? `due ${current.due_on}` : 'no subscription'}
+            {current ? t(`ვადა ${current.due_on}`, `due ${current.due_on}`) : t('გამოწერა არ არის', 'no subscription')}
           </span>
         </div>
         <div className="figure">
           <span className="figure__value" style={{ fontSize: '1.4rem' }}>
             {current?.plans?.name_en ?? '—'}
           </span>
-          <span className="eyebrow">Plan</span>
+          <span className="eyebrow">{t('პაკეტი', 'Plan')}</span>
           <span className="figure__meta">
-            {current ? `${current.price_at_signup}₾ · ${current.device_count} device${current.device_count === 1 ? '' : 's'}` : ''}
+            {current ? t(`${current.price_at_signup}₾ · ${current.device_count} მოწყობილობა`, `${current.price_at_signup}₾ · ${current.device_count} device${current.device_count === 1 ? '' : 's'}`) : ''}
           </span>
         </div>
         <div className="figure">
           <span className="figure__value" style={{ fontSize: '1.4rem' }}>
             {state ?? 'none'}
           </span>
-          <span className="eyebrow">State</span>
+          <span className="eyebrow">{t('სტატუსი', 'State')}</span>
           <span className="figure__meta">
-            {unpaid ? 'this period is unpaid' : 'this period is paid'}
+            {unpaid ? t('ეს პერიოდი გადაუხდელია', 'this period is unpaid') : t('ეს პერიოდი გადახდილია', 'this period is paid')}
           </span>
         </div>
       </div>
 
       <div className="head" style={{ marginTop: 26 }}>
-        <h2 className="head__title" style={{ fontSize: '1rem' }}>Contact</h2>
+        <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('კონტაქტი', 'Contact')}</h2>
       </div>
       <div className="panel">
         <div className="setting">
-          <span className="eyebrow setting__key">Phone</span>
+          <span className="eyebrow setting__key">{t('ტელეფონი', 'Phone')}</span>
           <span className="num">{s.phone}</span>
-          <span className="note">last four: {s.phone_last4} — used by the lookup</span>
+          <span className="note">{t(`ბოლო ოთხი: ${s.phone_last4} — შემოწმებისთვის`, `last four: ${s.phone_last4} — used by the lookup`)}</span>
         </div>
         <div className="setting">
-          <span className="eyebrow setting__key">Email</span>
+          <span className="eyebrow setting__key">{t('ელფოსტა', 'Email')}</span>
           <span className="num">{s.email || '—'}</span>
           <span className="note" />
         </div>
         <div className="setting">
-          <span className="eyebrow setting__key">Address</span>
+          <span className="eyebrow setting__key">{t('მისამართი', 'Address')}</span>
           <span>{[s.address, s.city].filter(Boolean).join(', ') || '—'}</span>
           <span className="note" />
         </div>
         {s.notes && (
           <div className="setting">
-            <span className="eyebrow setting__key">Notes</span>
+            <span className="eyebrow setting__key">{t('შენიშვნები', 'Notes')}</span>
             <span>{s.notes}</span>
             <span className="note" />
           </div>
@@ -173,7 +176,7 @@ export default function Subscriber() {
       {current && editable && (
         <>
           <div className="head" style={{ marginTop: 26 }}>
-            <h2 className="head__title" style={{ fontSize: '1rem' }}>Renew</h2>
+            <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('განახლება', 'Renew')}</h2>
           </div>
           <div className="panel">
             <Renew subscription={current} subscriberId={s.id} today={today} />
@@ -182,14 +185,14 @@ export default function Subscriber() {
       )}
 
       <div className="head" style={{ marginTop: 26 }}>
-        <h2 className="head__title" style={{ fontSize: '1rem' }}>Subscriptions</h2>
+        <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('გამოწერები', 'Subscriptions')}</h2>
         <span className="head__count">{s.subscriptions.length}</span>
       </div>
       <div className="panel panel--table">
         <table className="grid">
           <thead>
-            <tr><th>Plan</th><th>Started</th><th>Due</th><th>Devices</th>
-                <th>Price</th><th>Status</th></tr>
+            <tr><th>{t('პაკეტი','Plan')}</th><th>{t('დაიწყო','Started')}</th><th>{t('ვადა','Due')}</th><th>{t('მოწყობილობა','Devices')}</th>
+                <th>{t('ფასი','Price')}</th><th>{t('სტატუსი','Status')}</th></tr>
           </thead>
           <tbody>
             {[...s.subscriptions]
@@ -208,14 +211,14 @@ export default function Subscriber() {
         </table>
         {s.subscriptions.length === 0 && (
           <p className="notice">
-            <span className="state state--standby">None</span>
-            This subscriber has no subscription yet.
+            <span className="state state--standby">{t('არაფერი','None')}</span>
+            {t('ამ აბონენტს ჯერ გამოწერა არ აქვს.', 'This subscriber has no subscription yet.')}
           </p>
         )}
       </div>
 
       <div className="head" style={{ marginTop: 26 }}>
-        <h2 className="head__title" style={{ fontSize: '1rem' }}>Payments</h2>
+        <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('გადახდები', 'Payments')}</h2>
         <span className="head__count">{payments.length}</span>
         {current && editable && (
           <div className="head__right">
@@ -231,7 +234,7 @@ export default function Subscriber() {
                 recorded_by: admin?.id ?? null,
               })}
             >
-              Record payment
+              {t('გადახდის ჩაწერა', 'Record payment')}
             </button>
           </div>
         )}
@@ -239,7 +242,7 @@ export default function Subscriber() {
       <div className="panel panel--table">
         <table className="grid">
           <thead>
-            <tr><th>Paid on</th><th>Amount</th><th>Method</th><th>Note</th></tr>
+            <tr><th>{t('თარიღი','Paid on')}</th><th>{t('თანხა','Amount')}</th><th>{t('მეთოდი','Method')}</th><th>{t('შენიშვნა','Note')}</th></tr>
           </thead>
           <tbody>
             {payments.map((p) => (
@@ -254,8 +257,8 @@ export default function Subscriber() {
         </table>
         {payments.length === 0 && (
           <p className="notice">
-            <span className="state state--standby">None</span>
-            Nothing recorded against this account yet.
+            <span className="state state--standby">{t('არაფერი','None')}</span>
+            {t('ამ ანგარიშზე ჯერ არაფერია ჩაწერილი.', 'Nothing recorded against this account yet.')}
           </p>
         )}
       </div>

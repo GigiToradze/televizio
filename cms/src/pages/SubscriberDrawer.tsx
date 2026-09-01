@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { usePlans } from '../lib/queries';
+import { useLang } from '../lang/LangProvider';
 import {
   useSaveSubscriber, useSaveSubscription, type SubscriberRecord,
 } from '../lib/subscribers';
@@ -17,6 +18,7 @@ export default function SubscriberDrawer({
   subscriber: SubscriberRecord | null;
   onClose: () => void;
 }) {
+  const { t } = useLang();
   const plans = usePlans();
   const saveSubscriber = useSaveSubscriber();
   const saveSubscription = useSaveSubscription();
@@ -54,7 +56,7 @@ export default function SubscriberDrawer({
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (isNew && !sub.plan_id) { setError('Pick a plan for the first subscription.'); return; }
+    if (isNew && !sub.plan_id) { setError(t('აირჩიე პაკეტი პირველი გამოწერისთვის.', 'Pick a plan for the first subscription.')); return; }
 
     setBusy(true);
     try {
@@ -85,61 +87,61 @@ export default function SubscriberDrawer({
     <div className="scrim" onClick={onClose}>
       <form className="drawer" onSubmit={submit} onClick={(e) => e.stopPropagation()}>
         <div>
-          <p className="eyebrow">{isNew ? 'New subscriber' : 'Edit subscriber'}</p>
-          <h2 className="drawer__title">{form.full_name || 'Untitled'}</h2>
+          <p className="eyebrow">{isNew ? t('ახალი აბონენტი', 'New subscriber') : t('აბონენტის რედაქტირება', 'Edit subscriber')}</p>
+          <h2 className="drawer__title">{form.full_name || t('უსახელო', 'Untitled')}</h2>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <label className="label">
-            <span className="eyebrow">Subscriber number</span>
+            <span className="eyebrow">{t('აბონენტის ნომერი', 'Subscriber number')}</span>
             <input className="field field--mono" required value={form.subscriber_no}
                    onChange={(e) => set('subscriber_no', e.target.value.trim())} />
           </label>
           <label className="label">
-            <span className="eyebrow">Phone</span>
+            <span className="eyebrow">{t('ტელეფონი', 'Phone')}</span>
             <input className="field field--mono" required value={form.phone}
                    placeholder="+995 555 12 34 56"
                    onChange={(e) => set('phone', e.target.value)} />
           </label>
         </div>
         <p className="note">
-          The last four digits of this number are what the customer types on the
-          lookup page, so keep it the number they actually use.
+          {t('ამ ნომრის ბოლო ოთხ ციფრს წერს კლიენტი შემოწმების გვერდზე — ამიტომ ჩაწერე ის ნომერი, რომელსაც ნამდვილად იყენებს.',
+             'The last four digits of this number are what the customer types on the lookup page, so keep it the number they actually use.')}
         </p>
 
         <label className="label">
-          <span className="eyebrow">Full name</span>
+          <span className="eyebrow">{t('სრული სახელი', 'Full name')}</span>
           <input className="field" required value={form.full_name}
                  onChange={(e) => set('full_name', e.target.value)} />
         </label>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <label className="label">
-            <span className="eyebrow">Email</span>
+            <span className="eyebrow">{t('ელფოსტა', 'Email')}</span>
             <input className="field" type="email" value={form.email}
                    onChange={(e) => set('email', e.target.value)} />
           </label>
           <label className="label">
-            <span className="eyebrow">City</span>
+            <span className="eyebrow">{t('ქალაქი', 'City')}</span>
             <input className="field" value={form.city}
                    onChange={(e) => set('city', e.target.value)} />
           </label>
         </div>
 
         <label className="label">
-          <span className="eyebrow">Address</span>
+          <span className="eyebrow">{t('მისამართი', 'Address')}</span>
           <input className="field" value={form.address}
                  onChange={(e) => set('address', e.target.value)} />
         </label>
 
         <label className="label">
-          <span className="eyebrow">Notes</span>
+          <span className="eyebrow">{t('შენიშვნები', 'Notes')}</span>
           <textarea className="field" rows={2} value={form.notes}
                     onChange={(e) => set('notes', e.target.value)} />
         </label>
 
         <label className="label">
-          <span className="eyebrow">Account status</span>
+          <span className="eyebrow">{t('ანგარიშის სტატუსი', 'Account status')}</span>
           <select className="field" value={form.status}
                   onChange={(e) => set('status', e.target.value as typeof form.status)}>
             <option value="active">active</option>
@@ -151,14 +153,14 @@ export default function SubscriberDrawer({
         {isNew && (
           <>
             <div className="drawer__rule">
-              <span className="eyebrow">First subscription</span>
+              <span className="eyebrow">{t('პირველი გამოწერა', 'First subscription')}</span>
             </div>
 
             <label className="label">
-              <span className="eyebrow">Plan</span>
+              <span className="eyebrow">{t('პაკეტი', 'Plan')}</span>
               <select className="field" value={sub.plan_id}
                       onChange={(e) => setSub({ ...sub, plan_id: e.target.value })}>
-                <option value="">Pick a plan</option>
+                <option value="">{t('აირჩიე პაკეტი', 'Pick a plan')}</option>
                 {(plans.data ?? []).map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name_en} — {p.price}₾
@@ -169,7 +171,7 @@ export default function SubscriberDrawer({
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
               <label className="label">
-                <span className="eyebrow">Started</span>
+                <span className="eyebrow">{t('დაიწყო', 'Started')}</span>
                 <input className="field field--mono" type="date" value={sub.started_on}
                        onChange={(e) => setSub({
                          ...sub,
@@ -178,20 +180,20 @@ export default function SubscriberDrawer({
                        })} />
               </label>
               <label className="label">
-                <span className="eyebrow">Due</span>
+                <span className="eyebrow">{t('ვადა', 'Due')}</span>
                 <input className="field field--mono" type="date" value={sub.due_on}
                        onChange={(e) => setSub({ ...sub, due_on: e.target.value })} />
               </label>
               <label className="label">
-                <span className="eyebrow">Devices</span>
+                <span className="eyebrow">{t('მოწყობილობა', 'Devices')}</span>
                 <input className="field field--mono" type="number" min={1}
                        value={sub.device_count}
                        onChange={(e) => setSub({ ...sub, device_count: +e.target.value })} />
               </label>
             </div>
             <p className="note">
-              The due date follows the start date by one month. Change it if the
-              customer is on a different cycle.
+              {t('ვადა დაწყებიდან ერთი თვის შემდეგ დგება. შეცვალე, თუ კლიენტი სხვა ციკლზეა.',
+                 'The due date follows the start date by one month. Change it if the customer is on a different cycle.')}
             </p>
           </>
         )}
@@ -200,10 +202,10 @@ export default function SubscriberDrawer({
 
         <div className="drawer__foot">
           <button type="submit" className="btn btn--signal btn--sm" disabled={busy}>
-            {busy ? 'Saving' : isNew ? 'Add subscriber' : 'Save'}
+            {busy ? t('ინახება', 'Saving') : isNew ? t('აბონენტის დამატება', 'Add subscriber') : t('შენახვა', 'Save')}
           </button>
           <button type="button" className="btn btn--quiet btn--sm" onClick={onClose}>
-            Cancel
+            {t('გაუქმება', 'Cancel')}
           </button>
         </div>
       </form>

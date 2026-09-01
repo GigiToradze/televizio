@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthProvider';
 import { canWrite } from '../auth/guard';
+import { useLang } from '../lang/LangProvider';
 import {
   currentSubscription, useSubscribers, type SubscriberRecord,
 } from '../lib/subscribers';
@@ -18,23 +19,27 @@ const TONE: Record<SubscriptionState, string> = {
   cancelled: 'state--ok',
 };
 
-const WORDS: Record<SubscriptionState, string> = {
-  active: 'active',
-  'due-soon': 'due soon',
-  overdue: 'overdue',
-  expired: 'expired',
-  cancelled: 'cancelled',
-};
+function words(t: (ka: string, en: string) => string): Record<SubscriptionState, string> {
+  return {
+    active: t('აქტიური', 'active'),
+    'due-soon': t('ვადა იწურება', 'due soon'),
+    overdue: t('ვადაგასული', 'overdue'),
+    expired: t('ვადაგასული', 'expired'),
+    cancelled: t('გაუქმებული', 'cancelled'),
+  };
+}
 
 export default function Subscribers() {
   const { admin } = useAuth();
+  const { t } = useLang();
   const editable = canWrite(admin?.role, 'subscribers');
   const subscribers = useSubscribers();
   const [query, setQuery] = useState('');
   const [adding, setAdding] = useState(false);
   const today = new Date().toISOString().slice(0, 10);
 
-  if (subscribers.isLoading) return <p className="eyebrow">Loading</p>;
+  const WORDS = words(t);
+  if (subscribers.isLoading) return <p className="eyebrow">{t('იტვირთება', 'Loading')}</p>;
   if (subscribers.error) return <p className="error">{String(subscribers.error)}</p>;
 
   const all = subscribers.data ?? [];
@@ -54,20 +59,20 @@ export default function Subscribers() {
   return (
     <section>
       <div className="head">
-        <h1 className="head__title">Subscribers</h1>
+        <h1 className="head__title">{t('აბონენტები', 'Subscribers')}</h1>
         <span className="head__count">
-          {rows.length === all.length ? all.length : `${rows.length} of ${all.length}`}
-          {overdue > 0 && <span className="state state--fault"> · {overdue} overdue</span>}
+          {rows.length === all.length ? all.length : t(`${rows.length} / ${all.length}`, `${rows.length} of ${all.length}`)}
+          {overdue > 0 && <span className="state state--fault"> · {t(`${overdue} ვადაგასული`, `${overdue} overdue`)}</span>}
         </span>
         <div className="head__right">
           <input
             className="field field--mono" style={{ width: 210 }}
             value={query} onChange={(e) => setQuery(e.target.value)}
-            placeholder="Number, name or phone"
+            placeholder={t('ნომერი, სახელი ან ტელეფონი', 'Number, name or phone')}
           />
           {editable && (
             <button className="btn btn--signal btn--sm" onClick={() => setAdding(true)}>
-              Add subscriber
+              {t('აბონენტის დამატება', 'Add subscriber')}
             </button>
           )}
         </div>
@@ -77,12 +82,12 @@ export default function Subscribers() {
         <table className="grid">
           <thead>
             <tr>
-              <th>Number</th>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Plan</th>
-              <th>Due</th>
-              <th>State</th>
+              <th>{t('ნომერი','Number')}</th>
+              <th>{t('სახელი','Name')}</th>
+              <th>{t('ტელეფონი','Phone')}</th>
+              <th>{t('პაკეტი','Plan')}</th>
+              <th>{t('ვადა','Due')}</th>
+              <th>{t('სტატუსი','State')}</th>
             </tr>
           </thead>
           <tbody>
@@ -98,14 +103,14 @@ export default function Subscribers() {
                   </td>
                   <td>{s.full_name}</td>
                   <td><span className="num">{s.phone}</span></td>
-                  <td>{sub?.plans?.name_en ?? <span className="state state--standby">no plan</span>}</td>
+                  <td>{sub?.plans?.name_en ?? <span className="state state--standby">{t('პაკეტი არ აქვს','no plan')}</span>}</td>
                   <td>{sub ? <span className="num">{sub.due_on}</span> : '—'}</td>
                   <td>
                     {s.status !== 'active'
                       ? <span className="state state--fault">{s.status}</span>
                       : state
                         ? <span className={`state ${TONE[state]}`}>{WORDS[state]}</span>
-                        : <span className="state state--standby">none</span>}
+                        : <span className="state state--standby">{t('არაფერი','none')}</span>}
                   </td>
                 </tr>
               );
@@ -115,14 +120,15 @@ export default function Subscribers() {
 
         {all.length === 0 && (
           <p className="notice">
-            <span className="state state--standby">Empty</span>
-            No subscribers yet. Add the first one to start keeping records.
+            <span className="state state--standby">{t('ცარიელია','Empty')}</span>
+            {t('ჯერ არცერთი აბონენტი არ არის. დაამატე პირველი და ჩანაწერების წარმოებას დაიწყებ.',
+               'No subscribers yet. Add the first one to start keeping records.')}
           </p>
         )}
         {all.length > 0 && rows.length === 0 && (
           <p className="notice">
-            <span className="state state--ok">Nothing found</span>
-            No subscriber matches “{query}”.
+            <span className="state state--ok">{t('ვერ მოიძებნა','Nothing found')}</span>
+            {t(`„${query}“-ს ვერცერთი აბონენტი ვერ შეესაბამა.`, `No subscriber matches “${query}”.`)}
           </p>
         )}
       </div>
