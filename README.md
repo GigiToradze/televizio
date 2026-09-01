@@ -12,6 +12,10 @@ npx serve -l 4173 .
 Then open http://localhost:4173. Any static server works; serve it over HTTP rather
 than opening the file directly, so the fonts and video load.
 
+The deployed site is still a folder of static files with no build step. The
+`package.json` at the root is development tooling only — Vitest, the Supabase CLI
+and the CMS workspace. Nothing it installs is uploaded.
+
 ## Deploy
 
 Upload the whole folder as-is to any static host (Netlify, Cloudflare Pages, Nginx,
