@@ -5,18 +5,27 @@
  * Whichever is present wins, so either route works without editing scripts.
  */
 
+// `vercel env pull` writes the literal text [SENSITIVE] for any variable
+// marked sensitive in Vercel — those are write-only and never come back.
+// Treat such a value as absent rather than trying to authenticate with it.
+const PLACEHOLDERS = ['FILL_ME', 'YOUR', '[SENSITIVE]'];
+
 const FIRST = (...names) => {
   for (const n of names) {
     const v = process.env[n];
-    if (v && !v.includes('FILL_ME') && !v.includes('YOUR')) return v;
+    if (v && !PLACEHOLDERS.some((p) => v.includes(p))) return v;
   }
   return null;
 };
 
 export const env = {
   url: FIRST('SUPABASE_URL', 'NEXT_PUBLIC_SUPABASE_URL'),
-  anonKey: FIRST('SUPABASE_ANON_KEY', 'NEXT_PUBLIC_SUPABASE_ANON_KEY'),
-  serviceKey: FIRST('SUPABASE_SERVICE_KEY', 'SUPABASE_SERVICE_ROLE_KEY'),
+  // New-format keys first: a project with the new API keys enabled rejects
+  // the legacy anon JWT with a 401.
+  anonKey: FIRST('SUPABASE_PUBLISHABLE_KEY', 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY',
+                 'SUPABASE_ANON_KEY', 'NEXT_PUBLIC_SUPABASE_ANON_KEY'),
+  serviceKey: FIRST('SUPABASE_SECRET_KEY', 'SUPABASE_SERVICE_KEY',
+                    'SUPABASE_SERVICE_ROLE_KEY'),
   // pgTAP wraps each suite in a transaction, so a transaction-mode pooler
   // will not do. Prefer the non-pooling URL, then whatever else is offered.
   databaseUrl: FIRST('DATABASE_URL', 'POSTGRES_URL_NON_POOLING', 'POSTGRES_URL'),
