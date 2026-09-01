@@ -11,7 +11,8 @@
     "db:test": "node --env-file=.env supabase/tests/run.mjs",
     "db:push": "supabase db push",
     "test:api": "node --env-file=.env ./node_modules/vitest/vitest.mjs run tests/functions",
-    "fn:deploy": "supabase functions deploy publish --use-api && supabase functions deploy create-admin --use-api"
+    "fn:deploy": "supabase functions deploy publish --use-api && supabase functions deploy create-admin --use-api",
+    "vercel-build": "node scripts/build-site.mjs"
   },
   "devDependencies": {
     "@supabase/supabase-js": "^2.45.0",

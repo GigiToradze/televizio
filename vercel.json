@@ -1,8 +1,16 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "installCommand": "",
-  "buildCommand": "",
-  "outputDirectory": ".",
-  "cleanUrls": true
+  "installCommand": "npm install",
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "cms.televizio.ge" }],
+      "destination": "/cmsapp/index.html"
+    },
+    { "source": "/", "destination": "/site/index.html" },
+    { "source": "/(.*)", "destination": "/site/$1" }
+  ]
 }

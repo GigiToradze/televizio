@@ -9,3 +9,5 @@ supabase/.temp
 .env.local
 
 .vercel
+dist/
+cms/dist/
