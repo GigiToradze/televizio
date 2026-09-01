@@ -91,7 +91,7 @@ export default function SubscriberDrawer({
           <h2 className="drawer__title">{form.full_name || t('უსახელო', 'Untitled')}</h2>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <div className="pair">
           <label className="label">
             <span className="eyebrow">{t('აბონენტის ნომერი', 'Subscriber number')}</span>
             <input className="field field--mono" required value={form.subscriber_no}
@@ -115,7 +115,7 @@ export default function SubscriberDrawer({
                  onChange={(e) => set('full_name', e.target.value)} />
         </label>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <div className="pair">
           <label className="label">
             <span className="eyebrow">{t('ელფოსტა', 'Email')}</span>
             <input className="field" type="email" value={form.email}
@@ -169,7 +169,7 @@ export default function SubscriberDrawer({
               </select>
             </label>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+            <div className="trio">
               <label className="label">
                 <span className="eyebrow">{t('დაიწყო', 'Started')}</span>
                 <input className="field field--mono" type="date" value={sub.started_on}

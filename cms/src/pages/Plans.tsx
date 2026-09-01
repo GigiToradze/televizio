@@ -45,7 +45,7 @@ function PlanCard({ plan, editable }: { plan: PlanRecord; editable: boolean }) {
       </div>
 
       <div className="plan__body">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        <div className="pair">
           <label className="label">
             <span className="eyebrow">{t('სახელი — ქართულად', 'Name — Georgian')}</span>
             <input className="field" value={form.name_ka}
@@ -75,12 +75,12 @@ function PlanCard({ plan, editable }: { plan: PlanRecord; editable: boolean }) {
         </label>
 
         <div>
-          <span className="eyebrow" style={{ display: 'block', marginBottom: 7 }}>
+          <span className="eyebrow eyebrow--block">
             {t('მახასიათებლები', 'Features')}
           </span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div className="stack-row">
             {features.map((f, i) => (
-              <div key={i} style={{ display: 'flex', gap: 6 }}>
+              <div key={i} className="line-row">
                 <input className="field" value={f.text_ka} placeholder="Georgian"
                        onChange={(e) => {
                          const next = [...features];
@@ -101,17 +101,17 @@ function PlanCard({ plan, editable }: { plan: PlanRecord; editable: boolean }) {
               </div>
             ))}
           </div>
-          <button type="button" className="btn btn--quiet btn--sm" style={{ marginTop: 6 }}
+          <button type="button" className="btn btn--quiet btn--sm" style={{ marginTop: 'var(--s2)' }}
                   onClick={() => setFeatures([...features, { text_ka: '', text_en: '' }])}>
             {t('+ მახასიათებლის დამატება', '+ Add feature')}
           </button>
         </div>
 
         <div>
-          <span className="eyebrow" style={{ display: 'block', marginBottom: 7 }}>
+          <span className="eyebrow eyebrow--block">
             {t(`არხები — ${channelIds.length} / ${live.length}`, `Channels — ${channelIds.length} of ${live.length}`)}
           </span>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          <div className="wrap-row">
             {live.map((c) => {
               const on = channelIds.includes(c.id);
               return (
@@ -128,7 +128,7 @@ function PlanCard({ plan, editable }: { plan: PlanRecord; editable: boolean }) {
             })}
           </div>
           {channelIds.length === 0 && (
-            <p className="error" style={{ marginTop: 8 }}>
+            <p className="error error--spaced">
               {t('არხების გარეშე პაკეტი ვერ გამოქვეყნდება.', 'A plan with no channels cannot be published.')}
             </p>
           )}

@@ -23,12 +23,12 @@ function Admins() {
   return (
     <section>
       <div className="head">
-        <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('ადმინები', 'Admins')}</h2>
+        <h2 className="head__title">{t('ადმინები', 'Admins')}</h2>
         <span className="head__count">{(admins.data ?? []).length}</span>
       </div>
 
       <div className="panel panel--table">
-        <table className="grid">
+        <table className="rows">
           <thead>
             <tr><th>{t('სახელი','Name')}</th><th>{t('ელფოსტა','Email')}</th><th>{t('როლი','Role')}</th><th>{t('უფლებები','Can do')}</th></tr>
           </thead>
@@ -82,10 +82,10 @@ function Admins() {
           <button type="submit" className="btn btn--signal btn--sm" disabled={create.isPending}>
             {create.isPending ? t('იგზავნება', 'Sending') : t('მოწვევის გაგზავნა', 'Send invite')}
           </button>
-          {note && <p className="note" style={{ gridColumn: '1 / -1' }}>{note}</p>}
+          {note && <p className="note span-all">{note}</p>}
         </form>
       ) : (
-        <p className="note" style={{ marginTop: 10 }}>
+        <p className="note note--spaced">
           {t('ადმინის დამატება მხოლოდ მფლობელს შეუძლია.', 'Only an owner can add admins.')}
         </p>
       )}
@@ -99,9 +99,9 @@ function Numbers() {
   const save = useSaveSetting();
 
   return (
-    <section style={{ marginTop: 30 }}>
+    <section className="sub-section">
       <div className="head">
-        <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('რიცხვები გვერდზე', 'Numbers on the page')}</h2>
+        <h2 className="head__title">{t('რიცხვები გვერდზე', 'Numbers on the page')}</h2>
       </div>
       <p className="lede">
         {t('რიცხვები, რომლებსაც საიტი თავის ტექსტში ბეჭდავს. აქ შეცვლა ყველგან აისახება გამოქვეყნების შემდეგ.',
@@ -142,9 +142,9 @@ function History() {
   const rows = pubs.data ?? [];
 
   return (
-    <section style={{ marginTop: 30 }}>
+    <section className="sub-section">
       <div className="head">
-        <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('გამოქვეყნების ისტორია', 'Publish history')}</h2>
+        <h2 className="head__title">{t('გამოქვეყნების ისტორია', 'Publish history')}</h2>
         <span className="head__count">{t(`ბოლო ${rows.length}`, `last ${rows.length}`)}</span>
       </div>
 
@@ -155,7 +155,7 @@ function History() {
             {t('საიტი ჯერ კიდევ თან მოყოლილ შიგთავსს აჩვენებს.', 'The live site is still showing the content shipped with it.')}
           </p>
         ) : (
-          <table className="grid">
+          <table className="rows">
             <thead>
               <tr><th>{t('როდის','When')}</th><th>{t('შიგთავსი','Carried')}</th><th>{t('ანაბეჭდი','Snapshot')}</th></tr>
             </thead>
@@ -168,7 +168,7 @@ function History() {
                     })}
                   </span></td>
                   <td>{t(`${p.channel_count} არხი · ${p.plan_count} პაკეტი`, `${p.channel_count} channels · ${p.plan_count} plans`)}</td>
-                  <td><span className="num" style={{ color: 'var(--dimmer)' }}>
+                  <td><span className="num num--quiet">
                     {p.snapshot_hash.slice(0, 12)}
                   </span></td>
                 </tr>

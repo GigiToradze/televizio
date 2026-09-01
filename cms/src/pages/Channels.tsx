@@ -40,7 +40,7 @@ export default function Channels() {
         </span>
         <div className="head__right">
           <input
-            className="field" style={{ width: 200 }}
+            className="field field--search"
             value={query} onChange={(e) => setQuery(e.target.value)}
             placeholder={t('ძებნა', 'Search')}
           />
@@ -53,7 +53,7 @@ export default function Channels() {
       </div>
 
       <div className="panel panel--table">
-        <table className="grid">
+        <table className="rows">
           <thead>
             <tr>
               <th className="pos">#</th>

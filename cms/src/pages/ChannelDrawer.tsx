@@ -105,7 +105,7 @@ export default function ChannelDrawer({
           />
         </label>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <div className="pair">
           <label className="label">
             <span className="eyebrow">{t('სახელი — ქართულად', 'Name — Georgian')}</span>
             <input className="field" required value={form.name_ka}
@@ -123,11 +123,11 @@ export default function ChannelDrawer({
         </p>
 
         <div>
-          <span className="eyebrow" style={{ display: 'block', marginBottom: 7 }}>
+          <span className="eyebrow eyebrow--block">
             {t('კატეგორიები — პირველი ბარათზე იბეჭდება',
                'Categories — the first is printed on the card')}
           </span>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+          <div className="wrap-row">
             {categories.map((c) => {
               const at = catIds.indexOf(c.id);
               return (
@@ -143,7 +143,7 @@ export default function ChannelDrawer({
         </div>
 
         <div>
-          <span className="eyebrow" style={{ display: 'block', marginBottom: 7 }}>
+          <span className="eyebrow eyebrow--block">
             {t('ლოგო', 'Logo')}
           </span>
           <div className="logo-pick">
@@ -164,7 +164,7 @@ export default function ChannelDrawer({
                   ? t('იტვირთება', 'Uploading')
                   : url ? t('შეცვლა', 'Replace') : t('ატვირთვა', 'Upload')}
               </button>
-              <p className="note" style={{ marginTop: 6 }}>
+              <p className="note note--tight">
                 {form.logo_path
                   ? <><span className="num">{form.logo_w}×{form.logo_h}</span></>
                   : t('ლოგოს გარეშე გამოქვეყნება არ მოხდება.',
@@ -174,7 +174,7 @@ export default function ChannelDrawer({
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <div className="pair">
           <label className="label">
             <span className="eyebrow">{t('კატალოგის რიგი', 'Catalogue position')}</span>
             <input className="field field--mono" type="number" value={form.sort_order}
@@ -212,8 +212,7 @@ export default function ChannelDrawer({
           {channel && (
             <button
               type="button"
-              className="btn btn--danger btn--sm"
-              style={{ marginLeft: 'auto' }}
+              className="btn btn--danger btn--sm push"
               onClick={async () => {
                 if (!confirm(t(`წავშალო ${channel.name_en}? ამის დაბრუნება არ შეიძლება.`,
                                `Delete ${channel.name_en}? This cannot be undone.`))) return;

@@ -66,7 +66,7 @@ export default function Subscribers() {
         </span>
         <div className="head__right">
           <input
-            className="field field--mono" style={{ width: 210 }}
+            className="field field--mono field--search"
             value={query} onChange={(e) => setQuery(e.target.value)}
             placeholder={t('ნომერი, სახელი ან ტელეფონი', 'Number, name or phone')}
           />
@@ -79,7 +79,7 @@ export default function Subscribers() {
       </div>
 
       <div className="panel panel--table">
-        <table className="grid">
+        <table className="rows">
           <thead>
             <tr>
               <th>{t('ნომერი','Number')}</th>

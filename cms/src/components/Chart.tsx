@@ -80,7 +80,7 @@ function Figure({ title, meta, labels, values, format, children }: FigureProps) 
 
       {table ? (
         <div className="panel--table">
-          <table className="grid">
+          <table className="rows">
             <thead>
               <tr><th>{t('პერიოდი', 'Period')}</th><th>{title}</th></tr>
             </thead>

@@ -71,7 +71,7 @@ function Renew({
       >
         {renew.isPending ? t('ახლდება', 'Renewing') : t('განახლება', 'Renew')}
       </button>
-      {error && <p className="error" style={{ gridColumn: '1 / -1' }}>{error}</p>}
+      {error && <p className="error span-all">{error}</p>}
     </div>
   );
 }
@@ -126,7 +126,7 @@ export default function Subscriber() {
           </span>
         </div>
         <div className="figure">
-          <span className="figure__value" style={{ fontSize: '1.4rem' }}>
+          <span className="figure__value figure__value--sm">
             {current?.plans?.name_en ?? '—'}
           </span>
           <span className="eyebrow">{t('პაკეტი', 'Plan')}</span>
@@ -135,7 +135,7 @@ export default function Subscriber() {
           </span>
         </div>
         <div className="figure">
-          <span className="figure__value" style={{ fontSize: '1.4rem' }}>
+          <span className="figure__value figure__value--sm">
             {state ?? 'none'}
           </span>
           <span className="eyebrow">{t('სტატუსი', 'State')}</span>
@@ -145,8 +145,8 @@ export default function Subscriber() {
         </div>
       </div>
 
-      <div className="head" style={{ marginTop: 26 }}>
-        <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('კონტაქტი', 'Contact')}</h2>
+      <div className="head head--sub">
+        <h2 className="head__title">{t('კონტაქტი', 'Contact')}</h2>
       </div>
       <div className="panel">
         <div className="setting">
@@ -175,8 +175,8 @@ export default function Subscriber() {
 
       {current && editable && (
         <>
-          <div className="head" style={{ marginTop: 26 }}>
-            <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('განახლება', 'Renew')}</h2>
+          <div className="head head--sub">
+            <h2 className="head__title">{t('განახლება', 'Renew')}</h2>
           </div>
           <div className="panel">
             <Renew subscription={current} subscriberId={s.id} today={today} />
@@ -184,12 +184,12 @@ export default function Subscriber() {
         </>
       )}
 
-      <div className="head" style={{ marginTop: 26 }}>
-        <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('გამოწერები', 'Subscriptions')}</h2>
+      <div className="head head--sub">
+        <h2 className="head__title">{t('გამოწერები', 'Subscriptions')}</h2>
         <span className="head__count">{s.subscriptions.length}</span>
       </div>
       <div className="panel panel--table">
-        <table className="grid">
+        <table className="rows">
           <thead>
             <tr><th>{t('პაკეტი','Plan')}</th><th>{t('დაიწყო','Started')}</th><th>{t('ვადა','Due')}</th><th>{t('მოწყობილობა','Devices')}</th>
                 <th>{t('ფასი','Price')}</th><th>{t('სტატუსი','Status')}</th></tr>
@@ -217,8 +217,8 @@ export default function Subscriber() {
         )}
       </div>
 
-      <div className="head" style={{ marginTop: 26 }}>
-        <h2 className="head__title" style={{ fontSize: '1rem' }}>{t('გადახდები', 'Payments')}</h2>
+      <div className="head head--sub">
+        <h2 className="head__title">{t('გადახდები', 'Payments')}</h2>
         <span className="head__count">{payments.length}</span>
         {current && editable && (
           <div className="head__right">
@@ -240,7 +240,7 @@ export default function Subscriber() {
         )}
       </div>
       <div className="panel panel--table">
-        <table className="grid">
+        <table className="rows">
           <thead>
             <tr><th>{t('თარიღი','Paid on')}</th><th>{t('თანხა','Amount')}</th><th>{t('მეთოდი','Method')}</th><th>{t('შენიშვნა','Note')}</th></tr>
           </thead>

@@ -43,7 +43,7 @@ export default function Login() {
       <form onSubmit={submit} className="gate__form">
         <div className="gate__mark">
           <img className="gate__logo" src={logo} alt="Televizio" width={900} height={268} />
-          <span style={{ marginLeft: 'auto' }}><LangSwitch /></span>
+          <span className="push"><LangSwitch /></span>
         </div>
         <p className="eyebrow gate__sub">
           {t('არხები · პაკეტები · აბონენტები', 'Channels · Plans · Subscriptions')}

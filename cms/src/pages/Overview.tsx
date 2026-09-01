@@ -96,7 +96,7 @@ export default function Overview() {
       </div>
 
       {people.length === 0 ? (
-        <div className="panel" style={{ marginTop: 18 }}>
+        <div className="panel panel--spaced">
           <p className="notice">
             <span className="state state--standby">{t('ცარიელია', 'Empty')}</span>
             {t('ჯერ არცერთი აბონენტი არ არის. დაამატე პირველი და გრაფიკები გაცოცხლდება.',
@@ -148,8 +148,8 @@ export default function Overview() {
         </div>
       )}
 
-      <div className="head" style={{ marginTop: 30 }}>
-        <h2 className="head__title" style={{ fontSize: '1rem' }}>
+      <div className="head head--sub">
+        <h2 className="head__title">
           {t('ყურადღება', 'Attention')}
         </h2>
       </div>
@@ -192,7 +192,7 @@ export default function Overview() {
         )}
       </div>
 
-      <p className="note" style={{ marginTop: 16 }}>
+      <p className="note note--spaced">
         {t('ეს გრაფიკები აბონენტებისა და გადახდების ჩანაწერებს ეყრდნობა. ვიზიტორების სტატისტიკა ცალკე თვალთვალის ცხრილს საჭიროებს, რომელიც ჯერ არ არსებობს.',
            'These figures come from the subscriber and payment records. Visitor statistics need a separate tracking table, which does not exist yet.')}
       </p>

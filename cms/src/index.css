@@ -43,11 +43,21 @@
   --rule:#1B1B1F;
   --rule-2:#2C2C33;
   --red:#E4211C;
+  /* The signal red is a fill colour. As small text on black it lands at
+     4.25:1 and misses AA, so error copy and fault states take a lifted
+     cut of the same hue; anything painted — a lamp, a border, a button
+     with white on it — keeps the brand value. */
+  --red-lit:#F0413B;
   --red-deep:#7E0F0C;
   --standby:#E8B33C;
   --white:#FFFFFF;
-  --dim:#7C7C84;
-  --dimmer:#4A4A52;
+  /* Three greys, and every one of them clears 4.5:1 on both panel
+     grounds. The pair this replaces read 4.75 and 2.24 — the second was
+     carrying column headings, placeholders and every piece of metadata
+     in the panel at a ratio you can only call decorative. */
+  --dim:#93939C;      /* 6.46:1 — secondary text */
+  --dimmer:#7E7E88;   /* 4.90:1 — tertiary text, the floor */
+  --faint:#4A4A52;    /* not text: the dormant lamp, and nothing else */
 
   --glow: 0 0 0 1px rgba(228,33,28,.45), 0 0 34px -6px rgba(228,33,28,.55);
 
@@ -55,11 +65,44 @@
   --f-text:'IBM Plex Sans','Noto Sans Georgian',system-ui,sans-serif;
   --f-mono:'IBM Plex Mono',ui-monospace,'Cascadia Mono',Menlo,monospace;
 
+  /* ── the 4px grid ──────────────────────────────────────────
+     Every padding, gap and margin in this file is a step on it.
+     What was here before ran 5, 6, 7, 9, 11, 13, 18, 22, 26 —
+     each defensible alone, and together a rhythm you could feel
+     was off without being able to point at it. */
+  --s1:4px;  --s2:8px;  --s3:12px; --s4:16px;
+  --s5:20px; --s6:24px; --s7:32px; --s8:40px;
+
+  /* ── the type scale ───────────────────────────────────────
+     Nine sizes with nine jobs, and the interface uses no others.
+     The two smallest went up: a tag set at 9px and a state label
+     at 8.6px are not small, they are unread. */
+  --t-micro:.65rem;    /* 10px — tags, the smallest stencilled state */
+  --t-label:.6875rem;  /* 11px — eyebrows, buttons, chips, column heads */
+  --t-sm:.75rem;       /* 12px — counts, metadata, notes */
+  --t-base:.8125rem;   /* 13px — table data, rail labels */
+  --t-body:.875rem;    /* 14px — form values, toggles, running text */
+  --t-title:.9375rem;  /* 15px — panel and figure titles */
+  --t-lg:1.0625rem;    /* 17px — drawer titles */
+  --t-xl:1.3125rem;    /* 21px — page titles */
+  --t-data:2rem;       /* 32px — the number on a tile */
+
+  /* Two radii: one for things you press, one for things you read on. */
+  --r-sm:3px;
+  --r-md:4px;
+
   /* the brand star, painted as a mask so it takes currentColor */
   --star:url('./star.svg');
 
-  --rail-w:212px;
+  --rail-w:216px;
   --tally-h:56px;
+  --stage-pad:var(--s6);   /* the stage's own top padding, named so the
+                              sticky table header can cancel it */
+
+  /* Native widgets — the date picker, the select menu, the scrollbars —
+     read the page as light without this, and hand back white-on-white
+     dropdowns in the middle of a black panel. */
+  color-scheme:dark;
 }
 
 html,body,#root{ height:100%; }
@@ -74,22 +117,69 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 
+/* The rail and the stage scroll independently and all day. A default
+   scrollbar puts a bright slab down the side of both. */
+.rail,.stage,.drawer,.panel--table{
+  scrollbar-width:thin;
+  scrollbar-color:var(--rule-2) transparent;
+}
+.rail::-webkit-scrollbar,
+.stage::-webkit-scrollbar,
+.drawer::-webkit-scrollbar,
+.panel--table::-webkit-scrollbar{ width:10px; height:10px; }
+.rail::-webkit-scrollbar-thumb,
+.stage::-webkit-scrollbar-thumb,
+.drawer::-webkit-scrollbar-thumb,
+.panel--table::-webkit-scrollbar-thumb{
+  background:var(--rule-2);
+  border:3px solid transparent;
+  background-clip:content-box;
+  border-radius:5px;
+}
+.rail:hover::-webkit-scrollbar-thumb,
+.stage:hover::-webkit-scrollbar-thumb,
+.drawer:hover::-webkit-scrollbar-thumb{ background:#3A3A43; background-clip:content-box; }
+.rail::-webkit-scrollbar-track,
+.stage::-webkit-scrollbar-track,
+.drawer::-webkit-scrollbar-track,
+.panel--table::-webkit-scrollbar-track{ background:transparent; }
+
 ::selection{ background:var(--red); color:#fff; }
 
 :focus-visible{
   outline:2px solid var(--red);
   outline-offset:2px;
+  border-radius:1px;
+}
+
+/* Nothing here is choreography — every transition in this file is a
+   state change reporting itself. Somebody who has asked for less
+   motion still needs the state, just not the travel. */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+  .btn--signal:hover:not(:disabled){ transform:none; }
 }
 
 /* ── the mono label. Every piece of chrome in a gallery is
       stencilled, letterspaced and small. ───────────────────── */
 .eyebrow{
-  font:500 .66rem/1 var(--f-mono);
+  font:500 var(--t-label)/1.3 var(--f-mono);
   letter-spacing:.14em;
   color:var(--dim);
 }
+/* An eyebrow that labels a field sits on its own line and owes the
+   field below it a gap. It was being told so inline, in four files. */
+.eyebrow--block{ display:block; margin-bottom:var(--s2); }
 
-.num{ font:500 .8rem/1 var(--f-mono); font-variant-numeric:tabular-nums; }
+.num{ font:500 var(--t-base)/1 var(--f-mono); font-variant-numeric:tabular-nums; }
+
+/* pushes whatever follows it to the far end of a flex row */
+.push{ margin-left:auto; }
 
 /* ── app frame ────────────────────────────────────────────── */
 .app{
@@ -102,8 +192,8 @@ body{
 
 .brand{
   grid-area:brand;
-  display:flex; align-items:center; gap:10px;
-  padding:0 18px;
+  display:flex; align-items:center;
+  padding:0 var(--s5);
   border-right:1px solid var(--rule);
   border-bottom:1px solid var(--rule);
   background:var(--panel);
@@ -119,8 +209,8 @@ body{
       say is whether the live site matches the database. ───── */
 .tally{
   grid-area:tally;
-  display:flex; align-items:center; gap:16px;
-  padding:0 22px;
+  display:flex; align-items:center; gap:var(--s4);
+  padding:0 var(--s6);
   border-bottom:1px solid var(--rule);
   background:var(--panel);
   position:relative;
@@ -135,8 +225,8 @@ body{
 .tally[data-state="live"]{ --live:var(--red-deep); }
 
 .lamp{
-  width:9px; height:9px; border-radius:50%;
-  background:var(--dimmer);
+  width:8px; height:8px; border-radius:50%;
+  background:var(--faint);
   flex:none;
 }
 .lamp--live{ background:var(--red); box-shadow:0 0 12px -1px var(--red); }
@@ -149,18 +239,23 @@ body{
 }
 
 .tally__state{
-  font:600 .68rem/1 var(--f-mono);
+  font:600 var(--t-label)/1 var(--f-mono);
   letter-spacing:.16em;
 }
-.tally__meta{ color:var(--dim); font:500 .66rem/1 var(--f-mono); letter-spacing:.08em; }
-.tally__right{ margin-left:auto; display:flex; align-items:center; gap:18px; }
-
-.who{ display:flex; align-items:baseline; gap:8px; }
-.who__name{ font:600 .74rem/1 var(--f-dsp); letter-spacing:.04em; }
-.who__role{
-  font:500 .6rem/1 var(--f-mono); letter-spacing:.14em;
+.tally__meta{
   color:var(--dim);
-  border:1px solid var(--rule-2); border-radius:2px; padding:3px 5px;
+  font:500 var(--t-sm)/1 var(--f-mono);
+  letter-spacing:.08em;
+  font-variant-numeric:tabular-nums;
+}
+.tally__right{ margin-left:auto; display:flex; align-items:center; gap:var(--s4); }
+
+.who{ display:flex; align-items:center; gap:var(--s2); }
+.who__name{ font:600 var(--t-sm)/1 var(--f-text); letter-spacing:0; }
+.who__role{
+  font:500 var(--t-micro)/1 var(--f-mono); letter-spacing:.14em;
+  color:var(--dim);
+  border:1px solid var(--rule-2); border-radius:var(--r-sm); padding:var(--s1) 5px;
 }
 
 /* ── rail ─────────────────────────────────────────────────── */
@@ -168,17 +263,18 @@ body{
   grid-area:rail;
   border-right:1px solid var(--rule);
   background:var(--panel);
-  padding:14px 0;
+  padding:var(--s2) 0 var(--s4);
   display:flex; flex-direction:column;
   overflow-y:auto;
 }
 .rail__group{
-  padding:16px 18px 6px;
+  padding:var(--s5) var(--s5) var(--s2);
 }
 .rail__link{
-  display:flex; align-items:center; gap:10px;
-  padding:9px 18px;
-  font:600 .76rem/1 var(--f-dsp);
+  display:flex; align-items:center; gap:var(--s3);
+  min-height:36px;                    /* a target you can hit without aiming */
+  padding:var(--s2) var(--s5);
+  font:600 var(--t-base)/1.2 var(--f-dsp);
   letter-spacing:.1em;
   color:var(--dim);
   text-decoration:none;
@@ -191,12 +287,23 @@ body{
   border-left-color:var(--red);
   background:var(--panel-2);
 }
+/* The count is a readout, not a badge — it belongs to the number
+   column the rest of the panel keeps, so it is mono and it lines up. */
 .rail__count{
   margin-left:auto;
-  font:500 .66rem/1 var(--f-mono);
+  font:500 var(--t-sm)/1 var(--f-mono);
+  font-variant-numeric:tabular-nums;
   color:var(--dimmer);
 }
-.rail__foot{ margin-top:auto; padding:14px 18px 4px; }
+.rail__foot{ margin-top:auto; padding:var(--s5) var(--s5) 0; }
+/* the only link in the panel that leaves it — it still needs a target */
+.rail__foot a{
+  display:inline-flex; align-items:center;
+  min-height:28px;
+  text-decoration:none;
+  transition:color .15s;
+}
+.rail__foot a:hover{ color:var(--white); }
 
 /* Headings run in the text face, not the display one. Eurostile is the
    brand's voice and it is right on a billboard, but a heading here is
@@ -206,126 +313,217 @@ body{
    is the weight — 700 would only be a synthesised bold. */
 
 /* ── stage ────────────────────────────────────────────────── */
-.stage{ grid-area:stage; overflow-y:auto; padding:26px 28px 60px; }
+.stage{ grid-area:stage; overflow-y:auto; padding:var(--stage-pad) var(--s7) var(--s8); }
 
-.head{ display:flex; align-items:center; gap:14px; margin-bottom:20px; }
-.head__title{
-  font:600 1.28rem/1.15 var(--f-text);
-  letter-spacing:-.005em;
+.head{
+  display:flex; align-items:center; gap:var(--s3);
+  min-height:32px;                    /* the row holds still whether or not it carries a button */
+  margin-bottom:var(--s4);
 }
-.head__count{ font:500 .72rem/1 var(--f-mono); color:var(--dim); }
-.head__right{ margin-left:auto; display:flex; align-items:center; gap:10px; }
+.head__title{
+  font:600 var(--t-xl)/1.2 var(--f-text);
+  letter-spacing:-.01em;
+}
+/* A section inside a page, rather than the page itself — one step
+   down in size, one step of air above it. Seven pages were saying this
+   with an inline margin and an inline font-size. */
+.head--sub,
+.sub-section{ margin-top:var(--s7); }
+.head--sub .head__title,
+.sub-section .head__title{ font-size:var(--t-lg); }
 
-.lede{ color:var(--dim); max-width:62ch; margin:-10px 0 20px; }
+.head__count{
+  font:500 var(--t-sm)/1 var(--f-mono);
+  font-variant-numeric:tabular-nums;
+  color:var(--dim);
+}
+.head__right{ margin-left:auto; display:flex; align-items:center; gap:var(--s2); }
+
+/* The lede answers the heading, so it sits under it rather than a full
+   block away — but by taking the head's margin, not by cancelling it
+   with a negative one. */
+.head:has(+ .lede){ margin-bottom:var(--s2); }
+.lede{ color:var(--dim); max-width:62ch; margin:0 0 var(--s5); font-size:var(--t-body); }
 
 /* ── surfaces ─────────────────────────────────────────────── */
 .panel{
   background:var(--panel);
   border:1px solid var(--rule);
-  border-radius:3px;
+  border-radius:var(--r-md);
+  /* clip, not hidden: it trims the sticky header to the rounded corner
+     without becoming a scroll container the header would then pin to */
+  overflow:clip;
 }
 .panel__head{
-  display:flex; align-items:center; gap:10px;
-  padding:11px 14px;
+  display:flex; align-items:center; gap:var(--s3);
+  min-height:44px;
+  padding:var(--s3) var(--s4);
   border-bottom:1px solid var(--rule);
 }
 
+/* two fields side by side — the shape four drawers were describing inline */
+.pair{ display:grid; grid-template-columns:1fr 1fr; gap:var(--s3); }
+.trio{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:var(--s3); }
+@media (max-width:520px){
+  .pair,.trio{ grid-template-columns:1fr; }
+}
+
+/* ── the small shapes the pages kept re-describing inline ───────
+   None of these is interesting. That is the point: a margin worth
+   naming is worth naming once, and forty call sites picking their
+   own is how a grid stops being one. */
+.wrap-row{ display:flex; flex-wrap:wrap; gap:var(--s2); }
+.stack-row{ display:flex; flex-direction:column; gap:var(--s2); }
+.line-row{ display:flex; gap:var(--s2); }
+.span-all{ grid-column:1 / -1; }
+.panel--spaced{ margin-top:var(--s5); }
+.note--spaced{ margin-top:var(--s4); }
+.note--tight{ margin-top:var(--s2); }
+.error--spaced{ margin-top:var(--s2); }
+.num--quiet{ color:var(--dimmer); }
+
 /* ── controls ─────────────────────────────────────────────── */
 .btn{
-  display:inline-flex; align-items:center; gap:7px;
-  padding:8px 14px;
+  display:inline-flex; align-items:center; justify-content:center; gap:var(--s2);
+  min-height:34px;
+  padding:var(--s2) var(--s4);
   border:1px solid var(--rule-2);
-  border-radius:2px;
+  border-radius:var(--r-sm);
   background:transparent;
   color:var(--white);
-  font:600 .7rem/1 var(--f-mono);
+  font:600 var(--t-label)/1 var(--f-mono);
   letter-spacing:.12em;
   cursor:pointer;
+  white-space:nowrap;
   transition:border-color .15s, color .15s, background .15s, transform .15s;
 }
-.btn:hover:not(:disabled){ border-color:var(--red); color:var(--red); }
-.btn:disabled{ opacity:.4; cursor:not-allowed; }
+/* Red as small text needs the lifted cut; the border keeps the brand value. */
+.btn:hover:not(:disabled){ border-color:var(--red); color:var(--red-lit); }
+.btn:disabled{ opacity:.45; cursor:not-allowed; }
 
 .btn--signal{ background:var(--red); border-color:var(--red); color:#fff; box-shadow:var(--glow); }
 .btn--signal:hover:not(:disabled){ background:#FF3A34; border-color:#FF3A34; color:#fff; transform:translateY(-1px); }
 
 .btn--quiet{ border-color:transparent; color:var(--dim); }
-.btn--quiet:hover:not(:disabled){ border-color:transparent; color:var(--white); }
+.btn--quiet:hover:not(:disabled){ border-color:transparent; color:var(--white); background:var(--panel-2); }
 
-.btn--danger:hover:not(:disabled){ border-color:var(--red); color:var(--red); }
+.btn--danger:hover:not(:disabled){ border-color:var(--red); color:var(--red-lit); }
 
-.btn--sm{ padding:5px 9px; font-size:.64rem; }
+/* Smaller, but still a target: 28px is the floor a pointer lands on
+   without care, and the row it sits in is 34px anyway. */
+.btn--sm{ min-height:28px; padding:var(--s1) var(--s3); font-size:var(--t-micro); }
 
 .field{
   width:100%;
-  padding:9px 11px;
+  min-height:34px;
+  padding:var(--s2) var(--s3);
   background:var(--black);
   border:1px solid var(--rule-2);
-  border-radius:2px;
+  border-radius:var(--r-sm);
   color:var(--white);
   font-family:var(--f-text);
-  font-size:.86rem;
+  font-size:var(--t-body);
+  line-height:1.4;
+  transition:border-color .15s, box-shadow .15s;
 }
 .field::placeholder{ color:var(--dimmer); }
-.field:focus{ outline:none; border-color:var(--red); }
-.field--mono{ font:500 .8rem/1.4 var(--f-mono); }
+/* A 1px border going red is not a focus state you can find with the
+   keyboard. The ring is, and it reads from across a form. */
+.field:focus{
+  outline:none;
+  border-color:var(--red);
+  box-shadow:0 0 0 3px rgba(228,33,28,.22);
+}
+.field--mono{ font:500 var(--t-base)/1.4 var(--f-mono); }
+.field--search{ width:210px; max-width:100%; }
 
 .label{ display:block; }
-.label > .eyebrow{ display:block; margin-bottom:5px; }
+.label > .eyebrow{ display:block; margin-bottom:var(--s2); }
 
 .chip{
-  padding:5px 9px;
+  display:inline-flex; align-items:center;
+  min-height:28px;
+  padding:var(--s1) var(--s3);
   border:1px solid var(--rule-2);
-  border-radius:2px;
+  border-radius:var(--r-sm);
   background:transparent;
   color:var(--dim);
-  font:500 .64rem/1 var(--f-mono);
+  font:500 var(--t-label)/1 var(--f-mono);
   letter-spacing:.1em;
   cursor:pointer;
   transition:border-color .15s, color .15s, background .15s;
 }
-.chip:hover{ color:var(--white); border-color:var(--rule-2); }
+/* was setting the border to the colour it already had, so half the
+   hover never arrived */
+.chip:hover{ color:var(--white); border-color:#3E3E47; background:var(--panel-2); }
 .chip.is-on{ background:var(--red); border-color:var(--red); color:#fff; }
+.chip.is-on:hover{ background:#FF3A34; border-color:#FF3A34; }
 .chip.is-sub{ background:var(--panel-2); border-color:var(--rule-2); color:var(--white); }
 
-/* ── data grid: rows are the ordered thing the site renders,
-      so the position number carries real meaning. ─────────── */
-.grid{ width:100%; border-collapse:collapse; }
-.grid th{
+/* ── the data table ───────────────────────────────────────────
+   Rows are the ordered thing the site renders, so the position
+   number carries real meaning.
+
+   Called .rows and not .grid: Tailwind ships a .grid utility that
+   means display:grid, and it was landing on every table in the
+   panel. The custom rules only ever set border-collapse and width,
+   so nothing contested the display — the tables were grids, their
+   headers formed an anonymous table of their own, and no column
+   label sat above its column. */
+.rows{ width:100%; border-collapse:collapse; font-size:var(--t-base); }
+/* The header stays put while the body scrolls: on a list of two hundred
+   subscribers, a column you cannot name is a column you cannot read. */
+.rows th{
+  /* Sticky resolves against the stage's padding box, so top:0 would park
+     the header a stage-padding below the top and let rows ride through
+     the gap above it. Cancelling the padding pins it flush, and nothing
+     can appear above the labels. */
+  position:sticky; top:calc(-1 * var(--stage-pad)); z-index:1;
   text-align:left;
-  padding:0 12px 9px;
-  font:500 .62rem/1 var(--f-mono);
+  padding:var(--s3);
+  background:var(--panel);
+  font:500 var(--t-label)/1 var(--f-mono);
   letter-spacing:.14em;
   color:var(--dimmer);
-  border-bottom:1px solid var(--rule);
+  box-shadow:inset 0 -1px 0 var(--rule-2), 0 10px 16px -14px #000;
   white-space:nowrap;
 }
-.grid td{
-  padding:10px 12px;
+.rows td{
+  padding:var(--s3);
   border-bottom:1px solid var(--rule);
   vertical-align:middle;
 }
-.grid tbody tr{ transition:background .12s; }
-.grid tbody tr:hover{ background:var(--panel); }
-.grid tbody tr.is-clickable{ cursor:pointer; }
+.rows tbody tr:last-child td{ border-bottom:0; }
+.rows tbody tr{ transition:background .12s; }
+/* was set to the panel's own colour, so the row hover was invisible */
+.rows tbody tr:hover{ background:var(--panel-2); }
+.rows tbody tr.is-clickable{ cursor:pointer; }
 
-.pos{ color:var(--dimmer); font:500 .72rem/1 var(--f-mono); width:34px; }
+.pos{
+  color:var(--dimmer);
+  font:500 var(--t-sm)/1 var(--f-mono);
+  font-variant-numeric:tabular-nums;
+  width:44px;
+}
 .name-ka{ color:var(--dim); }
 
 .tag{
   display:inline-block;
-  padding:2px 6px;
+  padding:3px var(--s2);
   border:1px solid var(--rule-2);
-  border-radius:2px;
-  font:500 .58rem/1.5 var(--f-mono);
+  border-radius:var(--r-sm);
+  font:500 var(--t-micro)/1.4 var(--f-mono);
   letter-spacing:.1em;
   color:var(--dim);
 }
-.tag--primary{ border-color:var(--red-deep); color:var(--red); }
+/* JSX renders these with no whitespace between them, so they were
+   touching. They are separate facts and they now look it. */
+.tag + .tag{ margin-left:var(--s1); }
+.tag--primary{ border-color:var(--red-deep); color:var(--red-lit); }
 
-.state{ font:500 .64rem/1 var(--f-mono); letter-spacing:.1em; }
+.state{ font:500 var(--t-label)/1.3 var(--f-mono); letter-spacing:.1em; }
 .state--ok{ color:var(--dim); }
-.state--fault{ color:var(--red); }
+.state--fault{ color:var(--red-lit); }
 .state--standby{ color:var(--standby); }
 
 /* ── drawer ───────────────────────────────────────────────── */
@@ -341,33 +539,35 @@ body{
   overflow-y:auto;
   background:var(--panel);
   border-left:1px solid var(--rule-2);
-  padding:22px 22px 40px;
-  display:flex; flex-direction:column; gap:16px;
+  padding:var(--s6) var(--s6) var(--s8);
+  display:flex; flex-direction:column; gap:var(--s4);
+  box-shadow:-24px 0 48px -24px #000;
 }
-.drawer__title{ font:600 1.02rem/1.25 var(--f-text); letter-spacing:-.005em; }
+.drawer__title{ font:600 var(--t-lg)/1.25 var(--f-text); letter-spacing:-.005em; }
 .drawer__foot{
-  display:flex; align-items:center; gap:8px;
-  padding-top:6px; margin-top:auto;
+  display:flex; align-items:center; gap:var(--s2);
+  padding-top:var(--s4); margin-top:auto;
   border-top:1px solid var(--rule);
 }
 
-.note{ color:var(--dimmer); font-size:.76rem; line-height:1.5; }
-.error{ color:var(--red); font:500 .74rem/1.5 var(--f-mono); white-space:pre-line; }
+.note{ color:var(--dimmer); font-size:var(--t-sm); line-height:1.55; }
+.error{ color:var(--red-lit); font:500 var(--t-sm)/1.55 var(--f-mono); white-space:pre-line; }
 
 /* ── login ────────────────────────────────────────────────── */
 .gate{
   height:100%;
   display:grid; place-items:center;
-  padding:24px;
+  padding:var(--s6);
 }
-.gate__form{ width:min(21rem,100%); display:flex; flex-direction:column; gap:12px; }
-.gate__mark{ display:flex; align-items:center; gap:11px; margin-bottom:6px; }
+.gate__form{ width:min(21rem,100%); display:flex; flex-direction:column; gap:var(--s3); }
+.gate__mark{ display:flex; align-items:center; gap:var(--s3); margin-bottom:var(--s2); }
 /* the same wordmark the rail carries, so the panel opens on the brand */
 .gate__logo{
   display:block;
   width:min(58%,150px); height:auto;
 }
-.gate__sub{ margin-bottom:14px; }
+.gate__sub{ margin-bottom:var(--s4); }
+.gate .btn{ margin-top:var(--s1); }
 
 /* ── responsive: the rail collapses to a strip of labels ──── */
 @media (max-width:820px){
@@ -381,114 +581,140 @@ body{
     flex-direction:row; overflow-x:auto; padding:0;
     border-right:0; border-bottom:1px solid var(--rule);
   }
+  /* The rail groups its links in a div apiece. Turning the rail into a
+     row left those divs as columns, so the strip came out three lines
+     deep instead of one that scrolls. */
+  .rail > div{ display:flex; flex:none; }
   .rail__group,.rail__foot{ display:none; }
   .rail__link{
     border-left:0; border-bottom:2px solid transparent;
-    padding:12px 14px; white-space:nowrap;
+    min-height:44px;
+    padding:var(--s3) var(--s4); white-space:nowrap;
   }
   .rail__link.is-on{ border-left:0; border-bottom-color:var(--red); }
   .rail__count{ display:none; }
-  .stage{ padding:20px 16px 48px; }
+  .stage{ padding:var(--s5) var(--s4) var(--s8); }
+  .head--sub{ margin-top:var(--s6); }
 }
 
 /* ── overview ─────────────────────────────────────────────── */
 .figures{
   display:grid; gap:1px;
-  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
   background:var(--rule);
   border:1px solid var(--rule);
-  border-radius:3px;
+  border-radius:var(--r-md);
   overflow:hidden;
 }
+/* Number, then what it counts, then how it was counted — largest to
+   smallest, so the tile is read in that order and never any other. */
 .figure{
-  display:flex; flex-direction:column; gap:6px;
-  padding:18px;
+  display:flex; flex-direction:column; gap:var(--s1);
+  padding:var(--s5);
   background:var(--panel);
   text-decoration:none; color:inherit;
   transition:background .15s;
 }
 .figure:hover{ background:var(--panel-2); }
 .figure__value{
-  font:700 2.1rem/1 var(--f-dsp);
+  font:700 var(--t-data)/1 var(--f-dsp);
   font-variant-numeric:tabular-nums;
   letter-spacing:-.01em;
+  margin-bottom:var(--s1);
 }
-.figure__meta{ color:var(--dimmer); font-size:.74rem; }
+.figure__value--sm{ font-size:1.4rem; }
+.figure .eyebrow{ color:var(--white); letter-spacing:.1em; }
+.figure__meta{ color:var(--dimmer); font-size:var(--t-sm); line-height:1.45; }
 
 .notice{
-  display:flex; align-items:baseline; gap:12px;
-  padding:12px 14px;
+  display:flex; align-items:baseline; gap:var(--s3);
+  padding:var(--s3) var(--s4);
   border-bottom:1px solid var(--rule);
   color:var(--dim);
+  font-size:var(--t-body);
   text-decoration:none;
 }
 .notice:last-child{ border-bottom:0; }
 .notice--link{ transition:background .15s; }
 .notice--link:hover{ background:var(--panel-2); color:var(--white); }
-.notice .state{ flex:none; min-width:96px; }
+.notice .state{ flex:none; min-width:104px; }
 
 /* ── toggles ──────────────────────────────────────────────── */
 .toggle{
-  display:flex; align-items:center; gap:9px;
-  font-size:.82rem; color:var(--dim);
+  display:inline-flex; align-items:center; gap:var(--s2);
+  min-height:28px;                    /* the label is part of the target */
+  font-size:var(--t-body); color:var(--dim);
   cursor:pointer;
 }
 .toggle input{
   appearance:none;
-  width:15px; height:15px; flex:none;
-  border:1px solid var(--rule-2); border-radius:2px;
+  width:16px; height:16px; flex:none;
+  border:1px solid var(--rule-2); border-radius:var(--r-sm);
   background:var(--black);
   cursor:pointer;
+  position:relative;
   transition:background .15s, border-color .15s;
 }
 .toggle input:checked{ background:var(--red); border-color:var(--red); }
+/* A filled square says something is set; a tick says what. */
+.toggle input:checked::after{
+  content:'';
+  position:absolute; left:4px; top:1px;
+  width:4px; height:8px;
+  border:solid #fff; border-width:0 2px 2px 0;
+  transform:rotate(42deg);
+}
 .toggle input:disabled{ opacity:.4; cursor:not-allowed; }
 .toggle:hover input:not(:disabled){ border-color:var(--red); }
 
 /* ── the strip ────────────────────────────────────────────── */
 .strip{ list-style:none; margin:0; padding:0; }
 .strip__row{
-  display:flex; align-items:center; gap:12px;
-  padding:8px 14px;
+  display:flex; align-items:center; gap:var(--s3);
+  padding:var(--s2) var(--s4);
   border-bottom:1px solid var(--rule);
+  transition:background .12s;
 }
+.strip__row:hover{ background:var(--panel-2); }
 .strip__row:last-child{ border-bottom:0; }
 .strip__row.is-out .toggle span{ color:var(--dimmer); }
 .strip__row .toggle{ color:var(--white); }
-.strip__moves{ margin-left:auto; display:flex; gap:2px; }
+.strip__moves{ margin-left:auto; display:flex; gap:var(--s1); }
 
 /* ── plans ────────────────────────────────────────────────── */
 .plans{
-  display:grid; gap:14px;
+  display:grid; gap:var(--s4);
   grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
   align-items:start;
 }
 .plan__price{
   margin-left:auto;
-  font:700 1.25rem/1 var(--f-dsp);
+  font:700 var(--t-xl)/1 var(--f-dsp);
   font-variant-numeric:tabular-nums;
 }
-.plan__cur{ color:var(--dim); font-size:.72rem; margin-left:2px; }
-.plan__body{ padding:14px; display:flex; flex-direction:column; gap:14px; }
+.plan__cur{ color:var(--dim); font-size:var(--t-sm); margin-left:2px; }
+.plan__body{ padding:var(--s4); display:flex; flex-direction:column; gap:var(--s4); }
 .panel__foot{
-  display:flex; align-items:center; gap:10px;
-  padding:11px 14px;
+  display:flex; align-items:center; gap:var(--s2);
+  min-height:44px;
+  padding:var(--s3) var(--s4);
   border-top:1px solid var(--rule);
 }
 
 /* ── settings ─────────────────────────────────────────────── */
 .invite{
-  margin-top:12px; padding:14px;
-  display:grid; gap:10px; align-items:end;
+  margin-top:var(--s3); padding:var(--s4);
+  display:grid; gap:var(--s3); align-items:end;
   grid-template-columns:1.4fr 1fr .8fr auto;
 }
 @media (max-width:720px){ .invite{ grid-template-columns:1fr; } }
 
 .setting{
-  display:grid; gap:12px; align-items:center;
-  grid-template-columns:180px 220px 1fr;
-  padding:10px 14px;
+  display:grid; gap:var(--s3); align-items:center;
+  grid-template-columns:190px 220px 1fr;
+  padding:var(--s3) var(--s4);
   border-bottom:1px solid var(--rule);
+  font-size:var(--t-body);
 }
 .setting:last-child{ border-bottom:0; }
 .setting__key{ color:var(--white); }
@@ -497,20 +723,35 @@ body{
 /* ── narrow screens ───────────────────────────────────────────
    A table of thirteen channels cannot fold, so it scrolls inside
    its own panel rather than dragging the page sideways with it. */
-.panel--table{ overflow-x:auto; }
-.panel--table .grid{ min-width:660px; }
+/* A table of thirteen channels cannot fold, so once the stage is too
+   narrow to hold it, it scrolls inside its own panel rather than
+   dragging the page sideways with it. Above that width it does not
+   scroll at all — which is what lets the sticky header pin itself to
+   the top of the stage instead of to a second scrollbar nested in the
+   first. */
+@media (max-width:1100px){
+  .panel--table{ overflow-x:auto; }
+  .panel--table .rows{ min-width:760px; }
+  /* inside its own scroller there is nothing above to pin to */
+  .panel--table .rows th{ position:static; }
+}
 
 @media (max-width:820px){
-  .tally{ gap:10px; padding:0 14px; }
+  .tally{ gap:var(--s3); padding:0 var(--s4); }
   /* The state and the Publish button carry the meaning here; the
      timestamp is the first thing that can go. */
   .tally__meta{ display:none; }
-  .tally__right{ gap:10px; }
+  .tally__right{ gap:var(--s3); }
   .who__name{ display:none; }
 
   .head{ flex-wrap:wrap; }
   .head__right{ width:100%; margin-left:0; }
   .head__right .field{ flex:1; }
+  .field--search{ width:auto; }
+  /* A finger is not a mouse: on the sizes where one is likely, the
+     small controls come back up to a real target. */
+  .btn--sm,.chip{ min-height:36px; }
+  .toggle input{ width:18px; height:18px; }
 
   .figures{ grid-template-columns:1fr 1fr; }
   .plans{ grid-template-columns:1fr; }
@@ -523,20 +764,20 @@ body{
 
 /* ── subscribers ──────────────────────────────────────────── */
 .link{ color:var(--white); text-decoration:none; border-bottom:1px solid var(--rule-2); }
-.link:hover{ color:var(--red); border-bottom-color:var(--red); }
+.link:hover{ color:var(--red-lit); border-bottom-color:var(--red); }
 
 .drawer__rule{
-  margin-top:6px; padding-top:14px;
+  margin-top:var(--s1); padding-top:var(--s4);
   border-top:1px solid var(--rule-2);
 }
 
 .renew{
-  display:grid; gap:12px; align-items:end;
+  display:grid; gap:var(--s3); align-items:end;
   grid-template-columns:1.4fr 1fr 1fr auto;
-  padding:14px;
+  padding:var(--s4);
 }
 .renew__date{
-  font:700 1.15rem/1.3 var(--f-dsp);
+  font:700 var(--t-lg)/1.3 var(--f-dsp);
   font-variant-numeric:tabular-nums;
 }
 @media (max-width:820px){ .renew{ grid-template-columns:1fr; } }
@@ -560,7 +801,7 @@ select.field{ font-family:var(--f-text); }
 [data-lang="en"] .rail__link,
 [data-lang="en"] .btn,
 [data-lang="en"] .chip,
-[data-lang="en"] .grid th,
+[data-lang="en"] .rows th,
 [data-lang="en"] .tag,
 [data-lang="en"] .state{
   text-transform:uppercase;
@@ -570,7 +811,7 @@ select.field{ font-family:var(--f-text); }
 [data-lang="ka"] .tally__state,
 [data-lang="ka"] .tally__meta,
 [data-lang="ka"] .who__role,
-[data-lang="ka"] .grid th,
+[data-lang="ka"] .rows th,
 [data-lang="ka"] .tag,
 [data-lang="ka"] .state,
 [data-lang="ka"] .chip,
@@ -579,28 +820,32 @@ select.field{ font-family:var(--f-text); }
   letter-spacing:.01em;
 }
 
-[data-lang="ka"] .eyebrow{ font-size:.8rem; }
-[data-lang="ka"] .grid th{ font-size:.78rem; }
-[data-lang="ka"] .btn{ font-size:.8rem; font-weight:600; }
+/* Mkhedruli needs a size or two more than a Latin label at the same
+   optical weight, so the Georgian side steps up the same scale rather
+   than inventing numbers of its own. */
+[data-lang="ka"] .eyebrow{ font-size:var(--t-base); }
+[data-lang="ka"] .rows th{ font-size:var(--t-base); }
+[data-lang="ka"] .btn{ font-size:var(--t-base); font-weight:600; }
 [data-lang="ka"] .chip,
 [data-lang="ka"] .tag,
-[data-lang="ka"] .state{ font-size:.76rem; }
-[data-lang="ka"] .tally__state{ font-size:.82rem; font-weight:600; }
-[data-lang="ka"] .tally__meta{ font-size:.78rem; }
+[data-lang="ka"] .state{ font-size:var(--t-sm); }
+[data-lang="ka"] .tally__state{ font-size:var(--t-body); font-weight:600; }
+[data-lang="ka"] .tally__meta{ font-size:var(--t-base); }
+[data-lang="ka"] .who__role{ font-size:var(--t-sm); }
 
 /* Eurostile carries both scripts, but its Georgian is a display cut —
    fine for a heading, hard work down at nav size. */
 [data-lang="ka"] .rail__link{
   font-family:var(--f-text);
-  font-size:.86rem;
+  font-size:var(--t-body);
   font-weight:600;
   letter-spacing:.01em;
 }
 
 /* Running text and form values are never mono, in either language. */
 .field, .note, .lede, .figure__meta, .notice{ font-family:var(--f-text); }
-.note{ font-size:.8rem; }
-.lede{ font-size:.92rem; line-height:1.65; }
+.note{ font-size:var(--t-sm); }
+.lede{ font-size:var(--t-body); line-height:1.65; }
 
 /* Numbers stay mono in both — a column of dates only lines up if they do. */
 .num, .pos, .figure__value{ font-family:var(--f-mono); }
@@ -608,12 +853,13 @@ select.field{ font-family:var(--f-text); }
 
 /* ── the language switch ──────────────────────────────────── */
 .lang{
-  display:inline-flex; align-items:center; gap:6px;
-  padding:5px 9px;
-  border:1px solid var(--rule-2); border-radius:2px;
+  display:inline-flex; align-items:center; gap:var(--s2);
+  min-height:28px;
+  padding:var(--s1) var(--s3);
+  border:1px solid var(--rule-2); border-radius:var(--r-sm);
   background:transparent;
   color:var(--dim);
-  font:600 .66rem/1 var(--f-mono);
+  font:600 var(--t-label)/1 var(--f-mono);
   letter-spacing:.1em;
   cursor:pointer;
   transition:color .15s, border-color .15s;
@@ -621,33 +867,54 @@ select.field{ font-family:var(--f-text); }
 .lang:hover{ color:var(--white); border-color:var(--red); }
 .lang b{ color:var(--white); font-weight:600; }
 
-/* ── strip rows carry their artwork ───────────────────────── */
+/* ══ CHANNEL MARKS ═══════════════════════════════════════════
+   The one place this panel shows artwork, and the artwork is not
+   ours: thirteen broadcasters' logos, drawn for a black ground,
+   running from a square roundel to a wordmark five times as wide.
+   Nothing can be cropped and nothing can be stretched, so each
+   sits in a fixed plate and is fitted inside a constant optical
+   margin — the plate is what lines up, not the mark. Padding does
+   that job in pixels; the percentages it replaces gave a wide mark
+   a wide margin and a tall one almost none.                      */
 .strip__row{ flex-wrap:wrap; }
 .strip__logo{
   flex:none;
-  width:74px; height:30px;
+  width:80px; height:32px;
+  padding:var(--s1) 6px;
   display:grid; place-items:center;
   background:var(--black);
   border:1px solid var(--rule);
-  border-radius:2px;
+  border-radius:var(--r-sm);
   overflow:hidden;
 }
-/* The marks are drawn for a black ground and vary wildly in aspect, so
-   they are contained rather than cropped. */
 .strip__logo img{
-  max-width:88%; max-height:76%;
+  max-width:100%; max-height:100%;
   width:auto; height:auto;
   object-fit:contain;
 }
-.strip__logo .state{ font-size:.54rem; text-align:center; line-height:1.1; }
+/* A channel with no artwork still occupies the column, so the rows
+   below it do not step left. */
+.strip__logo .state{
+  font-size:var(--t-micro);
+  text-align:center; line-height:1.1;
+  letter-spacing:.06em;
+}
 .strip__name{ min-width:0; }
-.strip__acts{ margin-left:auto; display:flex; gap:2px; align-items:center; }
-.strip__error{ width:100%; margin:4px 0 0 86px; }
+.strip__acts{ margin-left:auto; display:flex; gap:var(--s1); align-items:center; }
+.strip__error{ width:100%; margin:var(--s2) 0 0 calc(80px + var(--s3)); }
 
-.logo-pick{ display:flex; align-items:flex-start; gap:14px; }
-.strip__logo--lg{ width:120px; height:64px; }
-/* The channels table shows the mark at row height. */
-.grid .strip__logo{ width:64px; height:26px; }
+.logo-pick{ display:flex; align-items:flex-start; gap:var(--s4); }
+/* the plate, then the control and what it will accept — the button
+   sizes to its label rather than to the column it sits in */
+.logo-pick > div{
+  display:flex; flex-direction:column; align-items:flex-start;
+  gap:var(--s2);
+  min-width:0;
+}
+.logo-pick .note{ margin-top:0; }
+.strip__logo--lg{ width:132px; height:72px; padding:var(--s3); }
+/* In the table the plate matches the row's cap height. */
+.rows .strip__logo{ width:72px; height:28px; padding:3px 5px; }
 
 /* ══ FIGURES ═════════════════════════════════════════════════
    Grid and axes recede; the one thing painted in signal red is
@@ -655,7 +922,7 @@ select.field{ font-family:var(--f-text); }
    a single series and its categories are named in the axis — so
    red stays reserved for status, where it means something.       */
 .figs{
-  display:grid; gap:14px; margin-top:18px;
+  display:grid; gap:var(--s4); margin-top:var(--s5);
   grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
 }
 
@@ -663,50 +930,62 @@ select.field{ font-family:var(--f-text); }
   margin:0;
   background:var(--panel);
   border:1px solid var(--rule);
-  border-radius:3px;
+  border-radius:var(--r-md);
 }
+/* Title, then what it is measuring, then the control — in a column,
+   because on a 340px card in Georgian all three on one line means two
+   of them wrap into each other and none of them reads. */
 .fig__head{
-  display:flex; align-items:baseline; gap:10px;
-  padding:12px 14px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:2px var(--s3);
+  min-height:44px;
+  padding:var(--s3) var(--s4);
   border-bottom:1px solid var(--rule);
 }
-.fig__title{ font:600 .9rem/1.25 var(--f-text); letter-spacing:0; }
-.fig__meta{ color:var(--dimmer); font-size:.74rem; }
-.fig__toggle{ margin-left:auto; }
+.fig__title{
+  grid-column:1;
+  font:600 var(--t-title)/1.3 var(--f-text); letter-spacing:0;
+  text-wrap:balance;
+}
+.fig__meta{ grid-column:1; color:var(--dimmer); font-size:var(--t-sm); line-height:1.35; }
+.fig__toggle{ grid-column:2; grid-row:1 / -1; margin-left:0; }
 
-.fig__plot{ position:relative; padding:8px 6px 2px; }
+.fig__plot{ position:relative; padding:var(--s3) var(--s2) var(--s1); }
 .fig__plot svg{ display:block; overflow:visible; }
 
 .fig__tip{
   position:absolute; z-index:2;
   transform:translate(-50%,-140%);
-  padding:5px 8px;
+  padding:var(--s2) var(--s3);
   background:var(--black);
   border:1px solid var(--rule-2);
-  border-radius:3px;
+  border-radius:var(--r-sm);
+  box-shadow:0 8px 20px -8px #000;
   pointer-events:none;
   white-space:nowrap;
-  display:flex; flex-direction:column; gap:1px;
+  display:flex; flex-direction:column; gap:2px;
 }
-.fig__tip b{ font:600 .84rem/1 var(--f-mono); }
-.fig__tip span{ font:500 .66rem/1 var(--f-mono); color:var(--dim); }
+.fig__tip b{ font:600 var(--t-body)/1.2 var(--f-mono); font-variant-numeric:tabular-nums; }
+.fig__tip span{ font:500 var(--t-label)/1.2 var(--f-mono); color:var(--dim); }
 
 /* ── comparison across named things ───────────────────────── */
-.across{ padding:14px; display:flex; flex-direction:column; gap:11px; }
-.across__row{ display:flex; align-items:center; gap:12px; }
-.across__label{ flex:none; width:110px; font-size:.84rem; }
+.across{ padding:var(--s4); display:flex; flex-direction:column; gap:var(--s3); }
+.across__row{ display:flex; align-items:center; gap:var(--s3); }
+.across__label{ flex:none; width:110px; font-size:var(--t-body); }
 .across__track{
-  flex:1; height:12px;
+  flex:1; height:10px;
   background:var(--rule);
-  border-radius:2px;
+  border-radius:var(--r-sm);
   overflow:hidden;
 }
 .across__fill{
   display:block; height:100%;
   background:var(--red);
-  border-radius:0 2px 2px 0;
+  border-radius:0 var(--r-sm) var(--r-sm) 0;
 }
-.across__value{ flex:none; width:52px; text-align:right; }
+.across__value{ flex:none; width:56px; text-align:right; }
 
 /* Tiles borrow status colour only where a state is being reported. */
 .figure__value.is-fault{ color:var(--red); }
@@ -714,7 +993,7 @@ select.field{ font-family:var(--f-text); }
 
 @media (max-width:560px){
   .figs{ grid-template-columns:1fr; }
-  .across__label{ width:78px; font-size:.78rem; }
+  .across__label{ width:78px; font-size:var(--t-sm); }
 }
 
 /* Eurostile's lari sign collides with its numerals at tile size, so the
