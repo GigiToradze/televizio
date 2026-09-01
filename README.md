@@ -159,7 +159,17 @@ Every one of these sits in its own module in `main.js` and every one is skipped 
   `data-tier` on each cell. Built like the wall: a sticky stage inside a 190vh runway,
   so the block holds the screen while it assembles and the numbers climb, with the last
   stretch of the runway left as a beat where all five stand. Scroll back up and it runs
-  in reverse. Plus the red signal meter under the header.
+  in reverse. Plus the red signal meter under the header. Below 900px the stage keeps
+  the sticky hold but drops to the numbers' own height and the runway to 150vh — at
+  100svh the block was half empty, and the black under it ran straight into the black
+  above the product film.
+- **The plan sheet.** A pricing card is a door. Click one — anywhere but the "Choose"
+  button — and the channels that plan actually carries open over a blurred page: the
+  card's own name, price and list at the top, category chips, then a horizontal lane of
+  logos. The logo under the cursor comes up to full colour and 1.16×, and its two
+  neighbours either side step aside 17px and 7px to make the room, so nothing is ever
+  covered. A chip with no channels behind it on that plan is not offered at all, which
+  is how Basic quietly says it has no sport.
 
 Hairlines are gone everywhere except where a grid genuinely needs them: the programme
 guide, the spec table and the FAQ rows. Sections, cards and the header are separated by
@@ -186,6 +196,11 @@ It only pins above 901px wide and 700px tall, because below that the two columns
 into more than a screenful and pinning would trap you. Everywhere else the same
 timeline runs against a normal scroll range, and the runway collapses to the content's
 own height.
+
+Unpinned, the film is a band at the top of the section rather than the ground behind
+it, so it does not ride the copy's timeline — it has its own trigger and is fully up by
+the time its top is 58% of the way up the screen. Sharing the copy's scrub left it
+black for most of its way into view.
 
 `box-loop.mp4` starts when it scrolls into view, loops, and pauses when it scrolls out
 — an IntersectionObserver in `main.js` drives it. It is muted and `playsinline`, so it
@@ -245,6 +260,9 @@ the press does and changes with the language.
 - The mobile menu traps focus while open and returns it to the button on Escape.
 - Plan buttons carry `aria-label`s naming the plan, so "Choose" is not the only thing
   a screen reader hears.
+- The pricing cards take a pointer cursor, are focusable, and open the plan sheet on
+  Enter or Space as well as on click. The sheet traps focus, closes on Escape or on the
+  scrim, and hands focus back to the card that opened it.
 
 ## Placeholders to replace before launch
 
@@ -253,6 +271,7 @@ All invented, all realistic — none of it is real business data.
 | Where | Placeholder |
 |---|---|
 | Pricing | 19₾ / 29₾ / 45₾ per month; box 149₾ or free on 12 months |
+| Plan sheet | which of the thirteen logos each plan carries, set on `data-plan` in `#pmCatalogue` |
 | Channel counts | 180+ / 520+ / 1,024; "40+ countries"; 3/7/14-day archive |
 | EPG grid | 9 channels with invented programme titles and the 46% "now" playhead (`--now`) |
 | Specs | Android TV 11, 2 GB / 16 GB, 4K HDR10+, Wi-Fi 5, 24-month warranty |

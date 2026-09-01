@@ -400,7 +400,9 @@
     </div>
 
     <div class="plans">
-      <article class="plan">
+      <article class="plan" data-plan="basic" data-total="180+"
+               tabindex="0" aria-haspopup="dialog"
+               aria-label="Basic — see what is included">
         <h3 class="plan__name"><span class="ka">საბაზისო</span><span class="en">Basic</span></h3>
         <p class="plan__price"><b>19</b><span>₾ / <span class="ka">თვე</span><span class="en">mo</span></span></p>
         <ul class="plan__list">
@@ -412,7 +414,9 @@
         <a class="btn btn--ghost plan__cta" href="#contact" aria-label="Basic — choose this plan"><span class="ka">აირჩიე</span><span class="en">Choose</span></a>
       </article>
 
-      <article class="plan plan--featured">
+      <article class="plan plan--featured" data-plan="standard" data-total="520+"
+               tabindex="0" aria-haspopup="dialog"
+               aria-label="Standard — see what is included">
         <p class="plan__flag"><span class="ka">ყველაზე პოპულარული</span><span class="en">Most popular</span></p>
         <h3 class="plan__name"><span class="ka">სტანდარტული</span><span class="en">Standard</span></h3>
         <p class="plan__price"><b>29</b><span>₾ / <span class="ka">თვე</span><span class="en">mo</span></span></p>
@@ -426,7 +430,9 @@
         <a class="btn btn--red plan__cta" href="#contact" aria-label="Standard — choose this plan"><span class="ka">აირჩიე</span><span class="en">Choose</span></a>
       </article>
 
-      <article class="plan">
+      <article class="plan" data-plan="premium" data-total="1 024"
+               tabindex="0" aria-haspopup="dialog"
+               aria-label="Premium — see what is included">
         <h3 class="plan__name"><span class="ka">პრემიუმი</span><span class="en">Premium</span></h3>
         <p class="plan__price"><b>45</b><span>₾ / <span class="ka">თვე</span><span class="en">mo</span></span></p>
         <ul class="plan__list">
@@ -558,6 +564,115 @@
   </p>
   <a class="btn btn--red dock__cta" href="#price" tabindex="-1"><span class="ka">შეუკვეთე</span><span class="en">Order</span></a>
 </div>
+
+<!-- ══ PLAN SHEET — the channels a plan carries ════════════ -->
+<div class="pm" id="planSheet" hidden>
+  <div class="pm__scrim" data-pm-close></div>
+
+  <div class="pm__panel" role="dialog" aria-modal="true" aria-labelledby="pmName" tabindex="-1">
+    <button class="pm__x" type="button" data-pm-close aria-label="Close / დახურვა"><span aria-hidden="true">×</span></button>
+
+    <div class="pm__head">
+      <p class="pm__eyebrow"><span class="ka">პაკეტში შედის</span><span class="en">Included in the plan</span></p>
+      <h2 class="pm__name" id="pmName"></h2>
+      <p class="pm__price"></p>
+      <ul class="pm__perks"></ul>
+    </div>
+
+    <div class="pm__filters" id="pmFilters" role="group" aria-label="ფილტრი / Filter">
+      <button class="chip is-on" type="button" data-cat="all"><span class="ka">ყველა</span><span class="en">All</span></button>
+      <button class="chip" type="button" data-cat="ge"><span class="ka">ქართული</span><span class="en">Georgian</span></button>
+      <button class="chip" type="button" data-cat="news"><span class="ka">ახალი ამბები</span><span class="en">News</span></button>
+      <button class="chip" type="button" data-cat="sport"><span class="ka">სპორტი</span><span class="en">Sport</span></button>
+      <button class="chip" type="button" data-cat="doc"><span class="ka">დოკუმენტური</span><span class="en">Documentary</span></button>
+      <button class="chip" type="button" data-cat="kids"><span class="ka">საბავშვო</span><span class="en">Kids</span></button>
+    </div>
+
+    <div class="pm__slider" id="pmSlider">
+      <button class="pm__arrow pm__arrow--l" type="button" data-pm-scroll="-1" aria-label="უკან / Previous"><span aria-hidden="true">‹</span></button>
+      <div class="pm__lane" id="pmLane" tabindex="0" role="region" aria-label="არხები / Channels"></div>
+      <button class="pm__arrow pm__arrow--r" type="button" data-pm-scroll="1" aria-label="წინ / Next"><span aria-hidden="true">›</span></button>
+    </div>
+
+    <div class="pm__foot">
+      <p class="pm__count">
+        <span class="ka">ნაჩვენებია <b data-pm-n>0</b> არხი <b data-pm-total>0</b>-დან</span>
+        <span class="en">Showing <b data-pm-n>0</b> of <b data-pm-total>0</b> channels</span>
+      </p>
+      <a class="btn btn--red pm__cta" href="#contact" data-pm-close><span class="ka">აირჩიე ეს პაკეტი</span><span class="en">Choose this plan</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- the catalogue the sheet draws from — copy lives in the markup,
+     in both languages, the way every other string on the page does -->
+<template id="pmCatalogue">
+  <figure class="chan" data-cat="ge" data-plan="basic standard premium">
+    <span class="chan__logo"><img src="assets/img/channels/1tv.svg" alt="" width="465" height="465" loading="lazy"></span>
+    <figcaption class="chan__name"><span class="ka">პირველი არხი</span><span class="en">First Channel</span></figcaption>
+    <span class="chan__tag"><span class="ka">ქართული</span><span class="en">Georgian</span></span>
+  </figure>
+  <figure class="chan" data-cat="ge" data-plan="basic standard premium">
+    <span class="chan__logo"><img src="assets/img/channels/imedi.png" alt="" width="138" height="120" loading="lazy"></span>
+    <figcaption class="chan__name"><span class="ka">იმედი</span><span class="en">Imedi</span></figcaption>
+    <span class="chan__tag"><span class="ka">ქართული</span><span class="en">Georgian</span></span>
+  </figure>
+  <figure class="chan" data-cat="ge" data-plan="basic standard premium">
+    <span class="chan__logo"><img src="assets/img/channels/rustavi2.png" alt="" width="129" height="120" loading="lazy"></span>
+    <figcaption class="chan__name"><span class="ka">რუსთავი 2</span><span class="en">Rustavi 2</span></figcaption>
+    <span class="chan__tag"><span class="ka">ქართული</span><span class="en">Georgian</span></span>
+  </figure>
+  <figure class="chan" data-cat="ge news" data-plan="basic standard premium">
+    <span class="chan__logo"><img src="assets/img/channels/formula.png" alt="" width="65" height="120" loading="lazy"></span>
+    <figcaption class="chan__name"><span class="ka">ფორმულა</span><span class="en">Formula</span></figcaption>
+    <span class="chan__tag"><span class="ka">ქართული</span><span class="en">Georgian</span></span>
+  </figure>
+  <figure class="chan" data-cat="ge news" data-plan="basic standard premium">
+    <span class="chan__logo"><img src="assets/img/channels/palitranews.png" alt="" width="267" height="120" loading="lazy"></span>
+    <figcaption class="chan__name"><span class="ka">პალიტრანიუსი</span><span class="en">Palitra News</span></figcaption>
+    <span class="chan__tag"><span class="ka">ქართული</span><span class="en">Georgian</span></span>
+  </figure>
+  <figure class="chan" data-cat="news" data-plan="basic standard premium">
+    <span class="chan__logo"><img src="assets/img/channels/euronews.svg" alt="" width="2106" height="250" loading="lazy"></span>
+    <figcaption class="chan__name">Euronews</figcaption>
+    <span class="chan__tag"><span class="ka">ახალი ამბები</span><span class="en">News</span></span>
+  </figure>
+  <figure class="chan" data-cat="news" data-plan="standard premium">
+    <span class="chan__logo"><img src="assets/img/channels/cnn.png" alt="" width="258" height="120" loading="lazy"></span>
+    <figcaption class="chan__name">CNN</figcaption>
+    <span class="chan__tag"><span class="ka">ახალი ამბები</span><span class="en">News</span></span>
+  </figure>
+  <figure class="chan" data-cat="news" data-plan="standard premium">
+    <span class="chan__logo"><img src="assets/img/channels/bbc.svg" alt="" width="560" height="160" loading="lazy"></span>
+    <figcaption class="chan__name">BBC News</figcaption>
+    <span class="chan__tag"><span class="ka">ახალი ამბები</span><span class="en">News</span></span>
+  </figure>
+  <figure class="chan" data-cat="doc" data-plan="standard premium">
+    <span class="chan__logo"><img src="assets/img/channels/discovery.png" alt="" width="579" height="120" loading="lazy"></span>
+    <figcaption class="chan__name">Discovery</figcaption>
+    <span class="chan__tag"><span class="ka">დოკუმენტური</span><span class="en">Documentary</span></span>
+  </figure>
+  <figure class="chan" data-cat="doc" data-plan="premium">
+    <span class="chan__logo"><img src="assets/img/channels/natgeo.svg" alt="" width="1000" height="294" loading="lazy"></span>
+    <figcaption class="chan__name">National Geographic</figcaption>
+    <span class="chan__tag"><span class="ka">დოკუმენტური</span><span class="en">Documentary</span></span>
+  </figure>
+  <figure class="chan" data-cat="kids" data-plan="standard premium">
+    <span class="chan__logo"><img src="assets/img/channels/cartoon.png" alt="" width="200" height="120" loading="lazy"></span>
+    <figcaption class="chan__name">Cartoon Network</figcaption>
+    <span class="chan__tag"><span class="ka">საბავშვო</span><span class="en">Kids</span></span>
+  </figure>
+  <figure class="chan" data-cat="kids" data-plan="standard premium">
+    <span class="chan__logo"><img src="assets/img/channels/nickelodeon.png" alt="" width="830" height="120" loading="lazy"></span>
+    <figcaption class="chan__name">Nickelodeon</figcaption>
+    <span class="chan__tag"><span class="ka">საბავშვო</span><span class="en">Kids</span></span>
+  </figure>
+  <figure class="chan" data-cat="sport" data-plan="premium">
+    <span class="chan__logo"><img src="assets/img/channels/setanta.png" alt="" width="426" height="120" loading="lazy"></span>
+    <figcaption class="chan__name">Setanta Sports</figcaption>
+    <span class="chan__tag"><span class="ka">სპორტი</span><span class="en">Sport</span></span>
+  </figure>
+</template>
 
 <script src="assets/js/vendor/gsap.min.js"></script>
 <script src="assets/js/vendor/ScrollTrigger.min.js"></script>

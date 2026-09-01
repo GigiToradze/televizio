@@ -3,6 +3,7 @@
    1 language   2 menu      3 hero       4 chrome (meter/nav/dock)
    5 reveals    6 counters  7 live guide 8 ticker
    9 product video          10 signal field (WebGL)
+   12 plan sheet — the channels a plan carries
    ═══════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
@@ -390,8 +391,20 @@
         : { trigger: run, start: 'top 78%', end: 'top 18%', scrub: 0.5 }
     });
 
-    tl.to(film, { opacity: 1, duration: 1.1, ease: 'power2.out' }, 0)
-      .to(head,  { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0.35)
+    /* Unpinned, the film is a band at the top of the section rather
+       than the ground behind it — riding the copy's timeline it stayed
+       black for most of its way up the screen. Give it its own trigger
+       so it is already there by the time you are looking at it. */
+    if (!pinned) {
+      gsap.to(film, {
+        opacity: 1, ease: 'none',
+        scrollTrigger: { trigger: film, start: 'top bottom', end: 'top 58%', scrub: 0.4 }
+      });
+    }
+
+    if (pinned) tl.to(film, { opacity: 1, duration: 1.1, ease: 'power2.out' }, 0);
+
+    tl.to(head,  { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0.35)
       .to(lede,  { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' }, 0.75)
       /* the spec sheet fills in a line at a time, like the box
          listing what it is */
@@ -852,6 +865,176 @@
         if (visible && !running) { running = true; loop(); }
       }, { threshold: 0 }).observe(canvas);
     }
+  })();
+
+  /* ── 12. the plan sheet ───────────────────────────────── */
+  /* A pricing card is a door: it opens the channel list the plan
+     actually carries, over a blurred page. The chips filter the lane
+     down to one kind of channel, and empty ones are not offered. */
+  (function planSheet() {
+    var sheet = document.getElementById('planSheet');
+    var cat = document.getElementById('pmCatalogue');
+    var lane = document.getElementById('pmLane');
+    var slider = document.getElementById('pmSlider');
+    var filters = document.getElementById('pmFilters');
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.plan[data-plan]'));
+    if (!sheet || !cat || !lane || !slider || !filters || !cards.length) return;
+
+    var panel = sheet.querySelector('.pm__panel');
+    var chips = Array.prototype.slice.call(filters.querySelectorAll('.chip'));
+    var opener = null;          /* the card to hand focus back to */
+    var forPlan = [];           /* the channels this plan carries */
+
+    /* every channel in the catalogue, once */
+    var all = Array.prototype.slice.call(
+      cat.content.querySelectorAll('.chan')
+    ).map(function (node) {
+      var el = node.cloneNode(true);
+      return {
+        el: el,
+        cats: (el.getAttribute('data-cat') || '').split(' '),
+        plans: (el.getAttribute('data-plan') || '').split(' ')
+      };
+    });
+
+    function focusables() {
+      return panel.querySelectorAll(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+    }
+
+    /* ── the lane ─────────────────────────────────────────── */
+    function edges() {
+      var over = lane.scrollWidth - lane.clientWidth;
+      slider.classList.toggle('has-prev', lane.scrollLeft > 4);
+      slider.classList.toggle('has-next', over > 4 && lane.scrollLeft < over - 4);
+    }
+
+    function paint(which) {
+      var shown = forPlan.filter(function (c) {
+        return which === 'all' || c.cats.indexOf(which) > -1;
+      });
+
+      lane.textContent = '';
+      shown.forEach(function (c) { lane.appendChild(c.el); });
+      lane.scrollLeft = 0;
+
+      sheet.querySelectorAll('[data-pm-n]').forEach(function (b) {
+        b.textContent = String(shown.length);
+      });
+      edges();
+    }
+
+    function pick(which) {
+      chips.forEach(function (chip) {
+        chip.classList.toggle('is-on', chip.dataset.cat === which);
+        chip.setAttribute('aria-pressed', chip.dataset.cat === which ? 'true' : 'false');
+      });
+      paint(which);
+    }
+
+    /* ── opening and closing ──────────────────────────────── */
+    function open(card) {
+      var plan = card.dataset.plan;
+      opener = card;
+      forPlan = all.filter(function (c) { return c.plans.indexOf(plan) > -1; });
+
+      /* the header repeats what the card said, so the sheet stands
+         on its own once the page behind it is blurred away */
+      var name = card.querySelector('.plan__name');
+      var price = card.querySelector('.plan__price');
+      var list = card.querySelector('.plan__list');
+      sheet.querySelector('.pm__name').innerHTML = name ? name.innerHTML : '';
+      sheet.querySelector('.pm__price').innerHTML = price ? price.innerHTML : '';
+      sheet.querySelector('.pm__perks').innerHTML = list ? list.innerHTML : '';
+      sheet.querySelectorAll('[data-pm-total]').forEach(function (b) {
+        b.textContent = card.dataset.total || String(forPlan.length);
+      });
+
+      /* a chip with nothing behind it is not offered */
+      chips.forEach(function (chip) {
+        var c = chip.dataset.cat;
+        chip.hidden = c !== 'all' && !forPlan.some(function (ch) {
+          return ch.cats.indexOf(c) > -1;
+        });
+      });
+
+      pick('all');
+
+      sheet.hidden = false;
+      document.body.classList.add('is-locked');
+      /* paint the panel at its start state, then move — a reflow rather
+         than a frame, because a backgrounded tab never gets the frame */
+      void panel.offsetWidth;
+      sheet.classList.add('is-open');
+      panel.focus();
+      edges();          /* the lane only has a width now that it is up */
+    }
+
+    function close() {
+      if (sheet.hidden) return;
+      sheet.classList.remove('is-open');
+      document.body.classList.remove('is-locked');
+      var done = function () {
+        sheet.hidden = true;
+        panel.removeEventListener('transitionend', done);
+      };
+      if (reduced) done();
+      else {
+        panel.addEventListener('transitionend', done);
+        setTimeout(done, 450);          /* in case the transition never fires */
+      }
+      if (opener) { opener.focus(); opener = null; }
+    }
+
+    /* ── wiring ───────────────────────────────────────────── */
+    cards.forEach(function (card) {
+      card.addEventListener('click', function (e) {
+        if (e.target.closest('a')) return;      /* "Choose" still goes to the form */
+        open(card);
+      });
+      card.addEventListener('keydown', function (e) {
+        if (e.target !== card) return;
+        if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+        e.preventDefault();
+        open(card);
+      });
+    });
+
+    filters.addEventListener('click', function (e) {
+      var chip = e.target.closest('.chip');
+      if (chip) pick(chip.dataset.cat);
+    });
+
+    sheet.addEventListener('click', function (e) {
+      if (e.target.closest('[data-pm-close]')) close();
+    });
+
+    slider.querySelectorAll('[data-pm-scroll]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var step = Math.max(160, Math.round(lane.clientWidth * 0.7));
+        lane.scrollBy({ left: step * +btn.dataset.pmScroll, behavior: reduced ? 'auto' : 'smooth' });
+      });
+    });
+
+    lane.addEventListener('scroll', edges, { passive: true });
+    window.addEventListener('resize', edges);
+
+    document.addEventListener('keydown', function (e) {
+      if (sheet.hidden) return;
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key !== 'Tab') return;
+
+      /* keep tabbing inside the open sheet */
+      var f = focusables();
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === panel)) {
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault(); first.focus();
+      }
+    });
   })();
 
 })();
