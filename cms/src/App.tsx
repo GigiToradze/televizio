@@ -3,6 +3,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from './auth/AuthProvider';
 import Shell from './components/Shell';
 import Login from './pages/Login';
+import Channels from './pages/Channels';
+import Slider from './pages/Slider';
+import Plans from './pages/Plans';
+import Settings from './pages/Settings';
 
 const qc = new QueryClient();
 
@@ -29,6 +33,10 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route element={<Private />}>
               <Route index element={<div>Dashboard comes in Plan 4.</div>} />
+              <Route path="channels" element={<Channels />} />
+              <Route path="slider" element={<Slider />} />
+              <Route path="plans" element={<Plans />} />
+              <Route path="settings" element={<Settings />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

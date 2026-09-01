@@ -9,5 +9,6 @@
     "skipLibCheck": true,
     "types": ["vitest/globals"]
   },
-  "include": ["tests", "supabase/functions", "cms/src"]
+  "//": "The function entrypoints are Deno, with jsr: imports and a Deno global; they are excluded so editors do not flag them against Node types.",
+  "include": ["tests", "supabase/functions/_shared", "cms/src"]
 }

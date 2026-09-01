@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../auth/AuthProvider';
+import PublishButton from './PublishButton';
 
 const LINKS = [
   { to: '/', label: 'Dashboard', end: true },
@@ -28,6 +29,7 @@ export default function Shell() {
           ))}
         </nav>
         <div className="ml-auto flex items-center gap-4 text-sm text-neutral-400">
+          <PublishButton />
           <span>{admin?.name} · {admin?.role}</span>
           <button onClick={signOut} className="hover:text-neutral-100">Sign out</button>
         </div>
