@@ -245,6 +245,50 @@
     });
   })();
 
+  /* ── 4b. a link lands on the finished frame ───────────── */
+  (function jumps() {
+    /* Four sections hold a sticky stage while a scrubbed timeline plays
+       across a tall runway. The top of that runway is progress zero —
+       nothing has faded in yet — so an ordinary anchor jump drops you on
+       an empty black screen and waits for you to scroll before the
+       section says anything. Land at the far end of the runway instead:
+       the stage is still pinned there, and everything it had to show is
+       already on it. */
+    if (!hasGSAP || reduced) return;   /* nothing is hidden, so nothing to skip past */
+
+    var STAGES = '.guide__stage, .box__stage, .wall__stage, .stats__stage';
+
+    function endOfRunway(section) {
+      var stage = section.querySelector(STAGES);
+      /* below the media queries that pin it, the stage is static and the
+         section reads top to bottom like any other — leave it alone */
+      if (!stage || getComputedStyle(stage).position !== 'sticky') return null;
+      var run = stage.parentNode;
+      var top = run.getBoundingClientRect().top + window.pageYOffset;
+      return Math.max(0, top + run.offsetHeight - window.innerHeight);
+    }
+
+    document.addEventListener('click', function (e) {
+      var link = e.target.closest && e.target.closest('a[href^="#"]');
+      if (!link || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey) return;
+
+      var id = link.getAttribute('href').slice(1);
+      var section = id && document.getElementById(id);
+      if (!section) return;
+
+      var y = endOfRunway(section);
+      if (y === null) return;              /* an ordinary section: let the browser do it */
+
+      e.preventDefault();
+      window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
+
+      /* keep the two things a real anchor jump would have done */
+      if (history.replaceState) history.replaceState(null, '', '#' + id);
+      section.setAttribute('tabindex', '-1');
+      section.focus({ preventScroll: true });
+    });
+  })();
+
   /* ── 5. reveals ───────────────────────────────────────── */
   (function reveals() {
     if (!hasGSAP || reduced) return;
