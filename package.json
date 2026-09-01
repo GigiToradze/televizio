@@ -2,16 +2,20 @@
   "name": "televizio",
   "private": true,
   "type": "module",
-  "workspaces": ["cms"],
+  "workspaces": [
+    "cms"
+  ],
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "db:test": "supabase test db"
+    "db:test": "node --env-file=.env supabase/tests/run.mjs",
+    "db:push": "supabase db push"
   },
   "devDependencies": {
     "@supabase/supabase-js": "^2.45.0",
     "jsdom": "^25.0.0",
-    "supabase": "^1.200.0",
+    "pg": "^8.23.0",
+    "supabase": "^2.116.0",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"
   }

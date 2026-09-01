@@ -21,6 +21,45 @@
 - Migration files are named `supabase/migrations/<UTC timestamp>_<name>.sql` and are never edited after being committed — corrections go in a new migration.
 - Every task ends with a commit. Commit messages are written in the imperative and describe the change, matching the existing log style.
 
+## Amendment — hosted Supabase, no local stack
+
+*Added 2026-09-01, after Docker proved unavailable on this machine and the decision
+was taken to work against a hosted project directly.*
+
+There is **one** Supabase project, and it is the real one. Every command below runs
+against live infrastructure, which changes three things:
+
+**`supabase db reset` is forbidden.** It drops the database. It appears nowhere in
+this plan any more; where a task said to reset and re-apply, push the new migration
+instead.
+
+**Command mapping** — wherever a task says the left, do the right:
+
+| The plan says | Do this instead |
+|---|---|
+| `npx supabase start` | nothing — the project is already up |
+| `npx supabase db reset` | `npm run db:push` (applies un-applied migrations only) |
+| `npx supabase test db` | `npm run db:test` (pgTAP over a plain connection) |
+| `npx supabase functions serve` | `npx supabase functions deploy <name> --use-api` |
+| `http://127.0.0.1:54321` | `$SUPABASE_URL` from `.env` |
+| invite mail at `:54324` | the real inbox — invites are actually sent |
+
+**pgTAP without the CLI.** `supabase test db` needs Docker. `supabase/tests/run.mjs`
+replaces it: it connects with `pg`, runs each `*.test.sql` in a transaction and rolls
+back, so a suite leaves nothing behind. Suites must therefore keep their
+`begin; … rollback;` wrapper — that wrapper is now the only thing standing between a
+test and your production data.
+
+**Integration tests mutate the live database.** The publish suite creates
+`editor@televizio.ge` and briefly nulls a channel's logo. Each test restores what it
+changed. Run them before there are real subscribers, and never against a project
+you would mind seeing a test admin in.
+
+**Credentials** live in `.env` at the repo root, gitignored, filled from
+`.env.example`. The service role key and the database password are in there; nothing
+reads them but the CLI, the test runner and the deploy step, and none of the three
+prints them.
+
 ---
 
 ## File Structure
