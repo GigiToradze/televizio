@@ -1445,3 +1445,111 @@ body.is-locked{ overflow:hidden; }
   }
   .pm__foot .btn{ width:100%; }
 }
+
+/* ══ SUBSCRIPTION LOOKUP — /lookup ═══════════════════════════
+   A single form on an otherwise empty page. It borrows the
+   section rhythm and the mono labelling from the rest of the
+   site and adds nothing new but a card and three states.       */
+.sec--lk{
+  padding-top:calc(var(--hdr-h) + clamp(40px,8vh,96px));
+  min-height:100svh;
+}
+.lk{ max-width:640px; }
+.lk__head{ margin-bottom:clamp(28px,4vw,44px); }
+.lk__eyebrow{
+  font:500 .7rem/1 var(--f-mono);
+  letter-spacing:.16em; text-transform:uppercase;
+  color:var(--red);
+  margin-bottom:14px;
+}
+
+.lk__form{
+  display:grid; gap:14px;
+  grid-template-columns:1fr 180px;
+  align-items:end;
+}
+.lk__field{ display:block; }
+.lk__field:nth-of-type(2){ grid-column:1 / -1; max-width:220px; }
+.lk__lbl{
+  display:block; margin-bottom:7px;
+  font:500 .68rem/1 var(--f-mono);
+  letter-spacing:.13em; text-transform:uppercase;
+  color:var(--dim);
+}
+.lk__form input{
+  width:100%;
+  padding:13px 15px;
+  background:var(--panel);
+  border:1px solid var(--rule-2);
+  border-radius:3px;
+  color:var(--white);
+  font:500 1rem/1.2 var(--f-mono);
+  letter-spacing:.04em;
+}
+.lk__form input:focus{ outline:none; border-color:var(--red); }
+.lk__go{ grid-column:1 / -1; justify-self:start; }
+
+.lk__msg{
+  margin-top:18px;
+  font:500 .82rem/1.6 var(--f-text);
+  color:var(--dim);
+}
+.lk__msg--bad{ color:var(--red); }
+
+/* ── the answer ─────────────────────────────────────────── */
+.lk__card{
+  margin-top:26px;
+  background:var(--panel);
+  border:1px solid var(--rule);
+  border-radius:4px;
+  overflow:hidden;
+}
+.lk__card-head{
+  padding:16px 20px;
+  border-bottom:1px solid var(--rule);
+}
+.lk__card-head .lk__eyebrow{ margin-bottom:6px; color:var(--dim); }
+.lk__no{
+  font:700 1.4rem/1 var(--f-dsp);
+  letter-spacing:.06em;
+}
+
+.lk__rows{ margin:0; }
+.lk__rows > div{
+  display:flex; align-items:baseline; gap:16px;
+  padding:13px 20px;
+  border-bottom:1px solid var(--rule);
+}
+.lk__rows dt{
+  flex:none; width:min(38%,160px);
+  font:500 .68rem/1.4 var(--f-mono);
+  letter-spacing:.12em; text-transform:uppercase;
+  color:var(--dim);
+}
+.lk__rows dd{
+  margin:0;
+  font:500 1rem/1.4 var(--f-mono);
+  font-variant-numeric:tabular-nums;
+}
+
+.lk__state{
+  padding:14px 20px;
+  font:500 .84rem/1.5 var(--f-text);
+}
+.lk__state.is-ok{ color:var(--dim); }
+.lk__state.is-soon{ color:#E8B33C; }
+.lk__state.is-bad{ color:var(--red); }
+
+.lk__help{
+  margin-top:22px;
+  font:400 .82rem/1.6 var(--f-text);
+  color:var(--dim);
+}
+.lk__help a{ color:var(--red); }
+
+@media (max-width:560px){
+  .lk__form{ grid-template-columns:1fr; }
+  .lk__field:nth-of-type(2){ max-width:none; }
+  .lk__rows > div{ flex-direction:column; gap:4px; }
+  .lk__rows dt{ width:auto; }
+}

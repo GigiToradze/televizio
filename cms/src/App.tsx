@@ -8,6 +8,8 @@ import Channels from './pages/Channels';
 import Slider from './pages/Slider';
 import Plans from './pages/Plans';
 import Settings from './pages/Settings';
+import Subscribers from './pages/Subscribers';
+import Subscriber from './pages/Subscriber';
 
 const qc = new QueryClient();
 
@@ -52,6 +54,8 @@ export default function App() {
               <Route path="channels" element={<Channels />} />
               <Route path="slider" element={<Slider />} />
               <Route path="plans" element={<Plans />} />
+              <Route path="subscribers" element={<Subscribers />} />
+              <Route path="subscribers/:id" element={<Subscriber />} />
               <Route path="settings" element={<Settings />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />

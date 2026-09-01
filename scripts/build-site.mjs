@@ -16,7 +16,8 @@ import { existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 
 const SITE_FILES = [
-  'index.html', 'favicon.ico', 'robots.txt', 'sitemap.xml', 'assets',
+  'index.html', 'lookup.html', 'favicon.ico', 'robots.txt', 'sitemap.xml',
+  'assets',
 ];
 
 const run = (cmd, args, env) =>

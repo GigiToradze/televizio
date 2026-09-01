@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ka" data-lang="ka">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>გამოწერის შემოწმება — Televizio</title>
+<meta name="description" content="შეამოწმე შენი Televizio-ს გამოწერა: პაკეტი, ვადა და დარჩენილი დღეები. საჭიროა აბონენტის ნომერი და ტელეფონის ბოლო ოთხი ციფრი.">
+<link rel="canonical" href="https://televizio.ge/lookup">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="assets/img/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<meta name="theme-color" content="#000000">
+
+<meta property="og:site_name" content="Televizio">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://televizio.ge/lookup">
+<meta property="og:locale" content="ka_GE">
+<meta property="og:title" content="გამოწერის შემოწმება — Televizio">
+<meta property="og:description" content="პაკეტი, ვადა და დარჩენილი დღეები — ერთ წამში.">
+<meta property="og:image" content="https://televizio.ge/assets/img/og.jpg">
+
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/eurostile-geo-900.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/eurostile-geo-700.woff2" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+Georgian:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<a class="skip" href="#lookup"><span class="ka">გადადი შიგთავსზე</span><span class="en">Skip to content</span></a>
+
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header class="hdr" id="hdr">
+  <div class="hdr__in">
+    <a class="hdr__logo" href="/" aria-label="Televizio">
+      <img src="assets/img/logo-white.png" alt="Televizio" width="900" height="268">
+    </a>
+
+    <nav class="hdr__nav" aria-label="მთავარი">
+      <a href="/#channels"><span class="ka">არხები</span><span class="en">Channels</span></a>
+      <a href="/#box"><span class="ka">ბოქსი</span><span class="en">The box</span></a>
+      <a href="/#price"><span class="ka">ფასები</span><span class="en">Pricing</span></a>
+      <a href="/lookup" aria-current="page"><span class="ka">გამოწერის შემოწმება</span><span class="en">Check subscription</span></a>
+    </nav>
+
+    <div class="hdr__end">
+      <button class="lang" id="lang" type="button" aria-label="Switch to English">
+        <svg class="flag flag--en" viewBox="0 0 30 20" aria-hidden="true"><clipPath id="uk"><rect width="30" height="20"/></clipPath><g clip-path="url(#uk)"><rect width="30" height="20" fill="#012169"/><path d="M0 0l30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0l30 20M30 0L0 20" stroke="#C8102E" stroke-width="2"/><path d="M15 0v20M0 10h30" stroke="#fff" stroke-width="6"/><path d="M15 0v20M0 10h30" stroke="#C8102E" stroke-width="3.6"/></g></svg>
+        <svg class="flag flag--ka" viewBox="0 0 30 20" aria-hidden="true"><rect width="30" height="20" fill="#fff"/><path d="M12 0h6v20h-6z" fill="#E4211C"/><path d="M0 7h30v6H0z" fill="#E4211C"/><g fill="#E4211C"><path d="M5.1 1.6h1.8v1.1H8v1.8H6.9v1.1H5.1V4.5H4V2.7h1.1z"/><path d="M23.1 1.6h1.8v1.1H26v1.8h-1.1v1.1h-1.8V4.5H22V2.7h1.1z"/><path d="M5.1 14.4h1.8v1.1H8v1.8H6.9v1.1H5.1v-1.1H4v-1.8h1.1z"/><path d="M23.1 14.4h1.8v1.1H26v1.8h-1.1v1.1h-1.8v-1.1H22v-1.8h1.1z"/></g></svg>
+      </button>
+      <a class="btn btn--red hdr__cta" href="/#price"><span class="ka">შეუკვეთე</span><span class="en">Order</span></a>
+
+      <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu">
+        <span class="burger__open"><span class="ka">მენიუ</span><span class="en">Menu</span></span>
+        <span class="burger__close"><span class="ka">დახურვა</span><span class="en">Close</span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" hidden>
+  <nav class="menu__nav" aria-label="მთავარი">
+    <a href="/#channels"><span class="ka">არხები</span><span class="en">Channels</span></a>
+    <a href="/#box"><span class="ka">ბოქსი</span><span class="en">The box</span></a>
+    <a href="/#price"><span class="ka">ფასები</span><span class="en">Pricing</span></a>
+    <a href="/lookup"><span class="ka">გამოწერის შემოწმება</span><span class="en">Check subscription</span></a>
+  </nav>
+  <div class="menu__foot">
+    <a class="btn btn--red" href="/#price"><span class="ka">შეუკვეთე</span><span class="en">Order</span></a>
+    <a class="menu__tel" href="tel:+995322000000">+995 32 2 000 000</a>
+  </div>
+</div>
+
+<main id="top">
+<section class="sec sec--lk" id="lookup">
+  <div class="wrap lk">
+    <div class="lk__head">
+      <p class="lk__eyebrow"><span class="ka">აბონენტებისთვის</span><span class="en">For subscribers</span></p>
+      <h1 class="dsp">
+        <span class="ka">შეამოწმე შენი გამოწერა</span>
+        <span class="en">Check your subscription</span>
+      </h1>
+      <p class="lede">
+        <span class="ka">შეიყვანე აბონენტის ნომერი და ტელეფონის ბოლო ოთხი ციფრი — ვაჩვენებთ პაკეტს, ვადას და დარჩენილ დღეებს. ანგარიში არ არის საჭირო.</span>
+        <span class="en">Enter your subscriber number and the last four digits of your phone. You will see your plan, your due date and the days remaining. No account needed.</span>
+      </p>
+    </div>
+
+    <form class="lk__form" id="lkForm" novalidate>
+      <label class="lk__field">
+        <span class="lk__lbl"><span class="ka">აბონენტის ნომერი</span><span class="en">Subscriber number</span></span>
+        <input id="lkNo" name="subscriber_no" type="text" inputmode="text"
+               autocomplete="off" required spellcheck="false">
+      </label>
+
+      <label class="lk__field">
+        <span class="lk__lbl"><span class="ka">ტელეფონის ბოლო 4 ციფრი</span><span class="en">Last 4 digits of your phone</span></span>
+        <input id="lkPin" name="phone_last4" type="text" inputmode="numeric"
+               autocomplete="off" required maxlength="4" pattern="[0-9]*">
+      </label>
+
+      <button class="btn btn--red lk__go" type="submit" id="lkGo">
+        <span class="ka">შემოწმება</span><span class="en">Check</span>
+      </button>
+    </form>
+
+    <p class="lk__msg" id="lkMsg" role="status" aria-live="polite" hidden></p>
+
+    <div class="lk__card" id="lkCard" hidden>
+      <div class="lk__card-head">
+        <p class="lk__eyebrow"><span class="ka">აბონენტი</span><span class="en">Subscriber</span></p>
+        <p class="lk__no" id="lkOutNo"></p>
+      </div>
+
+      <dl class="lk__rows">
+        <div>
+          <dt><span class="ka">პაკეტი</span><span class="en">Plan</span></dt>
+          <dd id="lkOutPlan"></dd>
+        </div>
+        <div>
+          <dt><span class="ka">ვადა</span><span class="en">Paid until</span></dt>
+          <dd id="lkOutDue"></dd>
+        </div>
+        <div>
+          <dt><span class="ka">დარჩენილია</span><span class="en">Remaining</span></dt>
+          <dd id="lkOutLeft"></dd>
+        </div>
+        <div>
+          <dt><span class="ka">მოწყობილობა</span><span class="en">Devices</span></dt>
+          <dd id="lkOutDev"></dd>
+        </div>
+      </dl>
+
+      <p class="lk__state" id="lkOutState"></p>
+    </div>
+
+    <p class="lk__help">
+      <span class="ka">ვერ პოულობ ნომერს? დაგვირეკე <a href="tel:+995322000000">+995 32 2 000 000</a>.</span>
+      <span class="en">Cannot find your number? Call us on <a href="tel:+995322000000">+995 32 2 000 000</a>.</span>
+    </p>
+  </div>
+</section>
+</main>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════ -->
+<footer class="ftr">
+  <div class="wrap ftr__in">
+    <img class="ftr__logo" src="assets/img/logo-red.png" alt="Televizio" width="900" height="268">
+    <div class="ftr__cols">
+      <div>
+        <p class="ftr__lbl"><span class="ka">კომპანია</span><span class="en">Company</span></p>
+        <p>შპს „ტელევიზიო“<br>Chavchavadze Ave 37, Tbilisi 0179<br><span class="ka">ს/ნ 400000000</span><span class="en">Reg. 400000000</span></p>
+      </div>
+      <div>
+        <p class="ftr__lbl"><span class="ka">კონტაქტი</span><span class="en">Contact</span></p>
+        <p><a href="tel:+995322000000">+995 32 2 000 000</a><br><a href="mailto:hello@televizio.ge">hello@televizio.ge</a></p>
+      </div>
+      <div>
+        <p class="ftr__lbl"><span class="ka">აბონენტებს</span><span class="en">Subscribers</span></p>
+        <p><a href="/lookup"><span class="ka">გამოწერის შემოწმება</span><span class="en">Check subscription</span></a><br>
+           <a href="/#faq"><span class="ka">კითხვები</span><span class="en">Questions</span></a></p>
+      </div>
+    </div>
+    <div class="ftr__base">
+      <p>© 2026 Televizio · televizio.ge</p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/lookup.js"></script>
+</body>
+</html>

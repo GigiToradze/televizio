@@ -11,5 +11,8 @@ export default defineConfig(({ command }) => ({
   // Dev serves from '/' so local URLs stay ordinary.
   base: command === 'build' ? '/cmsapp/' : '/',
   plugins: [react(), tailwindcss()],
-  server: { port: 5174, strictPort: true },
+  // The CMS shares the date and lookup logic with the edge functions
+  // rather than keeping a second copy that can drift, so the dev server
+  // needs to serve files from above its own root.
+  server: { port: 5174, strictPort: true, fs: { allow: ['..'] } },
 }));
