@@ -1,6 +1,8 @@
 import { useAuth } from '../auth/AuthProvider';
 import { canWrite } from '../auth/guard';
+import { useLang } from '../lang/LangProvider';
 import { useLastPublication, usePendingChanges, usePublish } from '../lib/queries';
+import LangSwitch from './LangSwitch';
 
 /** The tally.
  *
@@ -13,6 +15,7 @@ import { useLastPublication, usePendingChanges, usePublish } from '../lib/querie
  */
 export default function TallyBar() {
   const { admin, signOut } = useAuth();
+  const { t, lang } = useLang();
   const last = useLastPublication();
   const pending = usePendingChanges(last.data?.published_at ?? null);
   const publish = usePublish();
@@ -23,22 +26,26 @@ export default function TallyBar() {
   const state = queued ? 'pending' : 'live';
 
   const when = last.data
-    ? new Date(last.data.published_at).toLocaleString('en-GB', {
-        day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit',
-      })
+    ? new Date(last.data.published_at).toLocaleString(
+        lang === 'ka' ? 'ka-GE' : 'en-GB',
+        { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' },
+      )
     : null;
+
+  const meta = !last.data
+    ? t('ჯერ არ გამოქვეყნებულა', 'never published')
+    : count > 0
+      ? t(`${count} ცვლილება არ არის გამოქვეყნებული · ბოლო ${when}`,
+          `${count} change${count === 1 ? '' : 's'} not published · last ${when}`)
+      : t(`ბოლო გამოქვეყნება ${when}`, `last published ${when}`);
 
   return (
     <header className="tally" data-state={state}>
       <span className={`lamp lamp--${state}`} aria-hidden="true" />
-      <span className="tally__state">{queued ? 'Queued' : 'On air'}</span>
-      <span className="tally__meta">
-        {!last.data
-          ? 'never published'
-          : count > 0
-            ? `${count} change${count === 1 ? '' : 's'} not published · last ${when}`
-            : `last published ${when}`}
+      <span className="tally__state">
+        {queued ? t('რიგში', 'Queued') : t('ეთერში', 'On air')}
       </span>
+      <span className="tally__meta">{meta}</span>
 
       {publish.error && <span className="error">{publish.error.message}</span>}
 
@@ -49,14 +56,17 @@ export default function TallyBar() {
             onClick={() => publish.mutate()}
             disabled={publish.isPending}
           >
-            {publish.isPending ? 'Publishing' : 'Publish'}
+            {publish.isPending ? t('ქვეყნდება', 'Publishing') : t('გამოქვეყნება', 'Publish')}
           </button>
         )}
+        <LangSwitch />
         <span className="who">
           <span className="who__name">{admin?.name}</span>
           <span className="who__role">{admin?.role}</span>
         </span>
-        <button className="btn btn--quiet btn--sm" onClick={signOut}>Sign out</button>
+        <button className="btn btn--quiet btn--sm" onClick={signOut}>
+          {t('გასვლა', 'Sign out')}
+        </button>
       </div>
     </header>
   );

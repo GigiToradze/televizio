@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useAuth } from '../auth/AuthProvider';
 import { canWrite } from '../auth/guard';
+import { useLang } from '../lang/LangProvider';
 import { useCategories, useChannels, type ChannelRecord } from '../lib/queries';
+import { logoUrl } from '../lib/logos';
 import ChannelDrawer from './ChannelDrawer';
 
 export default function Channels() {
   const { admin } = useAuth();
+  const { t } = useLang();
   const editable = canWrite(admin?.role, 'content');
   const channels = useChannels();
   const categories = useCategories();
@@ -13,7 +16,7 @@ export default function Channels() {
   const [editing, setEditing] = useState<ChannelRecord | 'new' | null>(null);
 
   if (channels.isLoading || categories.isLoading) {
-    return <p className="eyebrow">Loading</p>;
+    return <p className="eyebrow">{t('იტვირთება', 'Loading')}</p>;
   }
   if (channels.error) return <p className="error">{String(channels.error)}</p>;
 
@@ -29,19 +32,21 @@ export default function Channels() {
   return (
     <section>
       <div className="head">
-        <h1 className="head__title">Channels</h1>
+        <h1 className="head__title">{t('არხები', 'Channels')}</h1>
         <span className="head__count">
-          {rows.length === all.length ? all.length : `${rows.length} of ${all.length}`}
+          {rows.length === all.length
+            ? all.length
+            : t(`${rows.length} / ${all.length}`, `${rows.length} of ${all.length}`)}
         </span>
         <div className="head__right">
           <input
-            className="field field--mono" style={{ width: 190 }}
+            className="field" style={{ width: 200 }}
             value={query} onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search"
+            placeholder={t('ძებნა', 'Search')}
           />
           {editable && (
             <button className="btn btn--signal btn--sm" onClick={() => setEditing('new')}>
-              Add channel
+              {t('არხის დამატება', 'Add channel')}
             </button>
           )}
         </div>
@@ -52,12 +57,13 @@ export default function Channels() {
           <thead>
             <tr>
               <th className="pos">#</th>
-              <th>Channel</th>
-              <th>Slug</th>
-              <th>Categories</th>
-              <th>Logo</th>
-              <th>Strip</th>
-              <th />
+              <th>{t('ლოგო', 'Logo')}</th>
+              <th>{t('არხი', 'Channel')}</th>
+              <th>{t('იდენტიფიკატორი', 'Slug')}</th>
+              <th>{t('კატეგორიები', 'Categories')}</th>
+              <th>{t('ზომა', 'Size')}</th>
+              <th>{t('ლენტა', 'Strip')}</th>
+              <th>{t('სტატუსი', 'State')}</th>
             </tr>
           </thead>
           <tbody>
@@ -67,6 +73,7 @@ export default function Channels() {
                 .map((cc) => bySlug.get(cc.category_id))
                 .filter(Boolean) as string[];
               const noLogo = !c.logo_path || !c.logo_w || !c.logo_h;
+              const url = logoUrl(c.logo_path);
 
               return (
                 <tr
@@ -75,6 +82,13 @@ export default function Channels() {
                   onClick={() => editable && setEditing(c)}
                 >
                   <td className="pos">{String(c.sort_order).padStart(2, '0')}</td>
+                  <td>
+                    <span className="strip__logo">
+                      {url
+                        ? <img src={url} alt="" loading="lazy" />
+                        : <span className="state state--fault">—</span>}
+                    </span>
+                  </td>
                   <td>
                     {c.name_en}
                     {c.name_ka !== c.name_en && (
@@ -91,7 +105,7 @@ export default function Channels() {
                   </td>
                   <td>
                     {noLogo
-                      ? <span className="state state--fault">no logo</span>
+                      ? <span className="state state--fault">{t('ლოგო არ არის', 'no logo')}</span>
                       : <span className="num">{c.logo_w}×{c.logo_h}</span>}
                   </td>
                   <td>
@@ -101,8 +115,8 @@ export default function Channels() {
                   </td>
                   <td>
                     {c.is_active
-                      ? <span className="state state--ok">live</span>
-                      : <span className="state state--standby">off</span>}
+                      ? <span className="state state--ok">{t('აქტიური', 'live')}</span>
+                      : <span className="state state--standby">{t('გამორთული', 'off')}</span>}
                   </td>
                 </tr>
               );
@@ -112,8 +126,9 @@ export default function Channels() {
 
         {rows.length === 0 && (
           <p className="notice">
-            <span className="state state--ok">Nothing found</span>
-            No channel matches “{query}”.
+            <span className="state state--ok">{t('ვერ მოიძებნა', 'Nothing found')}</span>
+            {t(`„${query}“-ს ვერცერთი არხი ვერ შეესაბამა.`,
+               `No channel matches “${query}”.`)}
           </p>
         )}
       </div>

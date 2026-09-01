@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ka" data-lang="ka">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -7,6 +7,12 @@
     <!-- An admin panel on a public hostname has no business in a search
          index, and its login form has none in a crawler's queue. -->
     <meta name="robots" content="noindex, nofollow" />
+    <!-- The same three faces the site uses. Noto Sans Georgian is the one
+         that matters here: Mkhedruli in a monospace fallback is painful to
+         read, and most of this interface is labels. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+Georgian:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <title>Televizio CMS</title>
   </head>
   <body>

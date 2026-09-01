@@ -310,3 +310,20 @@ export function useCreateAdmin() {
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['admins'] }); },
   });
 }
+
+/** Replaces a channel's artwork without touching anything else about it,
+ *  so the slider screen can accept a drop without opening the full editor. */
+export function useSaveChannelLogo() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: {
+      id: string; logo_path: string; logo_w: number; logo_h: number;
+    }) => {
+      const { error } = await supabase.from('channels').update({
+        logo_path: input.logo_path, logo_w: input.logo_w, logo_h: input.logo_h,
+      }).eq('id', input.id);
+      if (error) throw error;
+    },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['channels'] }); },
+  });
+}

@@ -69,7 +69,7 @@ body{
   background:var(--black);
   color:var(--white);
   font-family:var(--f-text);
-  font-size:14px;
+  font-size:15px;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
 }
@@ -86,7 +86,6 @@ body{
 .eyebrow{
   font:500 .66rem/1 var(--f-mono);
   letter-spacing:.14em;
-  text-transform:uppercase;
   color:var(--dim);
 }
 
@@ -118,7 +117,6 @@ body{
 .brand__name{
   font:700 .82rem/1 var(--f-dsp);
   letter-spacing:.16em;
-  text-transform:uppercase;
 }
 
 /* ── tally: the signature. The one thing this panel exists to
@@ -157,7 +155,6 @@ body{
 .tally__state{
   font:600 .68rem/1 var(--f-mono);
   letter-spacing:.16em;
-  text-transform:uppercase;
 }
 .tally__meta{ color:var(--dim); font:500 .66rem/1 var(--f-mono); letter-spacing:.08em; }
 .tally__right{ margin-left:auto; display:flex; align-items:center; gap:18px; }
@@ -165,7 +162,7 @@ body{
 .who{ display:flex; align-items:baseline; gap:8px; }
 .who__name{ font:600 .74rem/1 var(--f-dsp); letter-spacing:.04em; }
 .who__role{
-  font:500 .6rem/1 var(--f-mono); letter-spacing:.14em; text-transform:uppercase;
+  font:500 .6rem/1 var(--f-mono); letter-spacing:.14em;
   color:var(--dim);
   border:1px solid var(--rule-2); border-radius:2px; padding:3px 5px;
 }
@@ -186,7 +183,7 @@ body{
   display:flex; align-items:center; gap:10px;
   padding:9px 18px;
   font:600 .76rem/1 var(--f-dsp);
-  letter-spacing:.1em; text-transform:uppercase;
+  letter-spacing:.1em;
   color:var(--dim);
   text-decoration:none;
   border-left:2px solid transparent;
@@ -239,7 +236,7 @@ body{
   background:transparent;
   color:var(--white);
   font:600 .7rem/1 var(--f-mono);
-  letter-spacing:.12em; text-transform:uppercase;
+  letter-spacing:.12em;
   cursor:pointer;
   transition:border-color .15s, color .15s, background .15s, transform .15s;
 }
@@ -280,7 +277,7 @@ body{
   background:transparent;
   color:var(--dim);
   font:500 .64rem/1 var(--f-mono);
-  letter-spacing:.1em; text-transform:uppercase;
+  letter-spacing:.1em;
   cursor:pointer;
   transition:border-color .15s, color .15s, background .15s;
 }
@@ -295,7 +292,7 @@ body{
   text-align:left;
   padding:0 12px 9px;
   font:500 .62rem/1 var(--f-mono);
-  letter-spacing:.14em; text-transform:uppercase;
+  letter-spacing:.14em;
   color:var(--dimmer);
   border-bottom:1px solid var(--rule);
   white-space:nowrap;
@@ -318,12 +315,12 @@ body{
   border:1px solid var(--rule-2);
   border-radius:2px;
   font:500 .58rem/1.5 var(--f-mono);
-  letter-spacing:.1em; text-transform:uppercase;
+  letter-spacing:.1em;
   color:var(--dim);
 }
 .tag--primary{ border-color:var(--red-deep); color:var(--red); }
 
-.state{ font:500 .64rem/1 var(--f-mono); letter-spacing:.1em; text-transform:uppercase; }
+.state{ font:500 .64rem/1 var(--f-mono); letter-spacing:.1em; }
 .state--ok{ color:var(--dim); }
 .state--fault{ color:var(--red); }
 .state--standby{ color:var(--standby); }
@@ -369,7 +366,7 @@ body{
 }
 .gate__name{
   font:700 1.15rem/1 var(--f-dsp);
-  letter-spacing:.2em; text-transform:uppercase;
+  letter-spacing:.2em;
 }
 .gate__sub{ margin-bottom:14px; }
 
@@ -547,3 +544,109 @@ body{
 
 textarea.field{ font-family:var(--f-text); line-height:1.5; resize:vertical; }
 select.field{ font-family:var(--f-text); }
+
+/* ══ LANGUAGE AND LEGIBILITY ═════════════════════════════════
+   Capitals are an English device. Mkhedruli has none, so
+   uppercasing Georgian produces letterforms nobody reads — the
+   site's own stylesheet says the same thing about its headings.
+   Small letterspaced monospace is the other half of the problem:
+   it suits Latin labels and punishes Georgian ones.
+
+   So: caps and mono for English chrome, the text face at a
+   readable size for Georgian, and the same components either way. */
+
+[data-lang="en"] .eyebrow,
+[data-lang="en"] .brand__name,
+[data-lang="en"] .tally__state,
+[data-lang="en"] .who__role,
+[data-lang="en"] .rail__link,
+[data-lang="en"] .btn,
+[data-lang="en"] .chip,
+[data-lang="en"] .grid th,
+[data-lang="en"] .tag,
+[data-lang="en"] .state{
+  text-transform:uppercase;
+}
+
+[data-lang="ka"] .eyebrow,
+[data-lang="ka"] .tally__state,
+[data-lang="ka"] .tally__meta,
+[data-lang="ka"] .who__role,
+[data-lang="ka"] .grid th,
+[data-lang="ka"] .tag,
+[data-lang="ka"] .state,
+[data-lang="ka"] .chip,
+[data-lang="ka"] .btn{
+  font-family:var(--f-text);
+  letter-spacing:.01em;
+}
+
+[data-lang="ka"] .eyebrow{ font-size:.8rem; }
+[data-lang="ka"] .grid th{ font-size:.78rem; }
+[data-lang="ka"] .btn{ font-size:.8rem; font-weight:600; }
+[data-lang="ka"] .chip,
+[data-lang="ka"] .tag,
+[data-lang="ka"] .state{ font-size:.76rem; }
+[data-lang="ka"] .tally__state{ font-size:.82rem; font-weight:600; }
+[data-lang="ka"] .tally__meta{ font-size:.78rem; }
+
+/* Eurostile carries both scripts, but its Georgian is a display cut —
+   fine for a heading, hard work down at nav size. */
+[data-lang="ka"] .rail__link{
+  font-family:var(--f-text);
+  font-size:.86rem;
+  font-weight:600;
+  letter-spacing:.01em;
+}
+
+/* Running text and form values are never mono, in either language. */
+.field, .note, .lede, .figure__meta, .notice{ font-family:var(--f-text); }
+.note{ font-size:.8rem; }
+.lede{ font-size:.92rem; line-height:1.65; }
+
+/* Numbers stay mono in both — a column of dates only lines up if they do. */
+.num, .pos, .figure__value{ font-family:var(--f-mono); }
+[data-lang="ka"] .figure__value{ font-family:var(--f-dsp); }
+
+/* ── the language switch ──────────────────────────────────── */
+.lang{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:5px 9px;
+  border:1px solid var(--rule-2); border-radius:2px;
+  background:transparent;
+  color:var(--dim);
+  font:600 .66rem/1 var(--f-mono);
+  letter-spacing:.1em;
+  cursor:pointer;
+  transition:color .15s, border-color .15s;
+}
+.lang:hover{ color:var(--white); border-color:var(--red); }
+.lang b{ color:var(--white); font-weight:600; }
+
+/* ── strip rows carry their artwork ───────────────────────── */
+.strip__row{ flex-wrap:wrap; }
+.strip__logo{
+  flex:none;
+  width:74px; height:30px;
+  display:grid; place-items:center;
+  background:var(--black);
+  border:1px solid var(--rule);
+  border-radius:2px;
+  overflow:hidden;
+}
+/* The marks are drawn for a black ground and vary wildly in aspect, so
+   they are contained rather than cropped. */
+.strip__logo img{
+  max-width:88%; max-height:76%;
+  width:auto; height:auto;
+  object-fit:contain;
+}
+.strip__logo .state{ font-size:.54rem; text-align:center; line-height:1.1; }
+.strip__name{ min-width:0; }
+.strip__acts{ margin-left:auto; display:flex; gap:2px; align-items:center; }
+.strip__error{ width:100%; margin:4px 0 0 86px; }
+
+.logo-pick{ display:flex; align-items:flex-start; gap:14px; }
+.strip__logo--lg{ width:120px; height:64px; }
+/* The channels table shows the mark at row height. */
+.grid .strip__logo{ width:64px; height:26px; }

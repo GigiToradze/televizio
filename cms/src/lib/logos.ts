@@ -11,3 +11,10 @@ export async function uploadLogo(file: File, slug: string) {
   if (error) throw error;
   return { path, w, h };
 }
+
+/** The public URL for a stored logo. The bucket is public by design — the
+ *  site serves these straight off the CDN. */
+export function logoUrl(path: string | null): string | null {
+  if (!path) return null;
+  return `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/logos/${path}`;
+}

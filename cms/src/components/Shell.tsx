@@ -1,9 +1,11 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import TallyBar from './TallyBar';
+import { useLang } from '../lang/LangProvider';
 import { useChannels, usePlans } from '../lib/queries';
 import { useSubscribers } from '../lib/subscribers';
 
 export default function Shell() {
+  const { t } = useLang();
   // All three are cached by the pages that use them, so reading counts here
   // costs nothing and turns the rail into a readout.
   const channels = useChannels();
@@ -13,26 +15,31 @@ export default function Shell() {
   const groups = [
     {
       title: null,
-      links: [{ to: '/', label: 'Overview', end: true, count: undefined }],
-    },
-    {
-      title: 'Content',
       links: [
-        { to: '/channels', label: 'Channels', count: channels.data?.length },
-        { to: '/slider', label: 'Slider',
-          count: channels.data?.filter((c) => c.in_slider).length },
-        { to: '/plans', label: 'Plans', count: plans.data?.length },
+        { to: '/', label: t('მიმოხილვა', 'Overview'), end: true, count: undefined },
       ],
     },
     {
-      title: 'People',
+      title: t('შიგთავსი', 'Content'),
       links: [
-        { to: '/subscribers', label: 'Subscribers', count: subscribers.data?.length },
+        { to: '/channels', label: t('არხები', 'Channels'), count: channels.data?.length },
+        { to: '/slider', label: t('სლაიდერი', 'Slider'),
+          count: channels.data?.filter((c) => c.in_slider).length },
+        { to: '/plans', label: t('პაკეტები', 'Plans'), count: plans.data?.length },
+      ],
+    },
+    {
+      title: t('აბონენტები', 'People'),
+      links: [
+        { to: '/subscribers', label: t('აბონენტები', 'Subscribers'),
+          count: subscribers.data?.length },
       ],
     },
     {
       title: null,
-      links: [{ to: '/settings', label: 'Settings', count: undefined }],
+      links: [
+        { to: '/settings', label: t('პარამეტრები', 'Settings'), count: undefined },
+      ],
     },
   ];
 
@@ -62,7 +69,7 @@ export default function Shell() {
         ))}
         <div className="rail__foot">
           <a className="eyebrow" href="https://televizio.ge" target="_blank"
-             rel="noreferrer">View site ↗</a>
+             rel="noreferrer">{t('საიტის ნახვა ↗', 'View site ↗')}</a>
         </div>
       </nav>
 
