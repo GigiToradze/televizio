@@ -12,12 +12,13 @@ import { readdir, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import pg from 'pg';
+import { env } from '../env.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
-if (!process.env.DATABASE_URL) {
-  console.error('DATABASE_URL is not set. Copy .env.example to .env and fill it in,');
-  console.error('then run with:  node --env-file=.env supabase/tests/run.mjs');
+if (!env.databaseUrl) {
+  console.error('No database URL. Fill .env from .env.example, or run');
+  console.error('`npx vercel env pull .env`, then:  npm run db:test');
   process.exit(1);
 }
 
@@ -34,7 +35,7 @@ if (!files.length) {
 let failed = 0;
 
 for (const file of files) {
-  const client = new pg.Client({ connectionString: process.env.DATABASE_URL });
+  const client = new pg.Client({ connectionString: env.databaseUrl });
   await client.connect();
 
   const sql = await readFile(join(HERE, file), 'utf8');
