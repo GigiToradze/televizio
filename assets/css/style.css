@@ -1553,3 +1553,154 @@ body.is-locked{ overflow:hidden; }
   .lk__rows > div{ flex-direction:column; gap:4px; }
   .lk__rows dt{ width:auto; }
 }
+
+/* ══ LEGAL — /privacy, /terms ════════════════════════════════
+   Two pages of running text. They borrow the section rhythm and
+   the mono labelling from the rest of the site; the only thing
+   new is a measure narrow enough to read and a numbered spine
+   down the left of every clause.                               */
+.sec--legal{
+  padding-top:calc(var(--hdr-h) + clamp(40px,8vh,96px));
+}
+.legal{ max-width:76ch; }
+
+.legal__head{ margin-bottom:clamp(32px,4.5vw,56px); }
+/* "კონფიდენციალურობის" is one unbreakable 18-letter word — at the
+   section clamp it runs past the edge of a laptop column. Size this
+   heading off the viewport so the word always fits the measure. */
+.legal__head .dsp{ font-size:clamp(1.45rem,5.8vw,2.8rem); }
+.legal__eyebrow{
+  font:500 .7rem/1 var(--f-mono);
+  letter-spacing:.16em; text-transform:uppercase;
+  color:var(--red);
+  margin-bottom:14px;
+}
+.legal__stamp{
+  margin-top:clamp(18px,2.4vw,26px);
+  font:400 .72rem/1.6 var(--f-mono);
+  letter-spacing:.08em; text-transform:uppercase;
+  color:var(--dim);
+}
+
+/* the table of contents — a mono index, same voice as the spec sheet */
+.legal__toc{
+  margin-bottom:clamp(40px,5vw,64px);
+  padding:clamp(18px,2.4vw,26px) clamp(18px,2.6vw,28px);
+  background:var(--panel);
+  border:1px solid var(--rule);
+  border-radius:4px;
+}
+.legal__toc ol{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:8px 28px;
+  counter-reset:toc;
+}
+.legal__toc a{
+  font:400 .8rem/1.5 var(--f-mono);
+  letter-spacing:.03em;
+  color:var(--dim);
+  text-decoration:none;
+  transition:color .2s;
+}
+.legal__toc li{ counter-increment:toc; }
+.legal__toc li::before{
+  content:counter(toc,decimal-leading-zero) " ";
+  font:500 .72rem/1.5 var(--f-mono);
+  letter-spacing:.1em;
+  color:var(--red);
+}
+.legal__toc a:hover{ color:var(--white); }
+
+.legal__sec{
+  padding-top:clamp(30px,3.6vw,44px);
+  border-top:1px solid var(--rule);
+  scroll-margin-top:calc(var(--hdr-h) + 24px);
+}
+.legal__sec + .legal__sec{ margin-top:clamp(30px,3.6vw,44px); }
+.legal__no{
+  font:500 .72rem/1 var(--f-mono);
+  letter-spacing:.18em;
+  color:var(--red);
+  margin-bottom:12px;
+}
+.legal__sec h2{
+  font-family:var(--f-dsp);
+  font-weight:700;
+  font-size:clamp(1.24rem,1.06rem + .8vw,1.7rem);
+  line-height:1.12;
+  letter-spacing:-.015em;
+  margin-bottom:clamp(12px,1.6vw,18px);
+}
+[data-lang="en"] .legal__sec h2{ text-transform:uppercase; letter-spacing:.005em; }
+
+.legal__sec h3{
+  margin-top:clamp(20px,2.4vw,28px); margin-bottom:8px;
+  font:500 .72rem/1.4 var(--f-mono);
+  letter-spacing:.14em; text-transform:uppercase;
+  color:var(--dim);
+}
+.legal__sec p{
+  font-family:var(--f-text);
+  font-size:1rem; line-height:1.72;
+  color:#B9B9C0;
+}
+.legal__sec p + p{ margin-top:clamp(12px,1.4vw,16px); }
+.legal__sec strong{ color:var(--white); font-weight:600; }
+.legal__sec a{ color:var(--red); }
+
+.legal__list{
+  margin-top:clamp(12px,1.4vw,16px);
+}
+.legal__list li{
+  position:relative;
+  padding-left:22px;
+  font-family:var(--f-text);
+  font-size:1rem; line-height:1.72;
+  color:#B9B9C0;
+}
+.legal__list li + li{ margin-top:9px; }
+.legal__list li::before{
+  content:"";
+  position:absolute; left:0; top:.62em;
+  width:7px; height:7px;
+  background:var(--red);
+  -webkit-mask:var(--star) center/contain no-repeat;
+  mask:var(--star) center/contain no-repeat;
+}
+
+/* the data table on /privacy — what we hold, why, and for how long */
+.legal__table{
+  width:100%;
+  margin-top:clamp(16px,2vw,22px);
+  border-collapse:collapse;
+  border-top:1px solid var(--rule);
+  text-align:left;
+}
+.legal__table th,
+.legal__table td{
+  padding:11px 14px 11px 0;
+  border-bottom:1px solid var(--rule);
+  font:400 .82rem/1.55 var(--f-mono);
+  letter-spacing:.02em;
+  vertical-align:top;
+}
+.legal__table thead th{
+  color:var(--dim); font-weight:400;
+  text-transform:uppercase; letter-spacing:.12em; font-size:.68rem;
+}
+.legal__table tbody th{ color:var(--white); font-weight:500; width:34%; }
+.legal__table td{ color:#B9B9C0; }
+
+@media (max-width:640px){
+  .legal__table,
+  .legal__table tbody,
+  .legal__table tr,
+  .legal__table th,
+  .legal__table td{ display:block; }
+  .legal__table thead{ display:none; }
+  .legal__table tr{ padding-block:12px; border-bottom:1px solid var(--rule); }
+  .legal__table th,
+  .legal__table td{ width:auto; border:0; padding:2px 0; }
+  .legal__table tbody th{ margin-bottom:4px; }
+}
