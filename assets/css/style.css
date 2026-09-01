@@ -1177,10 +1177,12 @@ body.is-locked{ overflow:hidden; }
   position:relative;
   width:min(100%, 1060px);
   max-height:min(92svh, 900px);
-  overflow-y:auto;
+  overflow-y:auto; overflow-x:hidden;
   overscroll-behavior:contain;
-  --bleed:clamp(30px,4vw,46px);   /* how far the lane runs past the padding */
-  padding:clamp(26px,3.4vw,44px);
+  /* the lane runs out to the padding edge and not one pixel further,
+     or the panel overflows and takes a scrollbar of its own */
+  --bleed:clamp(26px,3.4vw,44px);
+  padding:var(--bleed);
   background:var(--panel);
   border:1px solid var(--rule-2);
   border-radius:4px;
@@ -1297,12 +1299,14 @@ body.is-locked{ overflow:hidden; }
   padding:26px var(--bleed);
   margin-inline:calc(var(--bleed) * -1);
   scroll-behavior:smooth;
-  scrollbar-width:thin;
   -webkit-overflow-scrolling:touch;
+  /* the arrows and the edge fades say it scrolls; a bar under the
+     logos only cut the lane in half */
+  scrollbar-width:none;
+  -ms-overflow-style:none;
 }
 @media (prefers-reduced-motion:reduce){ .pm__lane{ scroll-behavior:auto; } }
-.pm__lane::-webkit-scrollbar{ height:5px; }
-.pm__lane::-webkit-scrollbar-thumb{ background:var(--rule-2); border-radius:3px; }
+.pm__lane::-webkit-scrollbar{ display:none; }
 
 /* the black fades either end, so the lane reads as running on */
 .pm__slider::before,.pm__slider::after{
