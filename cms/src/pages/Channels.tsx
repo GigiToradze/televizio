@@ -13,75 +13,110 @@ export default function Channels() {
   const [editing, setEditing] = useState<ChannelRecord | 'new' | null>(null);
 
   if (channels.isLoading || categories.isLoading) {
-    return <p className="text-neutral-500">Loading…</p>;
+    return <p className="eyebrow">Loading</p>;
   }
-  if (channels.error) {
-    return <p className="text-red-500">{String(channels.error)}</p>;
-  }
+  if (channels.error) return <p className="error">{String(channels.error)}</p>;
 
+  const bySlug = new Map((categories.data ?? []).map((c) => [c.id, c.slug]));
+  const all = channels.data ?? [];
   const term = query.trim().toLowerCase();
-  const rows = (channels.data ?? []).filter((c) =>
+  const rows = all.filter((c) =>
     !term ||
     c.slug.includes(term) ||
     c.name_en.toLowerCase().includes(term) ||
     c.name_ka.includes(query.trim()));
 
   return (
-    <section className="space-y-4">
-      <header className="flex items-center gap-3">
-        <h1 className="text-xl font-semibold">Channels</h1>
-        <span className="text-sm text-neutral-500">{rows.length}</span>
-        <input
-          value={query} onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search"
-          className="ml-auto rounded bg-neutral-900 px-3 py-1.5 text-sm
-                     ring-1 ring-neutral-800 focus:outline-none focus:ring-red-600"
-        />
-        {editable && (
-          <button
-            onClick={() => setEditing('new')}
-            className="rounded bg-red-600 px-3 py-1.5 text-sm font-medium"
-          >
-            Add channel
-          </button>
-        )}
-      </header>
+    <section>
+      <div className="head">
+        <h1 className="head__title">Channels</h1>
+        <span className="head__count">
+          {rows.length === all.length ? all.length : `${rows.length} of ${all.length}`}
+        </span>
+        <div className="head__right">
+          <input
+            className="field field--mono" style={{ width: 190 }}
+            value={query} onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search"
+          />
+          {editable && (
+            <button className="btn btn--signal btn--sm" onClick={() => setEditing('new')}>
+              Add channel
+            </button>
+          )}
+        </div>
+      </div>
 
-      <table className="w-full text-sm">
-        <thead className="text-left text-neutral-500">
-          <tr className="border-b border-neutral-800">
-            <th className="py-2 font-medium">Logo</th>
-            <th className="font-medium">Name</th>
-            <th className="font-medium">Slug</th>
-            <th className="font-medium">Categories</th>
-            <th className="font-medium">Order</th>
-            <th className="font-medium">Slider</th>
-            <th className="font-medium">Active</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((c) => (
-            <tr
-              key={c.id}
-              onClick={() => editable && setEditing(c)}
-              className="border-b border-neutral-900 hover:bg-neutral-900/60
-                         cursor-pointer"
-            >
-              <td className="py-2">
-                {c.logo_path
-                  ? <span className="text-neutral-400">{c.logo_w}×{c.logo_h}</span>
-                  : <span className="text-red-500">missing</span>}
-              </td>
-              <td>{c.name_en}<span className="text-neutral-600"> · {c.name_ka}</span></td>
-              <td className="text-neutral-500">{c.slug}</td>
-              <td className="text-neutral-500">{c.channel_categories.length}</td>
-              <td className="text-neutral-500">{c.sort_order}</td>
-              <td className="text-neutral-500">{c.in_slider ? c.slider_order : '—'}</td>
-              <td>{c.is_active ? '' : <span className="text-neutral-600">off</span>}</td>
+      <div className="panel panel--table">
+        <table className="grid">
+          <thead>
+            <tr>
+              <th className="pos">#</th>
+              <th>Channel</th>
+              <th>Slug</th>
+              <th>Categories</th>
+              <th>Logo</th>
+              <th>Strip</th>
+              <th />
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((c) => {
+              const cats = [...c.channel_categories]
+                .sort((a, b) => a.sort_order - b.sort_order)
+                .map((cc) => bySlug.get(cc.category_id))
+                .filter(Boolean) as string[];
+              const noLogo = !c.logo_path || !c.logo_w || !c.logo_h;
+
+              return (
+                <tr
+                  key={c.id}
+                  className={editable ? 'is-clickable' : undefined}
+                  onClick={() => editable && setEditing(c)}
+                >
+                  <td className="pos">{String(c.sort_order).padStart(2, '0')}</td>
+                  <td>
+                    {c.name_en}
+                    {c.name_ka !== c.name_en && (
+                      <span className="name-ka"> {c.name_ka}</span>
+                    )}
+                  </td>
+                  <td><span className="num">{c.slug}</span></td>
+                  <td>
+                    {cats.map((s, i) => (
+                      <span key={s} className={`tag${i === 0 ? ' tag--primary' : ''}`}>
+                        {s}
+                      </span>
+                    ))}
+                  </td>
+                  <td>
+                    {noLogo
+                      ? <span className="state state--fault">no logo</span>
+                      : <span className="num">{c.logo_w}×{c.logo_h}</span>}
+                  </td>
+                  <td>
+                    {c.in_slider
+                      ? <span className="num">{String(c.slider_order).padStart(2, '0')}</span>
+                      : <span className="state state--ok">—</span>}
+                  </td>
+                  <td>
+                    {c.is_active
+                      ? <span className="state state--ok">live</span>
+                      : <span className="state state--standby">off</span>}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+        {rows.length === 0 && (
+          <p className="notice">
+            <span className="state state--ok">Nothing found</span>
+            No channel matches “{query}”.
+          </p>
+        )}
+      </div>
 
       {editing && (
         <ChannelDrawer

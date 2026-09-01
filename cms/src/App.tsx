@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from './auth/AuthProvider';
 import Shell from './components/Shell';
 import Login from './pages/Login';
+import Overview from './pages/Overview';
 import Channels from './pages/Channels';
 import Slider from './pages/Slider';
 import Plans from './pages/Plans';
@@ -15,19 +16,24 @@ const qc = new QueryClient();
  *  button having done nothing at all. */
 function PublicOnly({ children }: { children: React.ReactNode }) {
   const { session, loading } = useAuth();
-  if (loading) return <div className="p-6 text-neutral-500">Loading…</div>;
+  if (loading) return <div className="gate"><p className="eyebrow">Loading</p></div>;
   if (session) return <Navigate to="/" replace />;
   return <>{children}</>;
 }
 
 function Private() {
-  const { session, admin, loading } = useAuth();
-  if (loading) return <div className="p-6 text-neutral-500">Loading…</div>;
+  const { session, admin, loading, signOut } = useAuth();
+  if (loading) return <div className="gate"><p className="eyebrow">Loading</p></div>;
   if (!session) return <Navigate to="/login" replace />;
   if (!admin) {
     return (
-      <div className="min-h-screen grid place-items-center bg-neutral-950 text-neutral-400">
-        This account is not an admin. Ask an owner to add you.
+      <div className="gate">
+        <div className="gate__form">
+          <p className="eyebrow">No access</p>
+          <p>This account is signed in but is not an admin.</p>
+          <p className="note">Ask an owner to add you from Settings.</p>
+          <button className="btn btn--sm" onClick={signOut}>Sign out</button>
+        </div>
       </div>
     );
   }
@@ -42,7 +48,7 @@ export default function App() {
           <Routes>
             <Route path="/login" element={<PublicOnly><Login /></PublicOnly>} />
             <Route element={<Private />}>
-              <Route index element={<div>Dashboard comes in Plan 4.</div>} />
+              <Route index element={<Overview />} />
               <Route path="channels" element={<Channels />} />
               <Route path="slider" element={<Slider />} />
               <Route path="plans" element={<Plans />} />

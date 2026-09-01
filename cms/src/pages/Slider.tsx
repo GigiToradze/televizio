@@ -5,15 +5,16 @@ import { useChannels, useSaveSliderOrder } from '../lib/queries';
 
 type Row = { id: string; name_en: string; in_slider: boolean };
 
-/** The marquee is a curated subset in its own order — imedi leads the strip
- *  while 1tv leads the catalogue — so it gets a screen rather than a column. */
+/** The strip is a curated subset in its own order — Imedi leads it while
+ *  First Channel leads the catalogue — so it gets a screen of its own
+ *  rather than a column in the channels table. */
 export default function Slider() {
   const { admin } = useAuth();
   const editable = canWrite(admin?.role, 'content');
   const channels = useChannels();
   const save = useSaveSliderOrder();
   const [rows, setRows] = useState<Row[]>([]);
-  const [saved, setSaved] = useState(false);
+  const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
     if (!channels.data) return;
@@ -25,6 +26,7 @@ export default function Slider() {
         })
         .map((c) => ({ id: c.id, name_en: c.name_en, in_slider: c.in_slider })),
     );
+    setDirty(false);
   }, [channels.data]);
 
   function move(from: number, to: number) {
@@ -33,59 +35,74 @@ export default function Slider() {
     const [row] = next.splice(from, 1);
     next.splice(to, 0, row);
     setRows(next);
-    setSaved(false);
+    setDirty(true);
   }
 
   async function commit() {
-    // Position is the index among the channels actually in the marquee,
-    // counted from one, so the numbers read the way the strip does.
+    // Position counts only the channels actually in the strip, from one, so
+    // the numbers read the way the marquee does.
     let position = 0;
     await save.mutateAsync(rows.map((r) => ({
       id: r.id,
       in_slider: r.in_slider,
       slider_order: r.in_slider ? ++position : 0,
     })));
-    setSaved(true);
+    setDirty(false);
   }
 
-  if (channels.isLoading) return <p className="text-neutral-500">Loading…</p>;
+  if (channels.isLoading) return <p className="eyebrow">Loading</p>;
+
+  const inStrip = rows.filter((r) => r.in_slider).length;
 
   return (
-    <section className="max-w-xl space-y-4">
-      <header className="flex items-center gap-3">
-        <h1 className="text-xl font-semibold">Slider</h1>
-        <span className="text-sm text-neutral-500">
-          {rows.filter((r) => r.in_slider).length} in the strip
-        </span>
+    <section style={{ maxWidth: 620 }}>
+      <div className="head">
+        <h1 className="head__title">Slider</h1>
+        <span className="head__count">{inStrip} in the strip</span>
         {editable && (
-          <button onClick={commit} disabled={save.isPending}
-                  className="ml-auto rounded bg-red-600 px-3 py-1.5 text-sm font-medium
-                             disabled:opacity-50">
-            {save.isPending ? 'Saving…' : saved ? 'Saved' : 'Save order'}
-          </button>
+          <div className="head__right">
+            <button
+              className={`btn btn--sm${dirty ? ' btn--signal' : ''}`}
+              onClick={commit} disabled={save.isPending || !dirty}
+            >
+              {save.isPending ? 'Saving' : dirty ? 'Save order' : 'Saved'}
+            </button>
+          </div>
         )}
-      </header>
+      </div>
 
-      <ol className="divide-y divide-neutral-900 rounded ring-1 ring-neutral-800">
+      <p className="lede">
+        The logos that scroll across the top of the site, in the order they
+        appear. Unticked channels stay in the catalogue but leave the strip.
+      </p>
+
+      <ol className="panel strip">
         {rows.map((r, i) => (
-          <li key={r.id} className="flex items-center gap-3 px-3 py-2 text-sm">
-            <span className="w-6 text-neutral-600">{r.in_slider ? i + 1 : '—'}</span>
-            <input
-              type="checkbox" checked={r.in_slider} disabled={!editable}
-              onChange={(e) => {
-                const next = [...rows];
-                next[i] = { ...r, in_slider: e.target.checked };
-                setRows(next);
-                setSaved(false);
-              }}
-            />
-            <span className={r.in_slider ? '' : 'text-neutral-600'}>{r.name_en}</span>
+          <li key={r.id} className={`strip__row${r.in_slider ? '' : ' is-out'}`}>
+            <span className="pos">
+              {r.in_slider
+                ? String(rows.slice(0, i + 1).filter((x) => x.in_slider).length)
+                    .padStart(2, '0')
+                : '—'}
+            </span>
+            <label className="toggle">
+              <input
+                type="checkbox" checked={r.in_slider} disabled={!editable}
+                onChange={(e) => {
+                  const next = [...rows];
+                  next[i] = { ...r, in_slider: e.target.checked };
+                  setRows(next);
+                  setDirty(true);
+                }}
+              />
+              <span>{r.name_en}</span>
+            </label>
             {editable && (
-              <span className="ml-auto flex gap-1">
-                <button onClick={() => move(i, i - 1)}
-                        className="px-2 text-neutral-500 hover:text-neutral-100">↑</button>
-                <button onClick={() => move(i, i + 1)}
-                        className="px-2 text-neutral-500 hover:text-neutral-100">↓</button>
+              <span className="strip__moves">
+                <button className="btn btn--quiet btn--sm" onClick={() => move(i, i - 1)}
+                        aria-label={`Move ${r.name_en} up`}>↑</button>
+                <button className="btn btn--quiet btn--sm" onClick={() => move(i, i + 1)}
+                        aria-label={`Move ${r.name_en} down`}>↓</button>
               </span>
             )}
           </li>

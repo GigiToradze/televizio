@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Televizio CMS — specimen</title>
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <!--
+    A dev-only specimen of the CMS design system, so the components can be
+    looked at without a session. Vite serves it at /specimen.html in dev and
+    does not include it in the build (it is not in rollupOptions.input).
+    It is markup only — no React — so it can drift; treat the components as
+    the source of truth and this as a mirror.
+  -->
+  <body>
+    <div class="app">
+      <div class="brand">
+        <span class="brand__star"></span>
+        <span class="brand__name">Televizio</span>
+      </div>
+
+      <header class="tally" data-state="pending">
+        <span class="lamp lamp--pending"></span>
+        <span class="tally__state">Queued</span>
+        <span class="tally__meta">3 changes not published · last 01 Sep 20:14</span>
+        <div class="tally__right">
+          <button class="btn btn--sm btn--signal">Publish</button>
+          <span class="who">
+            <span class="who__name">Gigi</span>
+            <span class="who__role">owner</span>
+          </span>
+          <button class="btn btn--quiet btn--sm">Sign out</button>
+        </div>
+      </header>
+
+      <nav class="rail">
+        <p class="rail__group eyebrow">Content</p>
+        <a class="rail__link" href="#">Overview</a>
+        <a class="rail__link is-on" href="#">Channels <span class="rail__count">13</span></a>
+        <a class="rail__link" href="#">Slider <span class="rail__count">13</span></a>
+        <a class="rail__link" href="#">Plans <span class="rail__count">3</span></a>
+        <a class="rail__link" href="#">Settings</a>
+        <div class="rail__foot"><a class="eyebrow" href="#">View site ↗</a></div>
+      </nav>
+
+      <main class="stage">
+        <div class="head">
+          <h1 class="head__title">Channels</h1>
+          <span class="head__count">13 of 13</span>
+          <div class="head__right">
+            <input class="field field--mono" style="width:180px" placeholder="Search" />
+            <button class="btn btn--signal btn--sm">Add channel</button>
+          </div>
+        </div>
+
+        <div class="panel panel--table">
+          <table class="grid">
+            <thead>
+              <tr>
+                <th class="pos">#</th>
+                <th>Channel</th>
+                <th>Slug</th>
+                <th>Categories</th>
+                <th>Logo</th>
+                <th>Strip</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="is-clickable">
+                <td class="pos">01</td>
+                <td>First Channel <span class="name-ka">პირველი არხი</span></td>
+                <td><span class="num">1tv</span></td>
+                <td><span class="tag tag--primary">ge</span></td>
+                <td><span class="num">465×465</span></td>
+                <td><span class="num">04</span></td>
+                <td><span class="state state--ok">live</span></td>
+              </tr>
+              <tr class="is-clickable">
+                <td class="pos">02</td>
+                <td>Imedi <span class="name-ka">იმედი</span></td>
+                <td><span class="num">imedi</span></td>
+                <td><span class="tag tag--primary">ge</span></td>
+                <td><span class="num">138×120</span></td>
+                <td><span class="num">01</span></td>
+                <td><span class="state state--ok">live</span></td>
+              </tr>
+              <tr class="is-clickable">
+                <td class="pos">04</td>
+                <td>Formula <span class="name-ka">ფორმულა</span></td>
+                <td><span class="num">formula</span></td>
+                <td><span class="tag tag--primary">ge</span> <span class="tag">news</span></td>
+                <td><span class="state state--fault">no logo</span></td>
+                <td><span class="num">06</span></td>
+                <td><span class="state state--standby">off</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="head" style="margin-top:28px">
+          <h2 class="head__title" style="font-size:1rem">Overview blocks</h2>
+        </div>
+
+        <div class="figures">
+          <a class="figure" href="#">
+            <span class="figure__value">13</span>
+            <span class="eyebrow">Channels live</span>
+            <span class="figure__meta">0 inactive</span>
+          </a>
+          <a class="figure" href="#">
+            <span class="figure__value">13</span>
+            <span class="eyebrow">In the strip</span>
+            <span class="figure__meta">header marquee</span>
+          </a>
+          <a class="figure" href="#">
+            <span class="figure__value">3</span>
+            <span class="eyebrow">Plans</span>
+            <span class="figure__meta">Basic · Standard · Premium</span>
+          </a>
+        </div>
+
+        <div class="panel" style="margin-top:18px">
+          <a class="notice notice--link" href="#">
+            <span class="state state--fault">Blocks publish</span>
+            1 channel without a usable logo — formula
+          </a>
+          <p class="notice">
+            <span class="state state--standby">Queued</span>
+            3 changes saved but not yet on the live site.
+          </p>
+          <p class="notice">
+            <span class="state state--ok">Clear</span>
+            Everything else is published and nothing is missing.
+          </p>
+        </div>
+
+        <div class="head" style="margin-top:28px">
+          <h2 class="head__title" style="font-size:1rem">Controls</h2>
+        </div>
+        <div class="panel" style="padding:16px; display:flex; flex-wrap:wrap; gap:10px; align-items:center">
+          <button class="btn btn--signal">Publish</button>
+          <button class="btn">Save</button>
+          <button class="btn btn--quiet">Cancel</button>
+          <button class="btn btn--danger btn--sm">Delete</button>
+          <button class="chip is-on">ge · tag</button>
+          <button class="chip is-sub">news</button>
+          <button class="chip">sport</button>
+          <label class="label" style="width:200px">
+            <span class="eyebrow">Name (Georgian)</span>
+            <input class="field" value="პირველი არხი" />
+          </label>
+          <p class="error">Channel "formula" has no usable logo.</p>
+        </div>
+
+        <div class="head" style="margin-top:28px">
+          <h2 class="head__title" style="font-size:1rem">Slider</h2>
+        </div>
+        <ol class="panel strip" style="max-width:560px">
+          <li class="strip__row">
+            <span class="pos">01</span>
+            <label class="toggle"><input type="checkbox" checked /><span>Imedi</span></label>
+            <span class="strip__moves">
+              <button class="btn btn--quiet btn--sm">&uarr;</button>
+              <button class="btn btn--quiet btn--sm">&darr;</button>
+            </span>
+          </li>
+          <li class="strip__row">
+            <span class="pos">02</span>
+            <label class="toggle"><input type="checkbox" checked /><span>Rustavi 2</span></label>
+            <span class="strip__moves">
+              <button class="btn btn--quiet btn--sm">&uarr;</button>
+              <button class="btn btn--quiet btn--sm">&darr;</button>
+            </span>
+          </li>
+          <li class="strip__row is-out">
+            <span class="pos">&mdash;</span>
+            <label class="toggle"><input type="checkbox" /><span>Setanta Sports</span></label>
+            <span class="strip__moves">
+              <button class="btn btn--quiet btn--sm">&uarr;</button>
+              <button class="btn btn--quiet btn--sm">&darr;</button>
+            </span>
+          </li>
+        </ol>
+
+        <div class="head" style="margin-top:28px">
+          <h2 class="head__title" style="font-size:1rem">Plans</h2>
+        </div>
+        <div class="plans">
+          <form class="panel plan">
+            <div class="panel__head">
+              <span class="eyebrow">standard</span>
+              <span class="tag tag--primary">featured</span>
+              <span class="plan__price">29<span class="plan__cur">&#8382;</span></span>
+            </div>
+            <div class="plan__body">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <label class="label"><span class="eyebrow">Name &mdash; Georgian</span>
+                  <input class="field" value="&#4321;&#4322;&#4304;&#4316;&#4307;&#4304;&#4320;&#4322;&#4323;&#4314;&#4312;" /></label>
+                <label class="label"><span class="eyebrow">Name &mdash; English</span>
+                  <input class="field" value="Standard" /></label>
+                <label class="label"><span class="eyebrow">Price &middot; &#8382; per month</span>
+                  <input class="field field--mono" value="29" /></label>
+                <label class="label"><span class="eyebrow">Count on the card</span>
+                  <input class="field field--mono" value="520+" /></label>
+              </div>
+              <label class="toggle"><input type="checkbox" checked />
+                <span>Featured &mdash; the raised card with the red button</span></label>
+              <div>
+                <span class="eyebrow" style="display:block;margin-bottom:7px">Channels &mdash; 11 of 13</span>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <button type="button" class="chip is-on">1tv</button>
+                  <button type="button" class="chip is-on">imedi</button>
+                  <button type="button" class="chip">natgeo</button>
+                  <button type="button" class="chip">setanta</button>
+                </div>
+              </div>
+            </div>
+            <div class="panel__foot">
+              <button class="btn btn--signal btn--sm">Save plan</button>
+              <span class="eyebrow">Saved</span>
+            </div>
+          </form>
+        </div>
+
+        <div class="head" style="margin-top:28px">
+          <h2 class="head__title" style="font-size:1rem">Numbers on the page</h2>
+        </div>
+        <div class="panel" style="max-width:760px">
+          <div class="setting">
+            <span class="eyebrow setting__key">channel count</span>
+            <input class="field field--mono" value="1 024" />
+            <span class="note">the stat counter under the guide</span>
+          </div>
+          <div class="setting">
+            <span class="eyebrow setting__key">rewind days</span>
+            <input class="field field--mono" value="14" />
+            <span class="note">how far back the archive goes</span>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

@@ -37,7 +37,7 @@ export default function ChannelDrawer({
   }
 
   /** Clicking a category toggles it; the first one selected stays first, and
-   *  that is the label printed on the channel's card. */
+   *  that is the label printed on the channel's card on the site. */
   function toggleCat(id: string) {
     setCatIds((ids) => ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]);
   }
@@ -76,124 +76,118 @@ export default function ChannelDrawer({
     }
   }
 
-  const field = 'w-full rounded bg-neutral-900 px-3 py-2 text-sm ring-1 ' +
-                'ring-neutral-800 focus:outline-none focus:ring-red-600';
-
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/60" onClick={onClose}>
-      <form
-        onSubmit={submit} onClick={(e) => e.stopPropagation()}
-        className="h-full w-[28rem] space-y-4 overflow-y-auto border-l
-                   border-neutral-800 bg-neutral-950 p-6"
-      >
-        <h2 className="text-lg font-semibold">
-          {channel ? `Edit ${channel.name_en}` : 'New channel'}
-        </h2>
+    <div className="scrim" onClick={onClose}>
+      <form className="drawer" onSubmit={submit} onClick={(e) => e.stopPropagation()}>
+        <div>
+          <p className="eyebrow">{channel ? 'Edit channel' : 'New channel'}</p>
+          <h2 className="drawer__title">{channel ? channel.name_en : 'Untitled'}</h2>
+        </div>
 
-        <label className="block space-y-1">
-          <span className="text-xs text-neutral-500">Slug</span>
-          <input className={field} required value={form.slug}
-                 onChange={(e) => set('slug', e.target.value.toLowerCase().trim())} />
+        <label className="label">
+          <span className="eyebrow">Slug</span>
+          <input
+            className="field field--mono" required value={form.slug}
+            onChange={(e) => set('slug', e.target.value.toLowerCase().trim())}
+          />
         </label>
 
-        <div className="grid grid-cols-2 gap-3">
-          <label className="block space-y-1">
-            <span className="text-xs text-neutral-500">Name (Georgian)</span>
-            <input className={field} required value={form.name_ka}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <label className="label">
+            <span className="eyebrow">Name — Georgian</span>
+            <input className="field" required value={form.name_ka}
                    onChange={(e) => set('name_ka', e.target.value)} />
           </label>
-          <label className="block space-y-1">
-            <span className="text-xs text-neutral-500">Name (English)</span>
-            <input className={field} required value={form.name_en}
+          <label className="label">
+            <span className="eyebrow">Name — English</span>
+            <input className="field" required value={form.name_en}
                    onChange={(e) => set('name_en', e.target.value)} />
           </label>
         </div>
-        <p className="text-xs text-neutral-600">
-          Give both the same value for a brand that is not translated — CNN, Discovery.
-          The site then prints one name instead of switching between two.
+        <p className="note">
+          Give both the same value for a brand that is not translated — CNN,
+          Discovery. The site then prints one name instead of switching between two.
         </p>
 
-        <div className="space-y-1">
-          <span className="text-xs text-neutral-500">
+        <div>
+          <span className="eyebrow" style={{ display: 'block', marginBottom: 7 }}>
             Categories — the first is printed on the card
           </span>
-          <div className="flex flex-wrap gap-2">
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
             {categories.map((c) => {
               const at = catIds.indexOf(c.id);
               return (
                 <button
                   type="button" key={c.id} onClick={() => toggleCat(c.id)}
-                  className={`rounded px-2 py-1 text-xs ring-1 ${
-                    at === 0 ? 'bg-red-600 ring-red-600'
-                    : at > 0 ? 'bg-neutral-800 ring-neutral-700'
-                    : 'ring-neutral-800 text-neutral-400'}`}
+                  className={`chip${at === 0 ? ' is-on' : at > 0 ? ' is-sub' : ''}`}
                 >
-                  {c.name_en}{at === 0 ? ' · tag' : ''}
+                  {c.slug}{at === 0 ? ' · tag' : ''}
                 </button>
               );
             })}
           </div>
         </div>
 
-        <div className="space-y-1">
-          <span className="text-xs text-neutral-500">Logo</span>
+        <div>
+          <span className="eyebrow" style={{ display: 'block', marginBottom: 7 }}>
+            Logo
+          </span>
           <input
             type="file" accept=".png,.svg,.webp,.jpg,.jpeg"
+            className="note"
             onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])}
-            className="block w-full text-sm text-neutral-400"
           />
-          <p className="text-xs text-neutral-600">
+          <p className="note" style={{ marginTop: 6 }}>
             {form.logo_path
-              ? `${form.logo_path} · ${form.logo_w}×${form.logo_h}`
-              : 'No logo yet — a publish will refuse until there is one.'}
+              ? <><span className="num">{form.logo_w}×{form.logo_h}</span> · {form.logo_path}</>
+              : 'No logo yet. Publishing is refused until there is one.'}
           </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
-          <label className="block space-y-1">
-            <span className="text-xs text-neutral-500">Order</span>
-            <input className={field} type="number" value={form.sort_order}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <label className="label">
+            <span className="eyebrow">Catalogue position</span>
+            <input className="field field--mono" type="number" value={form.sort_order}
                    onChange={(e) => set('sort_order', +e.target.value)} />
           </label>
-          <label className="block space-y-1">
-            <span className="text-xs text-neutral-500">Slider pos.</span>
-            <input className={field} type="number" value={form.slider_order}
+          <label className="label">
+            <span className="eyebrow">Strip position</span>
+            <input className="field field--mono" type="number" value={form.slider_order}
                    onChange={(e) => set('slider_order', +e.target.value)} />
-          </label>
-          <label className="flex items-end gap-2 pb-2 text-sm">
-            <input type="checkbox" checked={form.in_slider}
-                   onChange={(e) => set('in_slider', e.target.checked)} />
-            In slider
           </label>
         </div>
 
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={form.is_active}
-                 onChange={(e) => set('is_active', e.target.checked)} />
-          Active — inactive channels are left out of a publish
+        <label className="toggle">
+          <input type="checkbox" checked={form.in_slider}
+                 onChange={(e) => set('in_slider', e.target.checked)} />
+          <span>Show in the header strip</span>
         </label>
 
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        <label className="toggle">
+          <input type="checkbox" checked={form.is_active}
+                 onChange={(e) => set('is_active', e.target.checked)} />
+          <span>Active — inactive channels are left out of a publish</span>
+        </label>
 
-        <div className="flex gap-2 pt-2">
-          <button type="submit" disabled={busy}
-                  className="rounded bg-red-600 px-3 py-2 text-sm font-medium
-                             disabled:opacity-50">
-            {busy ? 'Saving…' : 'Save'}
+        {error && <p className="error">{error}</p>}
+
+        <div className="drawer__foot">
+          <button type="submit" className="btn btn--signal btn--sm" disabled={busy}>
+            {busy ? 'Saving' : 'Save'}
           </button>
-          <button type="button" onClick={onClose}
-                  className="rounded px-3 py-2 text-sm text-neutral-400">
+          <button type="button" className="btn btn--quiet btn--sm" onClick={onClose}>
             Cancel
           </button>
           {channel && (
             <button
               type="button"
+              className="btn btn--danger btn--sm"
+              style={{ marginLeft: 'auto' }}
               onClick={async () => {
                 if (!confirm(`Delete ${channel.name_en}? This cannot be undone.`)) return;
                 await remove.mutateAsync(channel.id);
                 onClose();
               }}
-              className="ml-auto rounded px-3 py-2 text-sm text-red-500"
             >
               Delete
             </button>
