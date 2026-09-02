@@ -95,6 +95,7 @@
   (function hero() {
     var section = document.getElementById('hero');
     var plate = document.getElementById('plate');
+    var copy = document.getElementById('heroCopy');
     var dotBox = document.getElementById('heroDots');
     var scenes = document.querySelectorAll('.hero__scene');
     var dots = dotBox ? dotBox.querySelectorAll('button') : [];
@@ -182,9 +183,10 @@
       yPercent: 9, scale: 1.04, ease: 'none',
       scrollTrigger: { trigger: section, start: 'top top', end: 'bottom top', scrub: true }
     });
-    /* The copy used to sit on the picture and could fade out under it. It now
-       sits below the band, where the reader is scrolling *towards* it — fading
-       it on scroll would ghost the price and the buttons on the way down. */
+    gsap.to(copy, {
+      yPercent: -14, opacity: 0, ease: 'none',
+      scrollTrigger: { trigger: section, start: 'top top', end: 'bottom top', scrub: true }
+    });
   })();
 
   /* ── 4. header meter, current section, order dock ─────── */

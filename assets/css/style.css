@@ -323,53 +323,32 @@ body.is-locked{ overflow:hidden; }
   .hdr__cta{ display:none; }
 }
 
-/* ═══ HERO — the room above, the offer under it ══════════ */
+/* ═══ HERO — three rooms, crossfading ════════════════════ */
 .hero{
-  /* the plate's own pixel size; the band is built from it */
-  --plate-w:1584;
-  --plate-h:672;
-
   position:relative;
-  display:block;
-  padding-top:var(--hdr-h);
-  padding-bottom:clamp(36px,7vw,56px);
+  min-height:100svh;
+  display:flex; align-items:center;
   overflow:hidden;
   isolation:isolate;
 }
 
-/* The room is a band carrying the plate's own proportions, so the picture
-   arrives whole: nothing cropped off its edges and no copy across it. Capped
-   at the plate's width, so it is never enlarged past 1:1, and at 65svh, which
-   is what leaves the headline whole above the fold on a 900px-tall laptop. */
-.hero__stage{
-  position:relative; z-index:0;
-  width:min(100%,
-            calc(var(--plate-w) * 1px),
-            calc(65svh * var(--plate-w) / var(--plate-h)));
-  margin-inline:auto;
-  aspect-ratio:var(--plate-w) / var(--plate-h);
-  overflow:hidden;
-}
+.hero__stage{ position:absolute; inset:0; z-index:0; }
 .hero__plate{ position:absolute; inset:0; will-change:transform; }
 
 .hero__scene{
   position:absolute; inset:0;
   width:100%; height:100%;
-  /* the band already carries the plate's ratio, so cover crops nothing */
   object-fit:cover;
-  object-position:center;
+  /* A 16:9 viewport crops about a quarter off a 2.36 plate. Centred, that
+     takes the television's outer edge on the left and a little sofa on the
+     right, and keeps both the panel and the family whole — which the old 68%
+     would not, since this plate puts the television on the left. */
+  object-position:50% 50%;
+  /* no standing zoom: enlargement is softness, and the scroll parallax
+     scales the plate itself, so nothing here needs the headroom */
   opacity:0;
 }
 .hero__scene.is-on{ opacity:1; }
-
-/* the band melts into the page: dark under the fixed header, black at the
-   foot where the copy takes over */
-.hero__stage::after{
-  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
-  background:
-    linear-gradient(to bottom, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 13%),
-    linear-gradient(to top, #000 0%, rgba(0,0,0,.42) 9%, rgba(0,0,0,0) 26%);
-}
 
 .hero__vig{
   position:absolute; inset:0;
@@ -377,16 +356,22 @@ body.is-locked{ overflow:hidden; }
   pointer-events:none;
 }
 
-/* the copy no longer sits on the picture, so nothing needs darkening behind
-   it; the band's own fade does the blending */
-.hero__scrim{ display:none; }
+/* keeps the copy legible whichever room is on */
+.hero__scrim{
+  position:absolute; inset:0; z-index:1;
+  background:
+    linear-gradient(to right, #000 0%, rgba(0,0,0,.9) 26%, rgba(0,0,0,.42) 52%, rgba(0,0,0,0) 72%),
+    linear-gradient(to bottom, rgba(0,0,0,.7) 0%, rgba(0,0,0,0) 16%),
+    linear-gradient(to top, rgba(0,0,0,.8) 0%, rgba(0,0,0,0) 26%);
+  pointer-events:none;
+}
 
 .hero__copy{
   position:relative; z-index:2;
   width:100%;
   max-width:var(--max);
   margin-inline:auto;
-  padding:clamp(26px,3.4vw,44px) var(--pad) 0;
+  padding:calc(var(--hdr-h) + clamp(24px,5vh,60px)) var(--pad) clamp(56px,9vh,96px);
   will-change:transform;
 }
 .hero__kick{
@@ -443,13 +428,20 @@ body.is-locked{ overflow:hidden; }
 }
 
 @media (max-width:900px){
-  /* Portrait cannot have it both ways: an ultrawide plate shown whole at
-     375px is a 159px strip. The band takes its own shape here and crops,
-     framed left of centre so the television keeps the frame. */
-  .hero__stage{ width:100%; aspect-ratio:3 / 2; }
+  /* portrait: the room becomes a band, the copy sits under it */
+  .hero{ min-height:0; display:block; padding-bottom:clamp(36px,7vw,56px); }
+  .hero__stage{ position:relative; height:52svh; min-height:300px; }
+  .hero__scrim{
+    inset:0 0 auto 0; height:52svh; min-height:300px;
+    background:
+      linear-gradient(to bottom, rgba(0,0,0,.72) 0%, rgba(0,0,0,0) 20%),
+      linear-gradient(to top, #000 0%, rgba(0,0,0,.5) 14%, rgba(0,0,0,0) 34%);
+  }
+  /* the band is narrow and tall here — frame it on the television */
   .hero__scene{ object-position:40% 50%; }
-  .hero__copy{ padding-top:clamp(20px,4vw,32px); }
+  .hero__copy{ padding-top:clamp(20px,4vw,32px); padding-bottom:0; }
   .hero__lede{ max-width:none; }
+  .hero__dots{ bottom:auto; top:calc(52svh - 26px); }
 }
 
 /* ── channel strip ────────────────────────────────────────── */
