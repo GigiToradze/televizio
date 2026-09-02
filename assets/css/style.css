@@ -338,13 +338,12 @@ body.is-locked{ overflow:hidden; }
 .hero__scene{
   position:absolute; inset:0;
   width:100%; height:100%;
-  object-fit:cover;
-  /* the panel sits further right in this plate than in the old rooms; on a
-     16:9 viewport 64% cropped the channel rail off its right edge */
-  object-position:68% 46%;
-  /* no standing zoom: the plate is barely wider than the viewport crops it to,
-     and 4% of enlargement was 4% of softness. The scroll parallax scales the
-     plate itself, so nothing here needs the headroom. */
+  /* the whole room, never enlarged: scale-down is contain that stops at the
+     plate's own size, so a big viewport gets black around it rather than a
+     soft picture. cover would crop the television off one side and blow the
+     rest up past 1:1 on anything above 1600px. */
+  object-fit:scale-down;
+  object-position:center;
   opacity:0;
 }
 .hero__scene.is-on{ opacity:1; }
