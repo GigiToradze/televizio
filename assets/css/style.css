@@ -326,8 +326,8 @@ body.is-locked{ overflow:hidden; }
 /* ═══ HERO — the room above, the offer under it ══════════ */
 .hero{
   /* the plate's own pixel size; the band is built from it */
-  --plate-w:1600;
-  --plate-h:898;
+  --plate-w:1584;
+  --plate-h:672;
 
   position:relative;
   display:block;
@@ -443,8 +443,11 @@ body.is-locked{ overflow:hidden; }
 }
 
 @media (max-width:900px){
-  /* portrait: the band gives up the height cap and runs the full width */
-  .hero__stage{ width:100%; }
+  /* Portrait cannot have it both ways: an ultrawide plate shown whole at
+     375px is a 159px strip. The band takes its own shape here and crops,
+     framed left of centre so the television keeps the frame. */
+  .hero__stage{ width:100%; aspect-ratio:3 / 2; }
+  .hero__scene{ object-position:40% 50%; }
   .hero__copy{ padding-top:clamp(20px,4vw,32px); }
   .hero__lede{ max-width:none; }
 }
