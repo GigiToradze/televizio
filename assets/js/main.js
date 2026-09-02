@@ -166,9 +166,12 @@
 
     /* the opening, and the drift as the section leaves */
     var intro = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      /* the room used to swell in from 1.14 — that crops the plate for as
+         long as it runs, and the plate is now fitted whole. It comes up out
+         of the dark at its own size instead. */
       .fromTo(plate,
-        { scale: 1.14, filter: 'brightness(.15) saturate(.4)' },
-        { scale: 1, filter: 'brightness(1) saturate(1)', duration: 1.5 })
+        { filter: 'brightness(.15) saturate(.4)' },
+        { filter: 'brightness(1) saturate(1)', duration: 1.5 })
       .from('.hero__kick', { y: 14, opacity: 0, duration: 0.7 }, 0.55)
       .from('.hero__h1', {
         y: 26, opacity: 0, duration: 0.9,

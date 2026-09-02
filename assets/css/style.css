@@ -330,6 +330,7 @@ body.is-locked{ overflow:hidden; }
   display:flex; align-items:center;
   overflow:hidden;
   isolation:isolate;
+  background:var(--black);
 }
 
 .hero__stage{ position:absolute; inset:0; z-index:0; }
@@ -338,14 +339,14 @@ body.is-locked{ overflow:hidden; }
 .hero__scene{
   position:absolute; inset:0;
   width:100%; height:100%;
-  object-fit:cover;
-  /* A 16:9 viewport crops about a quarter off a 2.36 plate. Centred, that
-     takes the television's outer edge on the left and a little sofa on the
-     right, and keeps both the panel and the family whole — which the old 68%
-     would not, since this plate puts the television on the left. */
+  /* The whole plate, always. `cover` took a quarter off a 2.36 picture on a
+     16:9 screen — the television's outer edge on one side, sofa on the
+     other. `contain` fits it inside the hero instead, so the room arrives
+     entire and the copy lies over it rather than over a crop of it. What is
+     left over above and below is black on black, which reads as letterbox. */
+  object-fit:contain;
   object-position:50% 50%;
-  /* no standing zoom: enlargement is softness, and the scroll parallax
-     scales the plate itself, so nothing here needs the headroom */
+  /* no standing zoom: enlargement is softness, and it would crop again */
   opacity:0;
 }
 .hero__scene.is-on{ opacity:1; }
@@ -433,28 +434,26 @@ body.is-locked{ overflow:hidden; }
 }
 
 @media (max-width:900px){
-  /* portrait: the room becomes a band, the copy sits under it */
-  .hero{ min-height:0; display:block; padding-bottom:clamp(36px,7vw,56px); }
-  .hero__stage{ position:relative; height:52svh; min-height:300px; }
-  .hero__scrim{
-    inset:0 0 auto 0; height:52svh; min-height:300px;
-    background:
-      linear-gradient(to bottom, rgba(0,0,0,.72) 0%, rgba(0,0,0,0) 20%),
-      linear-gradient(to top, #000 0%, rgba(0,0,0,.5) 14%, rgba(0,0,0,0) 34%);
+  /* Portrait: a 2.36 picture across a phone is a 160px band, so behind the
+     copy it would be a smudge nobody can read as a room. It sits at the top
+     instead, whole and at its own ratio, clear of the header — and the copy
+     climbs onto its lower edge, so the two overlap without burying it. */
+  .hero{
+    min-height:0; display:block;
+    padding-top:var(--hdr-h); padding-bottom:clamp(36px,7vw,56px);
   }
-  /* the band is narrow and tall here — frame it on the television */
-  .hero__scene{ object-position:40% 50%; }
-  /* the copy climbs onto the room, so the two stop reading as stacked
-     blocks. It has to climb this far: the scrim ramps to solid black over
-     the last 60px or so of the band, and anything less than that is an
-     overlap you cannot see. This lands the kicker on the table and takes
-     the top of the headline across the edge. */
+  .hero__stage{ position:relative; aspect-ratio:1584 / 672; }
+  .hero__scrim{
+    inset:var(--hdr-h) 0 auto 0; width:100%; aspect-ratio:1584 / 672;
+    background:
+      linear-gradient(to bottom, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 28%),
+      linear-gradient(to top, #000 0%, rgba(0,0,0,.5) 26%, rgba(0,0,0,0) 52%);
+  }
   .hero__copy{
-    margin-top:calc(clamp(80px,20vw,120px) * -1);
-    padding-top:clamp(20px,4vw,32px); padding-bottom:0;
+    margin-top:calc(clamp(40px,11vw,64px) * -1);
+    padding-top:0; padding-bottom:0;
   }
   .hero__lede{ max-width:none; }
-  .hero__dots{ bottom:auto; top:calc(52svh - 26px); }
 }
 
 /* ── channel strip ────────────────────────────────────────── */
