@@ -1,0 +1,356 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Televizio — hero composite</title>
+<!--
+  Composites the Televizio player UI onto the TV panel of a photographed room.
+  Rendered headless at 1584×672 (same plate size as assets/img/scene-*.webp):
+
+  chrome --headless=new --hide-scrollbars --window-size=1584,672 \
+         --screenshot=out.png http://localhost:4173/scripts/hero-compose.html
+
+  #scene=1|2|3   which room plate
+  #guides=1      outline the screen quad, for re-measuring it
+-->
+<style>
+@font-face{font-family:'Eurostile GEO';src:url('/assets/fonts/eurostile-geo-400.woff2') format('woff2');font-weight:400}
+@font-face{font-family:'Eurostile GEO';src:url('/assets/fonts/eurostile-geo-600.woff2') format('woff2');font-weight:600}
+@font-face{font-family:'Eurostile GEO';src:url('/assets/fonts/eurostile-geo-700.woff2') format('woff2');font-weight:700}
+@font-face{font-family:'Eurostile GEO';src:url('/assets/fonts/eurostile-geo-900.woff2') format('woff2');font-weight:900}
+
+:root{
+  --red:#E4211C;
+  --red-deep:#7E0F0C;
+  --white:#fff;
+  --dim:#8A8A93;
+  --f:'Eurostile GEO',system-ui,sans-serif;
+}
+html,body{margin:0;background:#000;overflow:hidden}
+
+/* ── the plate: exactly the size of a scene-*.webp ───────── */
+.plate{position:relative;width:1584px;height:672px;overflow:hidden;isolation:isolate}
+.plate>img.room{position:absolute;inset:0;width:1584px;height:672px;display:block}
+
+/* light the panel throws back onto the wall — the brand's red, at wall strength */
+.spill{position:absolute;pointer-events:none;mix-blend-mode:screen}
+
+/* the panel's optics: the vector UI must not out-resolve the photograph */
+.soft{position:absolute;inset:0;filter:blur(.34px)}
+
+/* the warped layer: a 1920×1080 screen mapped onto the TV quad */
+.screen{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;
+        font-family:var(--f);color:var(--white);overflow:hidden}
+.screen *{box-sizing:border-box}
+
+/* ── UI ──────────────────────────────────────────────────── */
+/* the player scrim: dark from the bottom, the way a real overlay dims the feed */
+.scrim{position:absolute;inset:0;
+  background:
+    linear-gradient(to top, rgba(0,0,0,.95) 0%, rgba(0,0,0,.90) 30%, rgba(0,0,0,.62) 46%,
+                    rgba(0,0,0,.22) 60%, rgba(0,0,0,0) 74%),
+    linear-gradient(to bottom, rgba(0,0,0,.50) 0%, rgba(0,0,0,0) 17%);}
+/* a faint red bounce from the brand chrome into the feed */
+.wash{position:absolute;inset:0;background:
+  radial-gradient(110% 62% at 6% 112%, rgba(228,33,28,.16), rgba(228,33,28,0) 60%);
+  mix-blend-mode:screen}
+
+/* top bar */
+.top{position:absolute;left:84px;right:84px;top:52px;display:flex;align-items:center;gap:26px}
+.top img{height:46px;width:auto;display:block;filter:drop-shadow(0 2px 10px rgba(0,0,0,.6))}
+.top .sep{width:1px;height:34px;background:rgba(255,255,255,.28)}
+.top .now{font-size:26px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.top .right{margin-left:auto;display:flex;align-items:center;gap:20px;
+  font-size:26px;font-weight:600;color:rgba(255,255,255,.82);letter-spacing:.06em}
+.pill{border:1.5px solid rgba(255,255,255,.42);border-radius:6px;padding:4px 12px;
+  font-size:22px;font-weight:700;letter-spacing:.12em}
+
+/* now-playing block */
+.now-block{position:absolute;left:84px;bottom:404px;width:1180px}
+.kick{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.live{display:inline-flex;align-items:center;gap:10px;background:var(--red);border-radius:5px;
+  padding:7px 14px 6px;font-size:23px;font-weight:700;letter-spacing:.14em;line-height:1}
+.live i{width:11px;height:11px;border-radius:50%;background:#fff;display:block;
+  box-shadow:0 0 0 4px rgba(255,255,255,.25)}
+.kick .ch{display:flex;align-items:center;gap:14px;font-size:25px;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.78)}
+.kick .ch img{height:30px;width:auto;display:block;opacity:.95}
+.kick .num{font-size:25px;font-weight:700;color:var(--red);letter-spacing:.1em}
+
+h1{margin:0;font-size:76px;line-height:1.02;font-weight:900;letter-spacing:-.01em;
+  text-shadow:0 4px 26px rgba(0,0,0,.7)}
+.meta{margin-top:18px;font-size:28px;font-weight:400;color:rgba(255,255,255,.62);
+  display:flex;align-items:center;gap:14px}
+.meta b{font-weight:600;color:rgba(255,255,255,.86)}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.42)}
+
+/* progress */
+.bar{margin-top:30px;width:980px}
+.bar .track{position:relative;height:7px;border-radius:4px;background:rgba(255,255,255,.22)}
+.bar .fill{position:absolute;left:0;top:0;bottom:0;width:63%;border-radius:4px;background:var(--red);
+  box-shadow:0 0 22px 2px rgba(228,33,28,.65)}
+.bar .head{position:absolute;left:63%;top:50%;width:20px;height:20px;margin:-10px 0 0 -10px;
+  border-radius:50%;background:#fff;box-shadow:0 0 0 5px rgba(228,33,28,.5)}
+.bar .times{display:flex;justify-content:space-between;margin-top:14px;
+  font-size:25px;font-weight:600;color:rgba(255,255,255,.66);letter-spacing:.04em}
+
+/* channel rail */
+.rail-h{position:absolute;left:84px;bottom:352px;display:flex;align-items:center;gap:16px;
+  font-size:27px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.74)}
+.rail-h span.n{color:var(--red)}
+.rail{position:absolute;left:84px;bottom:62px;display:flex;gap:28px}
+
+.card{width:330px;flex:0 0 330px}
+.thumb{position:relative;width:330px;height:186px;border-radius:10px;overflow:hidden;
+  background:#0B0B0C;border:1.5px solid rgba(255,255,255,.14)}
+.thumb .shot{position:absolute;inset:0;background-repeat:no-repeat}
+.thumb .grad{position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.86),rgba(0,0,0,.05) 58%)}
+.thumb .lg{position:absolute;left:15px;bottom:14px;height:30px;width:auto;display:block;
+  filter:drop-shadow(0 1px 4px rgba(0,0,0,.9))}
+.thumb .no{position:absolute;left:13px;top:11px;font-size:21px;font-weight:700;letter-spacing:.08em;
+  color:rgba(255,255,255,.9);background:rgba(0,0,0,.5);border-radius:4px;padding:3px 8px 2px}
+.thumb .on{position:absolute;right:12px;top:11px;display:flex;align-items:center;gap:7px;
+  font-size:21px;font-weight:700;letter-spacing:.12em;color:#fff;
+  background:rgba(0,0,0,.55);border-radius:4px;padding:4px 9px 3px}
+.thumb .on i{width:9px;height:9px;border-radius:50%;background:var(--red)}
+.thumb .mini{position:absolute;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.2)}
+.thumb .mini b{display:block;height:100%;background:var(--red)}
+/* logo-only tile, for channels with no preview */
+.tile{position:absolute;inset:0;display:grid;place-items:center;
+  background:radial-gradient(120% 120% at 50% 0%,#191920,#08080A 72%)}
+.tile img{width:46%;height:auto;opacity:.88}
+
+.card .name{margin-top:15px;font-size:28px;font-weight:700;letter-spacing:.02em;color:#fff;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .prog{margin-top:7px;font-size:25px;font-weight:400;color:rgba(255,255,255,.58);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* the focused card — the brand's one red signal */
+.card.is-sel .thumb{border-color:var(--red);
+  box-shadow:0 0 0 4px var(--red), 0 0 44px 6px rgba(228,33,28,.55)}
+.card.is-sel .name{color:var(--red)}
+
+/* ── screen physics: keep the UI inside the panel's optics ── */
+.sheen{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(104deg, rgba(255,255,255,.055) 0%, rgba(255,255,255,0) 26%,
+             rgba(255,255,255,0) 68%, rgba(255,255,255,.035) 100%);}
+.px{position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(to bottom, rgba(0,0,0,.16) 0 1px, rgba(0,0,0,0) 1px 3px)}
+
+/* grain over the whole plate, so the vector UI sits in the photo's noise floor */
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay}
+.vig{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(130% 100% at 50% 45%, rgba(0,0,0,0) 42%, rgba(0,0,0,.34) 100%)}
+
+/* calibration */
+.guide{position:absolute;inset:0;outline:2px solid #0f0;outline-offset:-1px;
+  background:rgba(0,255,0,.16)}
+</style>
+
+<div class="plate" id="plate">
+  <img class="room" id="room" src="/assets/img/scene-1.webp" width="1584" height="672" alt="">
+  <div class="spill" id="spill"></div>
+
+  <div class="soft">
+  <div class="screen" id="screen">
+    <div class="scrim"></div>
+    <div class="wash"></div>
+
+    <div class="top">
+      <img src="/assets/img/logo-white.png" alt="Televizio">
+      <span class="sep"></span>
+      <span class="now">ტელეგიდი</span>
+      <span class="right"><span class="pill">4K</span><span>21:47</span></span>
+    </div>
+
+    <div class="now-block" id="nowBlock"></div>
+
+    <div class="rail-h">ახლა ეთერში<span class="n">·</span><span>1024 არხი</span></div>
+    <div class="rail" id="rail"></div>
+
+    <div class="sheen"></div>
+    <div class="px"></div>
+  </div>
+  </div>
+
+  <div class="grain" id="grain"></div>
+  <div class="vig"></div>
+</div>
+
+<script>
+/* the static server strips query strings on its clean-URL redirect, so read the hash too */
+const Q = new URLSearchParams(location.search.slice(1) + '&' + location.hash.slice(1));
+const SCENE = Q.get('scene') || '1';
+
+/* Picture area of the TV panel in each plate, measured off the 1584×672 image.
+   Order: top-left, top-right, bottom-right, bottom-left. */
+const QUADS = {
+  '1': [[826, 75], [1347, 47], [1347, 348], [826, 345]],
+  '2': [[823, 79], [1316, 46], [1316, 325], [823, 333]],
+  '3': [[862, 72], [1298, 66], [1298, 352], [862, 352]]
+};
+/* Same quads, used the other way round: to lift a still out of a plate's screen. */
+const SHOTS = {
+  '1': [826, 75, 521, 273],
+  '2': [823, 79, 493, 254],
+  '3': [862, 66, 436, 286]
+};
+
+
+/* What is playing on each plate's screen — the chrome has to agree with the picture. */
+const FEATURE = {
+  '1': {no:'041', logo:'discovery.png', title:'დაკარგული ქალაქის<br>საიდუმლო',
+        meta:['<b>დოკუმენტური</b>','ს03 · ე04','21:15 – 22:05','<b>4K HDR</b>'],
+        fill:63, times:['32:18','–17:42'], focus:0},
+  '2': {no:'112', logo:'setanta.png', title:'არსენალი — ლივერპული',
+        meta:['<b>პრემიერ ლიგა</b>','32-ე ტური','21:00 – 22:50','<b>4K HDR</b>'],
+        fill:92, times:['88:23','–1:37'], focus:1},
+  '3': {no:'001', logo:'imedi.png', title:'ქრონიკა<br>მთავარი გამოშვება',
+        meta:['<b>ახალი ამბები</b>','პირდაპირი','21:30 – 22:15','<b>4K HDR</b>'],
+        fill:38, times:['17:04','–27:56'], focus:0}
+};
+
+const SW = 1920, SH = 1080;
+
+/* ── projective map of the 1920×1080 screen onto the panel quad ── */
+function solve(A, b){                       // Gaussian elimination, 8×8
+  const n = b.length;
+  for(let i=0;i<n;i++){
+    let p=i; for(let r=i+1;r<n;r++) if(Math.abs(A[r][i])>Math.abs(A[p][i])) p=r;
+    [A[i],A[p]]=[A[p],A[i]]; [b[i],b[p]]=[b[p],b[i]];
+    for(let r=i+1;r<n;r++){
+      const f=A[r][i]/A[i][i]; if(!f) continue;
+      for(let c=i;c<n;c++) A[r][c]-=f*A[i][c];
+      b[r]-=f*b[i];
+    }
+  }
+  const x=new Array(n).fill(0);
+  for(let i=n-1;i>=0;i--){
+    let s=b[i]; for(let c=i+1;c<n;c++) s-=A[i][c]*x[c];
+    x[i]=s/A[i][i];
+  }
+  return x;
+}
+function matrix3dFor(dst){
+  const src=[[0,0],[SW,0],[SW,SH],[0,SH]];
+  const A=[],b=[];
+  for(let i=0;i<4;i++){
+    const [x,y]=src[i], [X,Y]=dst[i];
+    A.push([x,y,1,0,0,0,-X*x,-X*y]); b.push(X);
+    A.push([0,0,0,x,y,1,-Y*x,-Y*y]); b.push(Y);
+  }
+  const h=solve(A,b);                        // a b c d e f g i(h)
+  const [a,bb,c,d,e,f,g,hh]=h;
+  return `matrix3d(${a},${d},0,${g}, ${bb},${e},0,${hh}, 0,0,1,0, ${c},${f},0,1)`;
+}
+
+/* ── a still lifted from another plate's TV, cropped to fill a thumb ── */
+function shot(scene, w, h, zoom=1, ax=.5, ay=.5){
+  const [sx,sy,sw,sh]=SHOTS[scene];
+  const k=Math.max(w/sw, h/sh)*zoom;
+  return {
+    'background-image':`url(/assets/img/scene-${scene}.webp)`,
+    'background-size':`${1584*k}px ${672*k}px`,
+    'background-position':`${-(sx*k)-(sw*k-w)*ax}px ${-(sy*k)-(sh*k-h)*ay}px`
+  };
+}
+
+const CH = [
+  {no:'112', scene:'2', zoom:1.05, ax:.40, ay:.55, logo:'setanta.png',
+   name:'Setanta Sports 1', prog:'Arsenal — Liverpool', on:'88′', p:92},
+  {no:'001', scene:'3', zoom:1.30, ax:.52, ay:.30, logo:'imedi.png',
+   name:'Imedi TV', prog:'ქრონიკა · მთავარი გამოშვება', on:'ᲚᲐᲘᲕ', p:48},
+  {no:'207', scene:'1', zoom:1.35, ax:.30, ay:.40, logo:'natgeo.svg',
+   name:'Nat Geo Wild', prog:'ველური აფრიკა', p:71},
+  {no:'115', scene:'2', zoom:1.45, ax:.18, ay:.78, logo:'formula.png',
+   name:'Formula', prog:'სპორტის შაბათი', p:26},
+  {no:'304', tile:true, logo:'bbc.svg',     name:'BBC News',        prog:'World News Today', p:60},
+  {no:'002', tile:true, logo:'1tv.svg',     name:'პირველი არხი',    prog:'ღამის ეთერი', p:38}
+];
+
+/* now-playing block */
+(function(){
+  const f = FEATURE[SCENE];
+  document.getElementById('nowBlock').innerHTML = `
+    <div class="kick">
+      <span class="live"><i></i>ᲞᲘᲠᲓᲐᲞᲘᲠᲘ</span>
+      <span class="num">${f.no}</span>
+      <span class="ch"><img src="/assets/img/channels/${f.logo}" alt=""></span>
+    </div>
+    <h1>${f.title}</h1>
+    <div class="meta">${f.meta.join('<span class="dot"></span>')}</div>
+    <div class="bar">
+      <div class="track">
+        <div class="fill" style="width:${f.fill}%"></div>
+        <div class="head" style="left:${f.fill}%"></div>
+      </div>
+      <div class="times"><span>${f.times[0]}</span><span>${f.times[1]}</span></div>
+    </div>`;
+})();
+
+const rail = document.getElementById('rail');
+rail.innerHTML = CH.map((c,i)=>{
+  const inner = c.tile
+    ? `<div class="tile"><img src="/assets/img/channels/${c.logo}" alt=""></div>`
+    : `<div class="shot"></div><div class="grad"></div>`;
+  return `<div class="card${i===FEATURE[SCENE].focus?' is-sel':''}">
+    <div class="thumb">
+      ${inner}
+      ${c.tile?'':`<img class="lg" src="/assets/img/channels/${c.logo}" alt="">`}
+      <span class="no">${c.no}</span>
+      ${c.on?`<span class="on"><i></i>${c.on}</span>`:''}
+      <span class="mini"><b style="width:${c.p}%"></b></span>
+    </div>
+    <div class="name">${c.name}</div>
+    <div class="prog">${c.prog}</div>
+  </div>`;
+}).join('');
+
+[...rail.querySelectorAll('.card')].forEach((el,i)=>{
+  const c = CH[i]; if(c.tile) return;
+  const s = shot(c.scene, 330, 186, c.zoom, c.ax ?? .5, c.ay ?? .5);
+  const t = el.querySelector('.shot');
+  for(const k in s) t.style.setProperty(k, s[k]);
+});
+
+/* place the room + warp the screen */
+document.getElementById('room').src = `/assets/img/scene-${SCENE}.webp`;
+const screen = document.getElementById('screen');
+screen.style.transform = matrix3dFor(QUADS[SCENE]);
+
+/* red spill from the panel onto the wall around it */
+(function(){
+  const q=QUADS[SCENE], xs=q.map(p=>p[0]), ys=q.map(p=>p[1]);
+  const x0=Math.min(...xs), x1=Math.max(...xs), y0=Math.min(...ys), y1=Math.max(...ys);
+  const pad=170, el=document.getElementById('spill');
+  el.style.left=(x0-pad)+'px'; el.style.top=(y0-pad)+'px';
+  el.style.width=(x1-x0+pad*2)+'px'; el.style.height=(y1-y0+pad*2)+'px';
+  el.style.background='radial-gradient(closest-side, rgba(228,33,28,.30), rgba(228,33,28,.12) 56%, rgba(228,33,28,0) 100%)';
+})();
+
+/* film grain, matched to the plate's own noise */
+(function(){
+  const c=document.createElement('canvas'); c.width=c.height=200;
+  const x=c.getContext('2d'), d=x.createImageData(200,200);
+  for(let i=0;i<d.data.length;i+=4){
+    const v=128+(Math.random()-.5)*46;
+    d.data[i]=d.data[i+1]=d.data[i+2]=v; d.data[i+3]=255;
+  }
+  x.putImageData(d,0,0);
+  const g=document.getElementById('grain');
+  g.style.backgroundImage=`url(${c.toDataURL()})`;
+  g.style.backgroundSize='200px 200px';
+})();
+
+if(Q.get('guides')){
+  const g=document.createElement('div'); g.className='guide';
+  screen.appendChild(g);
+}
+/* #zoom=3&at=826,40 — inspect the panel at print size while composing */
+if(Q.get('zoom')){
+  const z=+Q.get('zoom'), [ax,ay]=(Q.get('at')||'820,30').split(',').map(Number);
+  const pl=document.getElementById('plate');
+  pl.style.transformOrigin='0 0';
+  pl.style.transform=`scale(${z}) translate(${-ax}px, ${-ay}px)`;
+}
+document.documentElement.setAttribute('data-ready','1');
+</script>

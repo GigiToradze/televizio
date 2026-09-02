@@ -339,7 +339,9 @@ body.is-locked{ overflow:hidden; }
   position:absolute; inset:0;
   width:100%; height:100%;
   object-fit:cover;
-  object-position:64% 46%;
+  /* the panel sits further right in this plate than in the old rooms; on a
+     16:9 viewport 64% cropped the channel rail off its right edge */
+  object-position:68% 46%;
   transform:scale(1.04);
   opacity:0;
 }

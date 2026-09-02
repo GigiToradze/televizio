@@ -91,7 +91,7 @@
     });
   })();
 
-  /* ── 3. hero: three rooms, crossfading ───────────────── */
+  /* ── 3. hero: the room, crossfading if there is more than one ── */
   (function hero() {
     var section = document.getElementById('hero');
     var plate = document.getElementById('plate');
@@ -145,24 +145,27 @@
         queue();
       }, HOLD * 1000);
     }
-    queue();
+    /* one room in the plate: nothing to cross to, so no timer runs */
+    if (scenes.length > 1) {
+      queue();
 
-    dots.forEach(function (dot, i) {
-      dot.addEventListener('click', function () { show(i); queue(); });
-    });
+      dots.forEach(function (dot, i) {
+        dot.addEventListener('click', function () { show(i); queue(); });
+      });
 
-    /* a room nobody is looking at does not need to change */
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (e) {
-        if (e[0].isIntersecting) queue(); else clearTimeout(timer);
-      }, { threshold: 0 }).observe(section);
+      /* a room nobody is looking at does not need to change */
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (e) {
+          if (e[0].isIntersecting) queue(); else clearTimeout(timer);
+        }, { threshold: 0 }).observe(section);
+      }
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) clearTimeout(timer); else queue();
+      });
     }
-    document.addEventListener('visibilitychange', function () {
-      if (document.hidden) clearTimeout(timer); else queue();
-    });
 
     /* the opening, and the drift as the section leaves */
-    gsap.timeline({ defaults: { ease: 'power3.out' } })
+    var intro = gsap.timeline({ defaults: { ease: 'power3.out' } })
       .fromTo(plate,
         { scale: 1.14, filter: 'brightness(.15) saturate(.4)' },
         { scale: 1, filter: 'brightness(1) saturate(1)', duration: 1.5 })
@@ -172,8 +175,9 @@
         clipPath: 'inset(0% 0% 100% 0%)'
       }, 0.7)
       .from('.hero__lede', { y: 16, opacity: 0, duration: 0.7 }, 0.95)
-      .from('.hero__cta > *', { y: 14, opacity: 0, duration: 0.6, stagger: 0.08 }, 1.05)
-      .from(dotBox, { opacity: 0, duration: 0.6 }, 1.2);
+      .from('.hero__cta > *', { y: 14, opacity: 0, duration: 0.6, stagger: 0.08 }, 1.05);
+
+    if (dotBox) intro.from(dotBox, { opacity: 0, duration: 0.6 }, 1.2);
 
     gsap.to(plate, {
       yPercent: 9, scale: 1.04, ease: 'none',
