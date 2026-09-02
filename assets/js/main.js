@@ -179,10 +179,9 @@
 
     if (dotBox) intro.from(dotBox, { opacity: 0, duration: 0.6 }, 1.2);
 
-    gsap.to(plate, {
-      yPercent: 9, scale: 1.04, ease: 'none',
-      scrollTrigger: { trigger: section, start: 'top top', end: 'bottom top', scrub: true }
-    });
+    /* The plate used to drift and scale up as the hero left — it pushed the
+       framing off and hid more of the room the further you scrolled. The
+       picture now holds still, so what you see on arrival is what stays. */
     gsap.to(copy, {
       yPercent: -14, opacity: 0, ease: 'none',
       scrollTrigger: { trigger: section, start: 'top top', end: 'bottom top', scrub: true }
