@@ -342,7 +342,9 @@ body.is-locked{ overflow:hidden; }
   /* the panel sits further right in this plate than in the old rooms; on a
      16:9 viewport 64% cropped the channel rail off its right edge */
   object-position:68% 46%;
-  transform:scale(1.04);
+  /* no standing zoom: the plate is barely wider than the viewport crops it to,
+     and 4% of enlargement was 4% of softness. The scroll parallax scales the
+     plate itself, so nothing here needs the headroom. */
   opacity:0;
 }
 .hero__scene.is-on{ opacity:1; }
