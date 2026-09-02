@@ -444,7 +444,15 @@ body.is-locked{ overflow:hidden; }
   }
   /* the band is narrow and tall here — frame it on the television */
   .hero__scene{ object-position:40% 50%; }
-  .hero__copy{ padding-top:clamp(20px,4vw,32px); padding-bottom:0; }
+  /* the copy climbs onto the room, so the two stop reading as stacked
+     blocks. It has to climb this far: the scrim ramps to solid black over
+     the last 60px or so of the band, and anything less than that is an
+     overlap you cannot see. This lands the kicker on the table and takes
+     the top of the headline across the edge. */
+  .hero__copy{
+    margin-top:calc(clamp(80px,20vw,120px) * -1);
+    padding-top:clamp(20px,4vw,32px); padding-bottom:0;
+  }
   .hero__lede{ max-width:none; }
   .hero__dots{ bottom:auto; top:calc(52svh - 26px); }
 }
