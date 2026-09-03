@@ -260,11 +260,10 @@
        section says anything. Land at the far end of the runway instead:
        the stage is still pinned there, and everything it had to show is
        already on it. */
-    if (!hasGSAP || reduced) return;   /* nothing is hidden, so nothing to skip past */
-
     var STAGES = '.guide__stage, .box__stage, .wall__stage, .stats__stage';
 
     function endOfRunway(section) {
+      if (!hasGSAP || reduced) return null;  /* nothing is hidden, so nothing to skip past */
       var stage = section.querySelector(STAGES);
       /* below the media queries that pin it, the stage is static and the
          section reads top to bottom like any other — leave it alone */
@@ -272,6 +271,27 @@
       var run = stage.parentNode;
       var top = run.getBoundingClientRect().top + window.pageYOffset;
       return Math.max(0, top + run.offsetHeight - window.innerHeight);
+    }
+
+    /* A section marked data-jump="center" is one block you take in at a
+       glance — the plans. Landing on its top edge parks its generous top
+       padding under the header and pushes the last row of cards off the
+       bottom, so sit it in the middle of the room the fixed chrome leaves
+       instead. A section taller than that room cannot be centred without
+       cutting the head off, so it gives up only its own top padding: on a
+       wide screen that is the whole of the overflow and the block sits
+       centred, on a phone it is all there is and the head lands under the
+       header, which is where an ordinary anchor jump wanted it anyway. */
+    function centred(section) {
+      if (section.getAttribute('data-jump') !== 'center') return null;
+      var hdr = parseFloat(getComputedStyle(root).getPropertyValue('--hdr-h')) || 0;
+      var dock = document.getElementById('dock');
+      var bar = dock && getComputedStyle(dock).display !== 'none' ? dock.offsetHeight : 0;
+      var box = section.getBoundingClientRect();
+      var room = window.innerHeight - hdr - bar;
+      var pad = parseFloat(getComputedStyle(section).paddingTop) || 0;
+      var pull = Math.min((box.height - room) / 2, pad);
+      return Math.max(0, box.top + window.pageYOffset - hdr + pull);
     }
 
     document.addEventListener('click', function (e) {
@@ -283,6 +303,7 @@
       if (!section) return;
 
       var y = endOfRunway(section);
+      if (y === null) y = centred(section);
       if (y === null) return;              /* an ordinary section: let the browser do it */
 
       e.preventDefault();

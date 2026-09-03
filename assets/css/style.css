@@ -254,7 +254,14 @@ ul,ol{ margin:0; padding:0; list-style:none; }
 [data-lang="ka"] .flag--ka{ display:none; }
 [data-lang="en"] .flag--en{ display:none; }
 
-.hdr__cta{ padding:.7em 1.15em; font-size:.76rem; }
+/* The two labels sit in one grid cell, so the button is always as wide as
+   the longer of them — the Georgian — and the flag beside it does not jump
+   an inch to the right the moment you switch to English. */
+.hdr__cta{ padding:.7em 1.15em; font-size:.76rem; display:inline-grid; justify-items:center; }
+.hdr__cta .ka,
+.hdr__cta .en{ grid-area:1/1; display:block; }
+[data-lang="ka"] .hdr__cta .en,
+[data-lang="en"] .hdr__cta .ka{ visibility:hidden; }
 
 .hdr__meter{
   position:absolute; left:0; right:0; bottom:-1px; height:1px;
